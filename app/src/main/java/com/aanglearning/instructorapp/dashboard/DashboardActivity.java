@@ -1,9 +1,9 @@
 package com.aanglearning.instructorapp.dashboard;
 
 import android.content.Intent;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,16 +17,16 @@ import android.widget.TextView;
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.login.LoginActivity;
 import com.aanglearning.instructorapp.util.AppGlobal;
+import com.aanglearning.instructorapp.util.NetworkUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DashboardActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.navigation_view) NavigationView navigationView;
     @BindView(R.id.drawer) DrawerLayout drawerLayout;
-    @BindView(R.id.viewpager) ViewPager viewPager;
-    @BindView(R.id.sliding_tabs) TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +82,18 @@ public class DashboardActivity extends AppCompatActivity {
         imageView.setImageResource(R.drawable.child);
         tv.setText("Vinay Krishna");
 
-        setViewPager();
-
     }
 
-    private void setViewPager() {
-        DashboardPagerAdapter adapter = new DashboardPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
+    public void addGroup(View view) {
+        if (NetworkUtil.isNetworkAvailable(this)) {
+            startActivity(new Intent(this, DashboardActivity.class));
+        } else {
+            showSnackbar("You are offline,check your internet.");
+        }
     }
+
+    private void showSnackbar(String message) {
+        Snackbar.make(coordinatorLayout, message, 3000).show();
+    }
+
 }

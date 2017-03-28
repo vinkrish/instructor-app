@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true">
 
-            <include layout="@layout/tabs_dashboard" />
+            <include layout="@layout/lyaout_groups"/>
 
         </android.support.design.widget.CoordinatorLayout>
 

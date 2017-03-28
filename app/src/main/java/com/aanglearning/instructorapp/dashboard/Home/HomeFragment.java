@@ -125,7 +125,7 @@ public class HomeFragment extends Fragment implements HomeView {
                     //byte[] imageInByte = stream.toByteArray();
                     ByteArrayInputStream bis = new ByteArrayInputStream(stream.toByteArray());
 
-                    cloudinary.uploader().upload(bis, ObjectUtils.emptyMap());
+                    cloudinary.uploader().upload(bis, ObjectUtils.asMap("public_id", "test"));
                 }
 
             } catch (IOException e) {
