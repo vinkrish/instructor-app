@@ -16,102 +16,76 @@
         android:orientation="vertical"
         android:padding="15dp">
 
-        <TextView
-            fontPath="fonts/Asap-Bold.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text=""
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/text_small" />
-
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/title"
+            android:id="@+id/group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp">
 
             <EditText
-                android:id="@+id/title_et"
+                android:id="@+id/group_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint=""
+                android:hint="@string/group_name"
                 android:imeOptions="actionNext"
                 android:inputType="text|textNoSuggestions"
                 android:maxLength="120" />
 
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-            <EditText
-                android:id="@+id/description_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint=""
-                android:inputType="text|textNoSuggestions"
-                android:maxLength="120" />
-
-        </android.support.design.widget.TextInputLayout>
-
         <TextView
-            fontPath="fonts/Asap-Bold.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text=""
-            android:textAllCaps="true"
+            android:layout_marginTop="30dp"
+            android:text="@string/select_class"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/text_small" />
+            android:textStyle="bold" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/title_book"
+        <Spinner
+            android:id="@+id/spinner_class"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp" />
 
-            <EditText
-                android:id="@+id/title_book_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint=""
-                android:inputType="text|textNoSuggestions"
-                android:maxLength="120" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/pages"
+        <CheckBox
+            android:id="@+id/checkBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:text="@string/for_class" />
 
-            <EditText
-                android:id="@+id/pages_et"
+        <LinearLayout
+            android:id="@+id/section_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint=""
-                android:inputType="number"
-                android:maxLength="4" />
+                android:layout_marginTop="30dp"
+                android:text="@string/select_section"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
 
-        </android.support.design.widget.TextInputLayout>
+            <Spinner
+                android:id="@+id/spinner_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/book_btn"
             style="?android:attr/borderlessButtonStyle"
-            fontPath="fonts/Asap-Bold.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:minHeight="0dp"
             android:minWidth="0dp"
-            android:onClick="createCourse"
-            android:text=""
+            android:onClick="createGroup"
+            android:text="@string/save"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/text_xsmall" />

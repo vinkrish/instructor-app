@@ -41,6 +41,16 @@
         <activity
             android:name=".newgroup.GroupActivity"
             android:label="@string/title_activity_group"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".newgroup.GroupActivity" />
+        </activity>
+        <activity
+            android:name=".usergroup.UserGroupActivity"
+            android:label="@string/title_activity_user_group"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

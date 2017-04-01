@@ -37,4 +37,8 @@ public class Clas {
     public void setAttendanceType(String attendanceType) {
         this.attendanceType = attendanceType;
     }
+
+    public String toString() {
+        return className;
+    }
 }

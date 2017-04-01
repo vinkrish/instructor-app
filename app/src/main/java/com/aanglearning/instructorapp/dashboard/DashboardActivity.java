@@ -16,8 +16,10 @@ import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.login.LoginActivity;
+import com.aanglearning.instructorapp.newgroup.GroupActivity;
 import com.aanglearning.instructorapp.util.AppGlobal;
 import com.aanglearning.instructorapp.util.NetworkUtil;
+import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +49,7 @@ public class DashboardActivity extends AppCompatActivity {
                             case R.id.dashboard_item:
                                 break;
                             case R.id.logout_item:
-                                //SharedPreferenceUtil.logout(DashboardActivity.this);
+                                SharedPreferenceUtil.logout(DashboardActivity.this);
                                 startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
                                 finish();
                                 break;
@@ -86,7 +88,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     public void addGroup(View view) {
         if (NetworkUtil.isNetworkAvailable(this)) {
-            startActivity(new Intent(this, DashboardActivity.class));
+            startActivity(new Intent(this, GroupActivity.class));
         } else {
             showSnackbar("You are offline,check your internet.");
         }

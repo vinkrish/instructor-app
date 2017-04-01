@@ -18,5 +18,12 @@
     <string name="no_data_available">No Data Available</string>
     <string name="existing_groups">Existing Groups</string>
     <string name="new_group">Create new group</string>
-    <string name="title_activity_group">GroupActivity</string>
+
+    <string name="group_name">Group Name</string>
+    <string name="select_class">Select Class</string>
+    <string name="select_section">Select Section</string>
+    <string name="for_class">This group is for class</string>
+    <string name="save">Save</string>
+    <string name="title_activity_group">New Group</string>
+    <string name="title_activity_user_group">UserGroupActivity</string>
 </resources>

@@ -5,7 +5,6 @@ public class UserGroup {
     private long userId;
     private String role;
     private long groupId;
-    private String createdDate;
     private boolean isActive;
 
     public long getId() {
@@ -38,14 +37,6 @@ public class UserGroup {
 
     public void setGroupId(long groupId) {
         this.groupId = groupId;
-    }
-
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
     }
 
     public boolean isActive() {

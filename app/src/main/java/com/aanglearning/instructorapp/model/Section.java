@@ -38,4 +38,8 @@ public class Section {
         this.teacherId = teacherId;
     }
 
+    public String toString() {
+        return sectionName;
+    }
+
 }
