@@ -3,8 +3,6 @@ package com.aanglearning.instructorapp.newgroup;
 import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Section;
-import com.aanglearning.instructorapp.model.Student;
-import com.aanglearning.instructorapp.model.Teacher;
 
 import java.util.List;
 
@@ -12,7 +10,7 @@ import java.util.List;
  * Created by Vinay on 30-03-2017.
  */
 
-public interface GroupInteractor {
+public interface NewGroupInteractor {
     interface OnFinishedListener {
         void onError();
 
@@ -25,9 +23,9 @@ public interface GroupInteractor {
         void onGroupSaved(Groups groups);
     }
 
-    void getClassList(long schoolId, GroupInteractor.OnFinishedListener listener);
+    void getClassList(long schoolId, NewGroupInteractor.OnFinishedListener listener);
 
-    void getSectionList(long classId, GroupInteractor.OnFinishedListener listener);
+    void getSectionList(long classId, NewGroupInteractor.OnFinishedListener listener);
 
-    void saveGroup(Groups groups, GroupInteractor.OnFinishedListener listener);
+    void saveGroup(Groups groups, NewGroupInteractor.OnFinishedListener listener);
 }

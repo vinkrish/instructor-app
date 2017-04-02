@@ -26,4 +26,5 @@
     <string name="save">Save</string>
     <string name="title_activity_group">New Group</string>
     <string name="title_activity_user_group">UserGroupActivity</string>
+    <string name="title_activity_new_group">NewGroupActivity</string>
 </resources>

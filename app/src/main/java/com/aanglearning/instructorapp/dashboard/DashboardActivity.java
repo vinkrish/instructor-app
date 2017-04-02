@@ -8,27 +8,39 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
+import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.login.LoginActivity;
-import com.aanglearning.instructorapp.newgroup.GroupActivity;
+import com.aanglearning.instructorapp.model.Groups;
+import com.aanglearning.instructorapp.newgroup.NewGroupActivity;
 import com.aanglearning.instructorapp.util.AppGlobal;
 import com.aanglearning.instructorapp.util.NetworkUtil;
 import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity implements GroupView{
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.navigation_view) NavigationView navigationView;
     @BindView(R.id.drawer) DrawerLayout drawerLayout;
+    @BindView(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.recycler_view) RecyclerView recyclerView;
+
+    private GroupPresenter presenter;
+    private GroupAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +52,12 @@ public class DashboardActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        presenter = new GroupPresenterImpl(this, new GroupInteractorImpl());
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        recyclerView.setNestedScrollingEnabled(false);
 
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -86,9 +104,21 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.getGroups(TeacherDao.getTeacher().getId());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
+
     public void addGroup(View view) {
         if (NetworkUtil.isNetworkAvailable(this)) {
-            startActivity(new Intent(this, GroupActivity.class));
+            startActivity(new Intent(this, NewGroupActivity.class));
         } else {
             showSnackbar("You are offline,check your internet.");
         }
@@ -98,4 +128,34 @@ public class DashboardActivity extends AppCompatActivity {
         Snackbar.make(coordinatorLayout, message, 3000).show();
     }
 
+    @Override
+    public void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgess() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showError() {
+        showSnackbar(getString(R.string.request_error));
+    }
+
+    @Override
+    public void showAPIError(String message) {
+        showSnackbar(message);
+    }
+
+    @Override
+    public void setGroups(List<Groups> groups) {
+        adapter = new GroupAdapter(groups, new GroupAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Groups item) {
+
+            }
+        });
+        recyclerView.setAdapter(adapter);
+    }
 }

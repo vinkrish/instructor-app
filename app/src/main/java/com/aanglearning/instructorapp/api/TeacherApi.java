@@ -31,6 +31,9 @@ public interface TeacherApi {
     @POST("groups")
     Call<Groups> saveGroup(@Body Groups groups);
 
+    @GET("groups/user/{id}")
+    Call<List<Groups>> getGroups(@Path("id") long id);
+
     @GET("student/class/{classId}")
     Call<List<Student>> getClassStudents(@Path("classId") long classId);
 

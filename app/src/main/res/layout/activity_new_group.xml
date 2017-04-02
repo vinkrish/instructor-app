@@ -5,7 +5,7 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.aanglearning.instructorapp.newgroup.GroupActivity">
+    tools:context="com.aanglearning.instructorapp.newgroup.NewGroupActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,6 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_group" />
+    <include layout="@layout/content_new_group" />
 
 </android.support.design.widget.CoordinatorLayout>

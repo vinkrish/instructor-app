@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.aanglearning.instructorapp.newgroup.GroupActivity"
+    tools:context="com.aanglearning.instructorapp.newgroup.NewGroupActivity"
     tools:ignore="MissingPrefix"
-    tools:showIn="@layout/activity_group">
+    tools:showIn="@layout/activity_new_group">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/group_name"
-                android:imeOptions="actionNext"
+                android:imeOptions="actionDone"
                 android:inputType="text|textNoSuggestions"
                 android:maxLength="120" />
 

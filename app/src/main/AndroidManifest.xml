@@ -17,6 +17,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".login.LoginActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBar" />
         <activity
@@ -31,6 +32,7 @@
         </activity>
         <activity
             android:name=".dashboard.DashboardActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBar" />
         <activity android:name="com.darsh.multipleimageselect.activities.AlbumSelectActivity">
@@ -39,19 +41,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".newgroup.GroupActivity"
-            android:label="@string/title_activity_group"
+            android:name=".newgroup.NewGroupActivity"
+            android:label="@string/title_activity_new_group"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".newgroup.GroupActivity" />
+                android:value=".dashboard.DashboardActivity" />
         </activity>
         <activity
             android:name=".usergroup.UserGroupActivity"
             android:label="@string/title_activity_user_group"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

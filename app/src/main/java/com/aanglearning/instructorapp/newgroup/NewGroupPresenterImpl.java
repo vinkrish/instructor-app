@@ -3,8 +3,6 @@ package com.aanglearning.instructorapp.newgroup;
 import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Section;
-import com.aanglearning.instructorapp.model.Student;
-import com.aanglearning.instructorapp.model.Teacher;
 
 import java.util.List;
 
@@ -12,11 +10,11 @@ import java.util.List;
  * Created by Vinay on 30-03-2017.
  */
 
-public class GroupPresenterImpl implements GroupPresenter, GroupInteractor.OnFinishedListener {
-    private GroupView mView;
-    private GroupInteractor mInteractor;
+public class NewGroupPresenterImpl implements NewGroupPresenter, NewGroupInteractor.OnFinishedListener {
+    private NewGroupView mView;
+    private NewGroupInteractor mInteractor;
 
-    GroupPresenterImpl(GroupView view, GroupInteractor interactor) {
+    NewGroupPresenterImpl(NewGroupView view, NewGroupInteractor interactor) {
         mView = view;
         mInteractor = interactor;
     }

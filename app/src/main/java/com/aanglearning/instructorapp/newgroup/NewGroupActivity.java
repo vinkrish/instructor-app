@@ -3,6 +3,7 @@ package com.aanglearning.instructorapp.newgroup;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -23,8 +24,6 @@ import com.aanglearning.instructorapp.dashboard.DashboardActivity;
 import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Section;
-import com.aanglearning.instructorapp.model.Student;
-import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.util.EditTextWatcher;
 import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
@@ -35,9 +34,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GroupActivity extends AppCompatActivity implements GroupView,
+public class NewGroupActivity extends AppCompatActivity implements NewGroupView,
         AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener {
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.progress)
@@ -57,19 +55,20 @@ public class GroupActivity extends AppCompatActivity implements GroupView,
     @BindView(R.id.checkBox)
     CheckBox isForClass;
 
-    private GroupPresenter presenter;
+    private NewGroupPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group);
+        setContentView(R.layout.activity_new_group);
+
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         groupName.addTextChangedListener(new EditTextWatcher(groupLayout));
-        presenter = new GroupPresenterImpl(this, new GroupInteractorImpl());
+        presenter = new NewGroupPresenterImpl(this, new NewGroupInteractorImpl());
 
         isForClass.setOnCheckedChangeListener(this);
     }
@@ -148,6 +147,7 @@ public class GroupActivity extends AppCompatActivity implements GroupView,
     @Override
     public void groupSaved(Groups groups) {
         startActivity(new Intent(this, DashboardActivity.class));
+        finish();
     }
 
     @Override
