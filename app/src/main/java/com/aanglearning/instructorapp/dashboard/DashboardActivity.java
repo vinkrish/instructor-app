@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,8 +19,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
+import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.login.LoginActivity;
+import com.aanglearning.instructorapp.messagegroup.MessageActivity;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.newgroup.NewGroupActivity;
 import com.aanglearning.instructorapp.util.AppGlobal;
@@ -58,6 +61,8 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         recyclerView.setNestedScrollingEnabled(false);
+
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -152,8 +157,10 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     public void setGroups(List<Groups> groups) {
         adapter = new GroupAdapter(groups, new GroupAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Groups item) {
-
+            public void onItemClick(Groups group) {
+                GroupDao.clear();
+                GroupDao.insert(group);
+                startActivity(new Intent(DashboardActivity.this, MessageActivity.class));
             }
         });
         recyclerView.setAdapter(adapter);

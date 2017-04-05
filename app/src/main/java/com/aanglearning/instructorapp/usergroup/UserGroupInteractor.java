@@ -2,7 +2,9 @@ package com.aanglearning.instructorapp.usergroup;
 
 import com.aanglearning.instructorapp.model.Student;
 import com.aanglearning.instructorapp.model.Teacher;
+import com.aanglearning.instructorapp.model.UserGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,16 +18,16 @@ public interface UserGroupInteractor {
 
         void onAPIError(String message);
 
-        void onStudentsReceived(List<Student> students);
+        void onUserGroupReceived(GroupUsers groupUsers);
 
-        void onTeachersReceived(List<Teacher> teachers);
+        void onUserGroupSaved();
+
+        void onUsersDeleted();
     }
 
-    void getClassStudents(long classId, UserGroupInteractor.OnFinishedListener listener);
+    void getUserGroup(long groupId, UserGroupInteractor.OnFinishedListener listener);
 
-    void getSectionStudents(long sectionId, UserGroupInteractor.OnFinishedListener listener);
+    void saveUserGroup(ArrayList<UserGroup> userGroups, UserGroupInteractor.OnFinishedListener listener);
 
-    void getClassSubjectTeachers(long classId, UserGroupInteractor.OnFinishedListener listener);
-
-    void getSectionSubjectTeachers(long sectionId, UserGroupInteractor.OnFinishedListener listener);
+    void deleteUsers(ArrayList<UserGroup> userGroups, UserGroupInteractor.OnFinishedListener listener);
 }

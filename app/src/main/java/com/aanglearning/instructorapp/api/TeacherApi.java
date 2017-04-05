@@ -6,7 +6,9 @@ import com.aanglearning.instructorapp.model.Section;
 import com.aanglearning.instructorapp.model.Student;
 import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.model.UserGroup;
+import com.aanglearning.instructorapp.usergroup.GroupUsers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,24 +36,15 @@ public interface TeacherApi {
     @GET("groups/user/{id}")
     Call<List<Groups>> getGroups(@Path("id") long id);
 
-    @GET("student/class/{classId}")
-    Call<List<Student>> getClassStudents(@Path("classId") long classId);
-
-    @GET("student/section/{sectionId}")
-    Call<List<Student>> getSectionStudents(@Path("sectionId") long sectionId);
-
-    @GET("teacher/class/{classId}")
-    Call<List<Teacher>> getClassSubjectTeachers(@Path("classId") long classId);
-
-    @GET("teacher/section/{sectionId}")
-    Call<List<Teacher>> getSectionSubjectTeachers(@Path("sectionId") long sectionId);
+    @GET("usergroup/groupusers/groups/{groupId}")
+    Call<GroupUsers> getUserGroup(@Path("groupId") long groupId);
 
     @POST("usergroup")
-    Call<Void> saveUserGroupList(@Body UserGroup userGroupList);
+    Call<Void> saveUserGroupList(@Body ArrayList<UserGroup> userGroupList);
 
-    @GET("usergroup/groups/{groupId}")
-    Call<Void> deleteUserGroup(@Path("groupId") long groupId);
+    @GET("groups/{groupId}")
+    Call<Void> deleteGroup(@Path("groupId") long groupId);
 
-    @DELETE("usergroup/{id}")
-    Call<Void> deleteUserGroupUser(@Path("id") long id);
+    @POST("usergroup/delete")
+    Call<Void> deleteUserGroupUsers(@Body ArrayList<UserGroup> userGroups);
 }

@@ -24,7 +24,16 @@
     <string name="select_section">Select Section</string>
     <string name="for_class">This group is for class</string>
     <string name="save">Save</string>
+
+    <string name="edit">Edit</string>
+    <string name="members">Members</string>
+    <string name="add_students">Add Student</string>
+    <string name="add_teachers">Add Teacher</string>
+    <string name="select_all">Select All</string>
+    <string name="menu_item_delete">Delete</string>
+
     <string name="title_activity_group">New Group</string>
-    <string name="title_activity_user_group">UserGroupActivity</string>
-    <string name="title_activity_new_group">NewGroupActivity</string>
+    <string name="title_activity_user_group">Group Members</string>
+    <string name="title_activity_new_group">New Group</string>
+    <string name="title_activity_message">Messages</string>
 </resources>

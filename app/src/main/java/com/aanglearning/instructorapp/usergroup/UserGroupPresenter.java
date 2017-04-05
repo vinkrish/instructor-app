@@ -1,17 +1,19 @@
 package com.aanglearning.instructorapp.usergroup;
 
+import com.aanglearning.instructorapp.model.UserGroup;
+
+import java.util.ArrayList;
+
 /**
  * Created by Vinay on 01-04-2017.
  */
 
 public interface UserGroupPresenter {
-    void getClassStudents(long classId);
+    void getUserGroup(long groupId);
 
-    void getSectionStudents(long sectionId);
+    void saveUserGroup(ArrayList<UserGroup> userGroups);
 
-    void getClassSubjectTeachers(long classId);
-
-    void getSectionSubjectTeachers(long sectionId);
+    void deleteUsers(ArrayList<UserGroup> userGroups);
 
     void onDestroy();
 }

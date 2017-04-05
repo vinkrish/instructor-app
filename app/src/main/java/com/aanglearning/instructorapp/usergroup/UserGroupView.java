@@ -2,6 +2,7 @@ package com.aanglearning.instructorapp.usergroup;
 
 import com.aanglearning.instructorapp.model.Student;
 import com.aanglearning.instructorapp.model.Teacher;
+import com.aanglearning.instructorapp.model.UserGroup;
 
 import java.util.List;
 
@@ -18,7 +19,9 @@ public interface UserGroupView {
 
     void showAPIError(String message);
 
-    void showStudents(List<Student> students);
+    void showUserGroup(GroupUsers groupUsers);
 
-    void showTeachers(List<Teacher> teachers);
+    void userGroupSaved();
+
+    void userGroupDeleted();
 }

@@ -45,7 +45,7 @@
             android:label="@string/title_activity_new_group"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -55,7 +55,19 @@
             android:name=".usergroup.UserGroupActivity"
             android:label="@string/title_activity_user_group"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.UserGroupTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".messagegroup.MessageActivity" />
+            </activity>
+        <activity
+            android:name=".messagegroup.MessageActivity"
+            android:label="@string/title_activity_message"
+            android:theme="@style/NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".dashboard.DashboardActivity" />
+        </activity>
     </application>
 
 </manifest>

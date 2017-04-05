@@ -24,7 +24,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     private final OnItemClickListener listener;
 
     interface OnItemClickListener {
-        void onItemClick(Groups item);
+        void onItemClick(Groups group);
     }
 
     GroupAdapter(List<Groups> items, OnItemClickListener listener) {
@@ -49,20 +49,19 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.group_name)
-        TextView groupName;
+        @BindView(R.id.group_name) TextView groupName;
 
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
-        void bind(final Groups item, final OnItemClickListener listener) {
-            groupName.setText(item.getName());
+        void bind(final Groups group, final OnItemClickListener listener) {
+            groupName.setText(group.getName());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClick(item);
+                    listener.onItemClick(group);
                 }
             });
         }

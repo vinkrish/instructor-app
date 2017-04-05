@@ -2,14 +2,17 @@ package com.aanglearning.instructorapp.usergroup;
 
 import com.aanglearning.instructorapp.model.Student;
 import com.aanglearning.instructorapp.model.Teacher;
+import com.aanglearning.instructorapp.model.UserGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Vinay on 01-04-2017.
  */
 
-public class UserGroupPresenterImpl implements UserGroupPresenter, UserGroupInteractor.OnFinishedListener {
+public class UserGroupPresenterImpl implements UserGroupPresenter,
+        UserGroupInteractor.OnFinishedListener {
 
     private UserGroupView mView;
     private UserGroupInteractor mInteractor;
@@ -20,34 +23,26 @@ public class UserGroupPresenterImpl implements UserGroupPresenter, UserGroupInte
     }
 
     @Override
-    public void getClassStudents(long classId) {
+    public void getUserGroup(long groupId) {
         if (mView != null) {
             mView.showProgress();
-            mInteractor.getClassStudents(classId, this);
+            mInteractor.getUserGroup(groupId, this);
         }
     }
 
     @Override
-    public void getSectionStudents(long sectionId) {
+    public void saveUserGroup(ArrayList<UserGroup> userGroups) {
         if (mView != null) {
             mView.showProgress();
-            mInteractor.getSectionStudents(sectionId, this);
+            mInteractor.saveUserGroup(userGroups, this);
         }
     }
 
     @Override
-    public void getClassSubjectTeachers(long classId) {
+    public void deleteUsers(ArrayList<UserGroup> userGroups) {
         if (mView != null) {
             mView.showProgress();
-            mInteractor.getClassSubjectTeachers(classId, this);
-        }
-    }
-
-    @Override
-    public void getSectionSubjectTeachers(long sectionId) {
-        if (mView != null) {
-            mView.showProgress();
-            mInteractor.getSectionSubjectTeachers(sectionId, this);
+            mInteractor.deleteUsers(userGroups, this);
         }
     }
 
@@ -73,18 +68,27 @@ public class UserGroupPresenterImpl implements UserGroupPresenter, UserGroupInte
     }
 
     @Override
-    public void onStudentsReceived(List<Student> students) {
+    public void onUserGroupReceived(GroupUsers groupUsers) {
         if (mView != null) {
-            mView.showStudents(students);
+            mView.showUserGroup(groupUsers);
             mView.hideProgress();
         }
     }
 
     @Override
-    public void onTeachersReceived(List<Teacher> teachers) {
-        if (mView != null) {
-            mView.showTeachers(teachers);
+    public void onUserGroupSaved() {
+        if(mView != null) {
             mView.hideProgress();
+            mView.userGroupSaved();
         }
     }
+
+    @Override
+    public void onUsersDeleted() {
+        if(mView != null) {
+            mView.hideProgress();
+            mView.userGroupDeleted();
+        }
+    }
+
 }

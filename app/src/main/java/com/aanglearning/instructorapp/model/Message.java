@@ -3,11 +3,38 @@ package com.aanglearning.instructorapp.model;
 public class Message {
     private long id;
     private long senderId;
+    private String senderRole;
     private long recipientId;
+    private String recipientRole;
+    private long groupId;
     private String messageType;
     private String messageBody;
     private String imageUrl;
     private String createdAt;
+
+    public String getSenderRole() {
+        return senderRole;
+    }
+
+    public void setSenderRole(String senderRole) {
+        this.senderRole = senderRole;
+    }
+
+    public String getRecipientRole() {
+        return recipientRole;
+    }
+
+    public void setRecipientRole(String recipientRole) {
+        this.recipientRole = recipientRole;
+    }
+
+    public long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
+    }
 
     public long getId() {
         return id;

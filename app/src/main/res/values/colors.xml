@@ -12,6 +12,10 @@
     <color name="divider_lightest">#EEEEEE</color>
     <color name="blue">#2196F3</color>
 
+    <color name="list_divider">#979797</color>
+    <color name="list_item_selected_state">#EEEEEE</color>
+    <color name="list_item_normal_state">#FAFAFA</color>
+
     <color name="multiple_image_select_primary">#00BCD4</color>
     <color name="multiple_image_select_primaryDark">#0097A7</color>
     <color name="multiple_image_select_primaryLight">#B2EBF2</color>

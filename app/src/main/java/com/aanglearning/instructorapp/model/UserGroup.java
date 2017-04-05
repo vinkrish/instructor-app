@@ -3,9 +3,18 @@ package com.aanglearning.instructorapp.model;
 public class UserGroup {
     private long id;
     private long userId;
+    private String name;
     private String role;
     private long groupId;
     private boolean isActive;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public long getId() {
         return id;

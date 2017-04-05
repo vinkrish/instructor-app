@@ -14,6 +14,14 @@ public class Teacher {
     private String gender;
     private String email;
 
+    public Teacher() {
+    }
+
+    public Teacher(long id, String teacherName) {
+        this.id = id;
+        this.teacherName = teacherName;
+    }
+
     public long getId() {
         return id;
     }
