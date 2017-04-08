@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
@@ -34,6 +35,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     private static final int ITEM_TYPE_TEXT = 0;
     private static final int ITEM_TYPE_IMAGE = 1;
+    private static final int ITEM_TYPE_PROGRESS = 2;
 
     ColorGenerator generator = ColorGenerator.MATERIAL;
     TextDrawable.IBuilder builder = TextDrawable.builder()
@@ -47,14 +49,24 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         this.messages = messages;
     }
 
-    public ArrayList<Message> getDataSet() {
+    ArrayList<Message> getDataSet() {
         return messages;
     }
 
     @UiThread
-    public void setDataSet(ArrayList<Message> messages) {
+    void setDataSet(ArrayList<Message> messages) {
         this.messages = messages;
         notifyDataSetChanged();
+    }
+
+    @UiThread
+    void updateDataSet(ArrayList<Message> msgs) {
+        //ArrayList<Message> oldMessages = messages;
+        //this.messages = new ArrayList<>();
+        //this.messages.addAll(oldMessages);
+        int pos = messages.size();
+        this.messages.addAll(msgs);
+        notifyItemRangeInserted(pos, messages.size() - 1);
     }
 
     @Override
@@ -62,9 +74,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         if (viewType == ITEM_TYPE_TEXT) {
             View textView = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_text_item, parent, false);
             return new TextHolder(textView);
-        } else {
+        } else if(viewType == ITEM_TYPE_IMAGE) {
             View imgView = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_image_item, parent, false);
             return new ImageHolder(imgView);
+        } else {
+            View progressView = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar_item, parent, false);
+            return new ProgressViewHolder(progressView);
         }
     }
 
@@ -76,6 +91,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             ((TextHolder)holder).bind(messages.get(position));
         } else if (itemType == ITEM_TYPE_IMAGE) {
             ((ImageHolder)holder).bind(messages.get(position));
+        } else {
+            ((ProgressViewHolder) holder).bind(messages.get(position));
         }
     }
 
@@ -155,7 +172,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     }
 
-    public Dialog displayUpdateDialog(final Message message) {
+    class ProgressViewHolder extends ViewHolder {
+        @BindView(R.id.progress_bar) ImageView progressBar;
+
+        ProgressViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
+        void bind(final Message message) {
+        }
+    }
+
+    Dialog displayUpdateDialog(final Message message) {
         final Dialog dialog = new Dialog(mContext, R.style.DialogFadeAnim);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -180,10 +209,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
-
-        //pagesRead.requestFocus();
-        //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        //imm.showSoftInput(pagesRead, InputMethodManager.SHOW_IMPLICIT);
 
         return dialog;
     }

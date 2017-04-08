@@ -40,7 +40,7 @@ public interface TeacherApi {
 
     @GET("message/group/{groupId}/message/{messageId}")
     Call<ArrayList<Message>> getGroupMessagesFromId(@Path("groupId") long groupId,
-                                               @Path("groupId") long messageId);
+                                               @Path("messageId") long messageId);
 
     @GET("usergroup/groupusers/groups/{groupId}")
     Call<GroupUsers> getUserGroup(@Path("groupId") long groupId);

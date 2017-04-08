@@ -46,7 +46,7 @@ public class MessageInteractorImpl implements MessageInteractor {
             @Override
             public void onResponse(Call<ArrayList<Message>> call, Response<ArrayList<Message>> response) {
                 if(response.isSuccessful()) {
-                    listener.onMessageReceived(response.body());
+                    listener.onFollowupMessagesReceived(response.body());
                 } else {
                     listener.onError();
                 }

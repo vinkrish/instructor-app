@@ -10,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,8 +21,9 @@ import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Message;
 import com.aanglearning.instructorapp.usergroup.UserGroupActivity;
-import com.aanglearning.instructorapp.usergroup.UserGroupAdapter;
+import com.aanglearning.instructorapp.util.EndlessRecyclerViewScrollListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -37,6 +39,8 @@ public class MessageActivity extends AppCompatActivity implements MessageView{
     private Groups group;
     private ArrayList<Message> messages = new ArrayList<>();
     private MessageAdapter adapter;
+    private EndlessRecyclerViewScrollListener scrollListener;
+    private int previousSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +54,21 @@ public class MessageActivity extends AppCompatActivity implements MessageView{
 
         presenter = new MessagePresenterImpl(this, new MessageInteractorImpl());
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setNestedScrollingEnabled(false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         adapter = new MessageAdapter(this, messages);
         recyclerView.setAdapter(adapter);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                presenter.getFollowupMessages(group.getId(), messages.get(messages.size()-1).getId());
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        recyclerView.addOnScrollListener(scrollListener);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -124,11 +137,22 @@ public class MessageActivity extends AppCompatActivity implements MessageView{
 
     @Override
     public void showMessages(ArrayList<Message> messages) {
+        this.messages = messages;
+        previousSize = messages.size();
         adapter.setDataSet(messages);
     }
 
     @Override
-    public void showFollowupMessages(ArrayList<Message> messages) {
-
+    public void showFollowupMessages(ArrayList<Message> msgs) {
+        /*ArrayList<Message> oldMessages = messages;
+        this.messages = new ArrayList<>();
+        this.messages.addAll(oldMessages);
+        this.messages.addAll(msgs);
+        previousSize = messages.size();*/
+        //adapter.notifyItemRangeInserted(previousSize, messages.size() - 1);
+        //adapter.setDataSet(messages);
+        adapter.updateDataSet(msgs);
+        this.messages = adapter.getDataSet();
+        previousSize = messages.size();
     }
 }

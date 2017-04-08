@@ -63,7 +63,7 @@ public class MessagePresenterImpl implements MessagePresenter, MessageInteractor
     }
 
     @Override
-    public void onFolloupMessagesReceived(ArrayList<Message> messages) {
+    public void onFollowupMessagesReceived(ArrayList<Message> messages) {
         if(mView != null) {
             mView.showFollowupMessages(messages);
             mView.hideProgress();

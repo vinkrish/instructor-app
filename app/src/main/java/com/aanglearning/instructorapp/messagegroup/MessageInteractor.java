@@ -18,7 +18,7 @@ public interface MessageInteractor {
 
         void onMessageReceived(ArrayList<Message> messages);
 
-        void onFolloupMessagesReceived(ArrayList<Message> messages);
+        void onFollowupMessagesReceived(ArrayList<Message> messages);
     }
 
     void getMessages(long groupId, MessageInteractor.OnFinishedListener listener);
