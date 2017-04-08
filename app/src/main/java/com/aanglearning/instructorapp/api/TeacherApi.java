@@ -2,9 +2,8 @@ package com.aanglearning.instructorapp.api;
 
 import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Groups;
+import com.aanglearning.instructorapp.model.Message;
 import com.aanglearning.instructorapp.model.Section;
-import com.aanglearning.instructorapp.model.Student;
-import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.model.UserGroup;
 import com.aanglearning.instructorapp.usergroup.GroupUsers;
 
@@ -35,6 +34,13 @@ public interface TeacherApi {
 
     @GET("groups/user/{id}")
     Call<List<Groups>> getGroups(@Path("id") long id);
+
+    @GET("message/group/{groupId}")
+    Call<ArrayList<Message>> getGroupMessages(@Path("groupId") long groupId);
+
+    @GET("message/group/{groupId}/message/{messageId}")
+    Call<ArrayList<Message>> getGroupMessagesFromId(@Path("groupId") long groupId,
+                                               @Path("groupId") long messageId);
 
     @GET("usergroup/groupusers/groups/{groupId}")
     Call<GroupUsers> getUserGroup(@Path("groupId") long groupId);
