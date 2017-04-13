@@ -17,6 +17,8 @@ public interface MessageView {
 
     void showAPIError(String message);
 
+    void onMessageSaved(Message message);
+
     void showMessages(ArrayList<Message> messages);
 
     void showFollowupMessages(ArrayList<Message> messages);

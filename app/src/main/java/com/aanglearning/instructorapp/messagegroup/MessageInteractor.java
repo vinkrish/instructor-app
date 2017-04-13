@@ -16,10 +16,14 @@ public interface MessageInteractor {
 
         void onAPIError(String message);
 
+        void onMessageSaved(Message message);
+
         void onMessageReceived(ArrayList<Message> messages);
 
         void onFollowupMessagesReceived(ArrayList<Message> messages);
     }
+
+    void saveMessage(Message message, MessageInteractor.OnFinishedListener listener);
 
     void getMessages(long groupId, MessageInteractor.OnFinishedListener listener);
 

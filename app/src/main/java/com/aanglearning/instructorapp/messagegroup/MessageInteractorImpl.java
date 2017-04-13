@@ -2,6 +2,7 @@ package com.aanglearning.instructorapp.messagegroup;
 
 import com.aanglearning.instructorapp.api.ApiClient;
 import com.aanglearning.instructorapp.api.TeacherApi;
+import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Message;
 
 import java.util.ArrayList;
@@ -16,11 +17,33 @@ import retrofit2.Response;
 
 public class MessageInteractorImpl implements MessageInteractor {
     @Override
+    public void saveMessage(Message message, final OnFinishedListener listener) {
+        TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
+
+        Call<Message> msg = api.saveMessage(message);
+        msg.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                if(response.isSuccessful()) {
+                    listener.onMessageSaved(response.body());
+                } else {
+                    listener.onError();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+                listener.onError();
+            }
+        });
+    }
+
+    @Override
     public void getMessages(long groupId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<ArrayList<Message>> classList = api.getGroupMessages(groupId);
-        classList.enqueue(new Callback<ArrayList<Message>>() {
+        Call<ArrayList<Message>> msgList = api.getGroupMessages(groupId);
+        msgList.enqueue(new Callback<ArrayList<Message>>() {
             @Override
             public void onResponse(Call<ArrayList<Message>> call, Response<ArrayList<Message>> response) {
                 if(response.isSuccessful()) {
@@ -41,8 +64,8 @@ public class MessageInteractorImpl implements MessageInteractor {
     public void getFollowupMessages(long groupId, long messageId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<ArrayList<Message>> classList = api.getGroupMessagesFromId(groupId, messageId);
-        classList.enqueue(new Callback<ArrayList<Message>>() {
+        Call<ArrayList<Message>> msgList = api.getGroupMessagesFromId(groupId, messageId);
+        msgList.enqueue(new Callback<ArrayList<Message>>() {
             @Override
             public void onResponse(Call<ArrayList<Message>> call, Response<ArrayList<Message>> response) {
                 if(response.isSuccessful()) {

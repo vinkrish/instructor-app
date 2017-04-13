@@ -4,6 +4,7 @@ public class Message {
     private long id;
     private long senderId;
     private String senderRole;
+    private String senderName;
     private long recipientId;
     private String recipientRole;
     private long groupId;
@@ -22,6 +23,14 @@ public class Message {
 
     public String getRecipientRole() {
         return recipientRole;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 
     public void setRecipientRole(String recipientRole) {

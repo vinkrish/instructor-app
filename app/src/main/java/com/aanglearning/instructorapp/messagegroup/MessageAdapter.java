@@ -20,6 +20,9 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.squareup.picasso.Picasso;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -35,7 +38,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     private static final int ITEM_TYPE_TEXT = 0;
     private static final int ITEM_TYPE_IMAGE = 1;
-    private static final int ITEM_TYPE_PROGRESS = 2;
 
     ColorGenerator generator = ColorGenerator.MATERIAL;
     TextDrawable.IBuilder builder = TextDrawable.builder()
@@ -69,17 +71,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         notifyItemRangeInserted(pos, messages.size() - 1);
     }
 
+    @UiThread
+    void insertDataSet(Message message) {
+        this.messages.add(0, message);
+        notifyItemInserted(0);
+    }
+
     @Override
     public MessageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_TYPE_TEXT) {
             View textView = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_text_item, parent, false);
             return new TextHolder(textView);
-        } else if(viewType == ITEM_TYPE_IMAGE) {
+        } else {
             View imgView = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_image_item, parent, false);
             return new ImageHolder(imgView);
-        } else {
-            View progressView = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar_item, parent, false);
-            return new ProgressViewHolder(progressView);
         }
     }
 
@@ -91,8 +96,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             ((TextHolder)holder).bind(messages.get(position));
         } else if (itemType == ITEM_TYPE_IMAGE) {
             ((ImageHolder)holder).bind(messages.get(position));
-        } else {
-            ((ProgressViewHolder) holder).bind(messages.get(position));
         }
     }
 
@@ -128,11 +131,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
 
         void bind(final Message message) {
-            int color = generator.getColor("Vinay");
-            TextDrawable drawable = builder.build("W", color);
+            int color = generator.getColor(message.getSenderName());
+            TextDrawable drawable = builder.build(message.getSenderName().substring(0,1), color);
             senderImage.setImageDrawable(drawable);
-            senderName.setText("Sender Name");
-            createdDate.setText("07-04-2017 21:25");
+            senderName.setText(message.getSenderName());
+            DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
+            createdDate.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
             messageTV.setText(message.getMessageBody());
         }
 
@@ -150,16 +154,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
 
         void bind(final Message message) {
-            int color = generator.getColor("Vinay");
-            TextDrawable drawable = builder.build("W", color);
+            int color = generator.getColor(message.getSenderName());
+            TextDrawable drawable = builder.build(message.getSenderName().substring(0,1), color);
             senderImage.setImageDrawable(drawable);
-            senderName.setText("Sender Name");
+            senderName.setText(message.getSenderName());
             createdDate.setText("07-04-2017 21:25");
 
             sharedImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    displayUpdateDialog(message);
+                    displayImageDialog(message);
                 }
             });
             //sharedImage.setImageResource(R.drawable.books);
@@ -172,19 +176,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     }
 
-    class ProgressViewHolder extends ViewHolder {
-        @BindView(R.id.progress_bar) ImageView progressBar;
-
-        ProgressViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-
-        void bind(final Message message) {
-        }
-    }
-
-    Dialog displayUpdateDialog(final Message message) {
+    private Dialog displayImageDialog(final Message message) {
         final Dialog dialog = new Dialog(mContext, R.style.DialogFadeAnim);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);

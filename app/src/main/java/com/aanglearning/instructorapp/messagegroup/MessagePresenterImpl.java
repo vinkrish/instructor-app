@@ -18,6 +18,14 @@ public class MessagePresenterImpl implements MessagePresenter, MessageInteractor
     }
 
     @Override
+    public void saveMessage(Message message) {
+        if(mView != null) {
+            mView.showProgress();
+            mInteractor.saveMessage(message, this);
+        }
+    }
+
+    @Override
     public void getMessages(long groupId) {
         if(mView != null) {
             mView.showProgress();
@@ -51,6 +59,14 @@ public class MessagePresenterImpl implements MessagePresenter, MessageInteractor
         if (mView != null) {
             mView.hideProgress();
             mView.showAPIError(message);
+        }
+    }
+
+    @Override
+    public void onMessageSaved(Message message) {
+        if(mView != null) {
+            mView.onMessageSaved(message);
+            mView.hideProgress();
         }
     }
 

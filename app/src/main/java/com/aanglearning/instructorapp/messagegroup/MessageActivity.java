@@ -1,39 +1,61 @@
 package com.aanglearning.instructorapp.messagegroup;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.GroupDao;
+import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Message;
+import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.usergroup.UserGroupActivity;
 import com.aanglearning.instructorapp.util.EndlessRecyclerViewScrollListener;
+import com.aanglearning.instructorapp.util.FloatingActionButton;
+import com.aanglearning.instructorapp.util.NetworkUtil;
+import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
-import java.lang.reflect.Array;
+import org.joda.time.DateTime;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MessageActivity extends AppCompatActivity implements MessageView{
+public class MessageActivity extends AppCompatActivity implements MessageView, View.OnKeyListener{
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.new_msg_layout) LinearLayout newMsgLayout;
+    @BindView(R.id.new_msg) EditText newMsg;
+    @BindView(R.id.enter_msg) ImageView enterMsg;
 
     private MessagePresenter presenter;
     private Groups group;
@@ -41,6 +63,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView{
     private MessageAdapter adapter;
     private EndlessRecyclerViewScrollListener scrollListener;
     private int previousSize;
+    private FloatingActionButton fabButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +77,15 @@ public class MessageActivity extends AppCompatActivity implements MessageView{
 
         presenter = new MessagePresenterImpl(this, new MessageInteractorImpl());
 
+        setupRecyclerView();
+
+        setupFab();
+
+        newMsg.setOnKeyListener(this);
+        newMsg.addTextChangedListener(newMsgWatcher);
+    }
+
+    private void setupRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -67,17 +99,40 @@ public class MessageActivity extends AppCompatActivity implements MessageView{
                 presenter.getFollowupMessages(group.getId(), messages.get(messages.size()-1).getId());
             }
         };
-        // Adds the scroll listener to RecyclerView
         recyclerView.addOnScrollListener(scrollListener);
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+    private void setupFab() {
+        fabButton = new FloatingActionButton.Builder(this)
+                .withDrawable(getResources().getDrawable(R.drawable.ic_add))
+                .withButtonColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
+                .withMargins(0, 0, 16, 16)
+                .create();
+
+        fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                fabButton.hideFloatingActionButton();
+                newMsgLayout.setVisibility(View.VISIBLE);
+                newMsg.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(newMsg, InputMethodManager.SHOW_IMPLICIT);
+                //enterMsg.bringToFront();
+                //(enterMsg.getParent()).requestLayout();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(newMsgLayout.getVisibility() == View.VISIBLE) {
+            newMsgLayout.setVisibility(View.GONE);
+            fabButton.showFloatingActionButton();
+            newMsg.setText("");
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -136,6 +191,11 @@ public class MessageActivity extends AppCompatActivity implements MessageView{
     }
 
     @Override
+    public void onMessageSaved(Message message) {
+        adapter.insertDataSet(message);
+    }
+
+    @Override
     public void showMessages(ArrayList<Message> messages) {
         this.messages = messages;
         previousSize = messages.size();
@@ -154,5 +214,67 @@ public class MessageActivity extends AppCompatActivity implements MessageView{
         adapter.updateDataSet(msgs);
         this.messages = adapter.getDataSet();
         previousSize = messages.size();
+    }
+
+    public void newMsgSendListener (View view) {
+        sendMessage();
+        newMsg.setText("");
+    }
+
+    private void sendMessage() {
+        View v = this.getCurrentFocus();
+        if (v != null) {
+            InputMethodManager imm = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        }
+        if(newMsg.getText().toString().trim().isEmpty()) {
+            showAPIError("Please enter message");
+        } else {
+            if (NetworkUtil.isNetworkAvailable(this)) {
+                Message message = new Message();
+                message.setSenderId(TeacherDao.getTeacher().getId());
+                message.setSenderName(TeacherDao.getTeacher().getTeacherName());
+                message.setSenderRole("teacher");
+                message.setGroupId(group.getId());
+                message.setMessageType("text");
+                message.setMessageBody(newMsg.getText().toString());
+                message.setCreatedAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                presenter.saveMessage(message);
+            } else {
+                showAPIError("You are offline,check your internet.");
+            }
+        }
+
+    }
+
+    private final TextWatcher newMsgWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            if (newMsg.getText().toString().equals("")) {
+            } else {
+                enterMsg.setImageResource(R.drawable.ic_chat_send);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if(editable.length()==0){
+                enterMsg.setImageResource(R.drawable.ic_chat_send);
+            }else{
+                enterMsg.setImageResource(R.drawable.ic_chat_send_active);
+            }
+        }
+    };
+
+    @Override
+    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+        if(i == keyEvent.KEYCODE_ENTER){
+            sendMessage();
+        }
+        return false;
     }
 }
