@@ -2,7 +2,6 @@ package com.aanglearning.instructorapp.messagegroup;
 
 import com.aanglearning.instructorapp.api.ApiClient;
 import com.aanglearning.instructorapp.api.TeacherApi;
-import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Message;
 
 import java.util.ArrayList;

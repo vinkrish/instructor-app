@@ -55,11 +55,11 @@
             android:name=".usergroup.UserGroupActivity"
             android:label="@string/title_activity_user_group"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.UserGroupTheme" >
+            android:theme="@style/AppTheme.UserGroupTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".messagegroup.MessageActivity" />
-            </activity>
+        </activity>
         <activity
             android:name=".messagegroup.MessageActivity"
             android:label="@string/title_activity_message"
@@ -68,6 +68,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".dashboard.DashboardActivity" />
         </activity>
+        <activity android:name=".messagegroup.ImageUploadActivity"
+            android:label="@string/upload_image">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".messagegroup.MessageActivity" />
+        </activity>
+        <service
+            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
+            android:enabled="true" />
     </application>
 
 </manifest>

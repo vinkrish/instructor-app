@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
-
         <item
             android:id="@+id/dashboard_item"
             android:checked="true"
             android:icon="@drawable/dashboard"
             android:title="@string/dashboard" />
-
+        <item
+            android:id="@+id/attendance_item"
+            android:checked="false"
+            android:icon="@drawable/dashboard"
+            android:title="@string/attendance" />
+        <item
+            android:id="@+id/homework_item"
+            android:checked="false"
+            android:icon="@drawable/dashboard"
+            android:title="@string/homework" />
         <item
             android:id="@+id/logout_item"
             android:checked="false"
             android:icon="@drawable/exit"
             android:title="@string/logout" />
-
     </group>
 </menu>

@@ -1,5 +1,6 @@
 package com.aanglearning.instructorapp.messagegroup;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     @BindView(R.id.new_msg) EditText newMsg;
     @BindView(R.id.enter_msg) ImageView enterMsg;
 
+    private static final String TAG = "MessageActivity";
     private MessagePresenter presenter;
     private Groups group;
     private ArrayList<Message> messages = new ArrayList<>();
@@ -64,6 +66,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     private EndlessRecyclerViewScrollListener scrollListener;
     private int previousSize;
     private FloatingActionButton fabButton;
+    final static int REQ_CODE = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,12 +219,17 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
         previousSize = messages.size();
     }
 
+    public void uploadImage (View view) {
+        Intent intent = new Intent(MessageActivity.this, ImageUploadActivity.class);
+        startActivityForResult(intent, REQ_CODE);
+    }
+
     public void newMsgSendListener (View view) {
-        sendMessage();
+        sendMessage("text", "");
         newMsg.setText("");
     }
 
-    private void sendMessage() {
+    private void sendMessage(String messageType, String imgUrl) {
         View v = this.getCurrentFocus();
         if (v != null) {
             InputMethodManager imm = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -236,7 +244,8 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
                 message.setSenderName(TeacherDao.getTeacher().getTeacherName());
                 message.setSenderRole("teacher");
                 message.setGroupId(group.getId());
-                message.setMessageType("text");
+                message.setMessageType(messageType);
+                message.setImageUrl(imgUrl);
                 message.setMessageBody(newMsg.getText().toString());
                 message.setCreatedAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 presenter.saveMessage(message);
@@ -244,7 +253,26 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
                 showAPIError("You are offline,check your internet.");
             }
         }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (REQ_CODE) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    String msg = data.getStringExtra("text");
+                    newMsg.setText(msg);
+                    String imgName = data.getStringExtra("imgName");
+                    Log.e(TAG,  msg + " Result from child activity " + imgName);
+                    sendMessage("image", imgName);
+                } else {
+                    hideProgress();
+                    showAPIError("Error in sending message");
+                }
+                break;
+            }
+        }
     }
 
     private final TextWatcher newMsgWatcher = new TextWatcher() {
@@ -273,7 +301,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     @Override
     public boolean onKey(View view, int i, KeyEvent keyEvent) {
         if(i == keyEvent.KEYCODE_ENTER){
-            sendMessage();
+            sendMessage("text", "");
         }
         return false;
     }

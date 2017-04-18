@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,10 +22,12 @@ import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.GroupDao;
+import com.aanglearning.instructorapp.dao.ServiceDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.login.LoginActivity;
 import com.aanglearning.instructorapp.messagegroup.MessageActivity;
 import com.aanglearning.instructorapp.model.Groups;
+import com.aanglearning.instructorapp.model.Service;
 import com.aanglearning.instructorapp.newgroup.NewGroupActivity;
 import com.aanglearning.instructorapp.util.AppGlobal;
 import com.aanglearning.instructorapp.util.NetworkUtil;
@@ -51,8 +55,6 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         setContentView(R.layout.activity_dashboard);
         ButterKnife.bind(this);
 
-        AppGlobal.setSqlDbHelper(getApplicationContext());
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -70,6 +72,10 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.dashboard_item:
+                                break;
+                            case R.id.attendance_item:
+                                break;
+                            case R.id.homework_item:
                                 break;
                             case R.id.logout_item:
                                 SharedPreferenceUtil.logout(DashboardActivity.this);
@@ -105,8 +111,9 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         ImageView imageView = (ImageView) hView.findViewById(R.id.user_image);
         TextView tv = (TextView) hView.findViewById(R.id.name);
         imageView.setImageResource(R.drawable.child);
-        tv.setText("Vinay Krishna");
+        tv.setText(TeacherDao.getTeacher().getTeacherName());
 
+        hideDrawerItem();
     }
 
     @Override
@@ -119,6 +126,32 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     public void onDestroy() {
         super.onDestroy();
         presenter.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isNavDrawerOpen()) {
+            closeNavDrawer();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    protected boolean isNavDrawerOpen() {
+        return drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.START);
+    }
+
+    protected void closeNavDrawer() {
+        if (drawerLayout != null) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    private void hideDrawerItem() {
+        Menu menu = navigationView.getMenu();
+        Service service = ServiceDao.getServices();
+        if(!service.isAttendance()) menu.findItem(R.id.attendance_item).setVisible(false);
+        if(!service.isHomework()) menu.findItem(R.id.homework_item).setVisible(false);
     }
 
     public void addGroup(View view) {

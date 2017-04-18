@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.aanglearning.instructorapp.R;
+import com.aanglearning.instructorapp.dao.ServiceDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.dashboard.DashboardActivity;
 import com.aanglearning.instructorapp.model.Credentials;
@@ -44,8 +45,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
-        AppGlobal.setSqlDbHelper(getApplicationContext());
 
         presenter = new LoginPresenterImpl(this);
     }
@@ -108,6 +107,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     public void saveUser(TeacherCredentials teacherCredentials) {
         TeacherDao.clear();
         TeacherDao.insert(teacherCredentials.getTeacher());
+        ServiceDao.clear();
+        ServiceDao.insert(teacherCredentials.getService());
         SharedPreferenceUtil.saveTeacher(this, teacherCredentials);
     }
 

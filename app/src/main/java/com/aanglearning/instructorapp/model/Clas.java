@@ -4,6 +4,7 @@ public class Clas {
     private long id;
     private String className;
     private long schoolId;
+    private long teacherId;
     private String attendanceType;
 
     public long getId() {
@@ -28,6 +29,14 @@ public class Clas {
 
     public void setSchoolId(long schoolId) {
         this.schoolId = schoolId;
+    }
+
+    public long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(long teacherId) {
+        this.teacherId = teacherId;
     }
 
     public String getAttendanceType() {

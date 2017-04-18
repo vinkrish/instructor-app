@@ -57,7 +57,6 @@
                 android:layout_marginTop="5dp"
                 android:layout_below="@id/sender_name"
                 android:layout_gravity="center_vertical"
-                android:text="asdf asdfas asdf  sdfasfdasdf a;jfdas adf a;dfa sdflas ;fja sjflkajsdf;l as;dfj ;lasjf kajsd;fl jas;f "
                 android:textColor="@color/default_tv_color"
                 android:textSize="@dimen/text_xsmall" />
 

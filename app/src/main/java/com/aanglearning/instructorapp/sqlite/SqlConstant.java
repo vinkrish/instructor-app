@@ -3,7 +3,7 @@ package com.aanglearning.instructorapp.sqlite;
 /**
  * Created by Vinay.
  */
-public interface SqlConstant {
+ interface SqlConstant {
 
     String DATABASE_NAME = "project.db";
     int DATABASE_VERSION = 1;
@@ -170,4 +170,14 @@ public interface SqlConstant {
             " IsActive INTEGER" +
             ")";
 
+   String CREATE_SERVICE = "CREATE TABLE service (" +
+           " Id INTEGER, " +
+           " SchoolId INTEGER, " +
+           " IsMessage INTEGER, " +
+           " IsSms INTEGER, " +
+           " IsAttendance INTEGER, " +
+           " IsAttendanceSms INTEGER," +
+           " IsHomework INEGER, " +
+           " IsHomeworkSms INTEGER" +
+           ")";
 }

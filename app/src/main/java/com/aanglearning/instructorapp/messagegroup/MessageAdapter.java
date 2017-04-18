@@ -147,6 +147,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         @BindView(R.id.sender_name) TextView senderName;
         @BindView(R.id.created_date) TextView createdDate;
         @BindView(R.id.shared_image) ImageView sharedImage;
+        @BindView(R.id.message) TextView messageTV;
 
         ImageHolder(View view) {
             super(view);
@@ -159,6 +160,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             senderImage.setImageDrawable(drawable);
             senderName.setText(message.getSenderName());
             createdDate.setText("07-04-2017 21:25");
+            messageTV.setText(message.getMessageBody());
 
             sharedImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -185,7 +187,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         ImageView fullImage = (ImageView) dialog.findViewById(R.id.full_image);
         Picasso.with(mContext)
-                .load(message.getImageUrl())
+                .load("https://s3.ap-south-1.amazonaws.com/aang-solutions/" + message.getImageUrl())
                 .placeholder(R.drawable.books)
                 .error(R.drawable.books)
                 .into(fullImage);
