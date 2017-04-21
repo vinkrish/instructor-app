@@ -173,11 +173,11 @@ package com.aanglearning.instructorapp.sqlite;
    String CREATE_SERVICE = "CREATE TABLE service (" +
            " Id INTEGER, " +
            " SchoolId INTEGER, " +
-           " IsMessage INTEGER, " +
-           " IsSms INTEGER, " +
-           " IsAttendance INTEGER, " +
-           " IsAttendanceSms INTEGER," +
-           " IsHomework INEGER, " +
-           " IsHomeworkSms INTEGER" +
+           " IsMessage TEXT, " +
+           " IsSms TEXT, " +
+           " IsAttendance TEXT, " +
+           " IsAttendanceSms TEXT," +
+           " IsHomework TEXT, " +
+           " IsHomeworkSms TEXT" +
            ")";
 }

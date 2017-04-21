@@ -13,6 +13,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -150,8 +151,8 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     private void hideDrawerItem() {
         Menu menu = navigationView.getMenu();
         Service service = ServiceDao.getServices();
-        if(!service.isAttendance()) menu.findItem(R.id.attendance_item).setVisible(false);
-        if(!service.isHomework()) menu.findItem(R.id.homework_item).setVisible(false);
+        if(service.getIsAttendance().equalsIgnoreCase("false")) menu.findItem(R.id.attendance_item).setVisible(false);
+        if(service.getIsHomework().equalsIgnoreCase("false")) menu.findItem(R.id.homework_item).setVisible(false);
     }
 
     public void addGroup(View view) {
