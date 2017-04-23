@@ -1,15 +1,15 @@
-package com.aanglearning.instructorapp.usergroup;
+package com.aanglearning.instructorapp.model;
 
-import com.aanglearning.instructorapp.model.Student;
+import com.aanglearning.instructorapp.model.Teacher;
 
 /**
  * Created by Vinay on 04-04-2017.
  */
 
-public class GroupStudent extends Student {
+public class TeacherSet extends Teacher {
     private boolean isSelected;
 
-    public GroupStudent(long id, String name) {
+    public TeacherSet(long id, String name) {
         super(id, name);
         this.isSelected = false;
     }

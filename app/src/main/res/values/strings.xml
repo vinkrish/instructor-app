@@ -12,9 +12,6 @@
     <string name="dashboard">Dashboard</string>
     <string name="logout">Logout</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="no_data_available">No Data Available</string>
     <string name="existing_groups">Existing Groups</string>
     <string name="new_group">Create new group</string>
@@ -37,6 +34,12 @@
     <string name="upload_image">Upload Image</string>
     <string name="select_image">Click here to choose image</string>
     <string name="send">Send</string>
+
+    <!-- Attendance View -->
+    <string name="absentees">Absentees</string>
+    <string name="mark_absentees">Mark Absentees</string>
+    <string name="change">Change</string>
+    <string name="future_date">Selected date can\'t be future to present day</string>
 
     <string name="title_activity_group">New Group</string>
     <string name="title_activity_user_group">Group Members</string>

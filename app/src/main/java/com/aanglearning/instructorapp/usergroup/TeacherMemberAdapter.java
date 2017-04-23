@@ -9,6 +9,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
+import com.aanglearning.instructorapp.model.TeacherSet;
 
 import java.util.ArrayList;
 
@@ -20,17 +21,17 @@ import butterknife.ButterKnife;
  */
 
 public class TeacherMemberAdapter extends RecyclerView.Adapter<TeacherMemberAdapter.ViewHolder>{
-    private ArrayList<GroupTeacher> items;
+    private ArrayList<TeacherSet> items;
 
-    TeacherMemberAdapter(ArrayList<GroupTeacher> items) {
+    TeacherMemberAdapter(ArrayList<TeacherSet> items) {
         this.items = items;
     }
 
-    public ArrayList<GroupTeacher> getDataSet() {
+    public ArrayList<TeacherSet> getDataSet() {
         return items;
     }
 
-    public void setDataSet(ArrayList<GroupTeacher> items) {
+    public void setDataSet(ArrayList<TeacherSet> items) {
         this.items = items;
         notifyDataSetChanged();
     }
@@ -43,13 +44,13 @@ public class TeacherMemberAdapter extends RecyclerView.Adapter<TeacherMemberAdap
 
     @Override
     public void onBindViewHolder(TeacherMemberAdapter.ViewHolder holder, int position) {
-        final GroupTeacher groupTeacher = items.get(position);
-        holder.name.setText(groupTeacher.getTeacherName());
-        holder.isSelected.setSelected(groupTeacher.isSelected());
+        final TeacherSet teacherSet = items.get(position);
+        holder.name.setText(teacherSet.getTeacherName());
+        holder.isSelected.setSelected(teacherSet.isSelected());
         holder.isSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                groupTeacher.setSelected(b);
+                teacherSet.setSelected(b);
             }
         });
     }

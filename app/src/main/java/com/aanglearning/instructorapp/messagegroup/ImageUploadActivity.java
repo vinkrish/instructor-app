@@ -58,7 +58,6 @@ public class ImageUploadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_upload);
-
         ButterKnife.bind(this);
 
         transferUtility = Util.getTransferUtility(this);

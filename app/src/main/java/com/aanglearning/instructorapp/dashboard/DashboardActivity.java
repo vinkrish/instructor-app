@@ -22,9 +22,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
+import com.aanglearning.instructorapp.attendance.AttendanceActivity;
 import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.dao.ServiceDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
+import com.aanglearning.instructorapp.homework.HomeworkActivity;
 import com.aanglearning.instructorapp.login.LoginActivity;
 import com.aanglearning.instructorapp.messagegroup.MessageActivity;
 import com.aanglearning.instructorapp.model.Groups;
@@ -62,9 +64,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         presenter = new GroupPresenterImpl(this, new GroupInteractorImpl());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         recyclerView.setNestedScrollingEnabled(false);
-
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         navigationView.setNavigationItemSelectedListener(
@@ -73,10 +73,13 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.dashboard_item:
+                                startActivity(new Intent(DashboardActivity.this, DashboardActivity.class));
                                 break;
                             case R.id.attendance_item:
+                                startActivity(new Intent(DashboardActivity.this, AttendanceActivity.class));
                                 break;
                             case R.id.homework_item:
+                                startActivity(new Intent(DashboardActivity.this, HomeworkActivity.class));
                                 break;
                             case R.id.logout_item:
                                 SharedPreferenceUtil.logout(DashboardActivity.this);
@@ -151,8 +154,8 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     private void hideDrawerItem() {
         Menu menu = navigationView.getMenu();
         Service service = ServiceDao.getServices();
-        if(service.getIsAttendance().equalsIgnoreCase("false")) menu.findItem(R.id.attendance_item).setVisible(false);
-        if(service.getIsHomework().equalsIgnoreCase("false")) menu.findItem(R.id.homework_item).setVisible(false);
+        if(!service.getIsAttendance()) menu.findItem(R.id.attendance_item).setVisible(false);
+        if(!service.getIsHomework()) menu.findItem(R.id.homework_item).setVisible(false);
     }
 
     public void addGroup(View view) {

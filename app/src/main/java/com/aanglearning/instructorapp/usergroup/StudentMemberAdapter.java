@@ -2,7 +2,6 @@ package com.aanglearning.instructorapp.usergroup;
 
 import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
+import com.aanglearning.instructorapp.model.StudentSet;
 
 import java.util.ArrayList;
 
@@ -22,18 +22,18 @@ import butterknife.ButterKnife;
  */
 
 public class StudentMemberAdapter extends RecyclerView.Adapter<StudentMemberAdapter.ViewHolder> {
-    private ArrayList<GroupStudent> items;
+    private ArrayList<StudentSet> items;
 
-    StudentMemberAdapter(ArrayList<GroupStudent> items) {
+    StudentMemberAdapter(ArrayList<StudentSet> items) {
         this.items = items;
     }
 
-    public ArrayList<GroupStudent> getDataSet() {
+    public ArrayList<StudentSet> getDataSet() {
         return items;
     }
 
     @UiThread
-    public void setDataSet(ArrayList<GroupStudent> items) {
+    public void setDataSet(ArrayList<StudentSet> items) {
         this.items = items;
         notifyDataSetChanged();
     }
@@ -46,13 +46,13 @@ public class StudentMemberAdapter extends RecyclerView.Adapter<StudentMemberAdap
 
     @Override
     public void onBindViewHolder(StudentMemberAdapter.ViewHolder holder, int position) {
-        final GroupStudent groupStudent = items.get(position);
-        holder.name.setText(groupStudent.getStudentName());
-        holder.isSelected.setChecked(groupStudent.isSelected());
+        final StudentSet studentSet = items.get(position);
+        holder.name.setText(studentSet.getStudentName());
+        holder.isSelected.setChecked(studentSet.isSelected());
         holder.isSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                groupStudent.setSelected(b);
+                studentSet.setSelected(b);
             }
         });
     }

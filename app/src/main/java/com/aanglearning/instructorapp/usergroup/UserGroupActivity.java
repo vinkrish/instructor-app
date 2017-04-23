@@ -16,13 +16,14 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Student;
+import com.aanglearning.instructorapp.model.StudentSet;
 import com.aanglearning.instructorapp.model.Teacher;
+import com.aanglearning.instructorapp.model.TeacherSet;
 import com.aanglearning.instructorapp.model.UserGroup;
 import com.aanglearning.instructorapp.util.AlertDialogHelper;
 import com.aanglearning.instructorapp.util.RecyclerItemClickListener;
@@ -90,7 +91,7 @@ public class UserGroupActivity extends AppCompatActivity implements
             @Override
             public void onItemLongClick(View view, int position) {
                 if (!isMultiSelect) {
-                    multiselect_list = new ArrayList<UserGroup>();
+                    multiselect_list = new ArrayList<>();
                     isMultiSelect = true;
 
                     if (mActionMode == null) {
@@ -126,31 +127,31 @@ public class UserGroupActivity extends AppCompatActivity implements
 
     public void selectAllStudents(View view) {
         showProgress();
-        ArrayList<GroupStudent> groupStudents = studentAdapter.getDataSet();
-        for(GroupStudent groupStudent: groupStudents) {
-            groupStudent.setSelected(true);
+        ArrayList<StudentSet> studentSets = studentAdapter.getDataSet();
+        for(StudentSet studentSet : studentSets) {
+            studentSet.setSelected(true);
         }
-        studentAdapter.setDataSet(groupStudents);
+        studentAdapter.setDataSet(studentSets);
         hideProgress();
     }
 
     public void saveUsers(View view) {
         showProgress();
         ArrayList<UserGroup> userGroups = new ArrayList<>();
-        for(GroupStudent groupStudent: studentAdapter.getDataSet()) {
-            if(groupStudent.isSelected()) {
+        for(StudentSet studentSet : studentAdapter.getDataSet()) {
+            if(studentSet.isSelected()) {
                 UserGroup userGroup = new UserGroup();
-                userGroup.setUserId(groupStudent.getId());
+                userGroup.setUserId(studentSet.getId());
                 userGroup.setRole("student");
                 userGroup.setGroupId(group.getId());
                 userGroup.setActive(true);
                 userGroups.add(userGroup);
             }
         }
-        for(GroupTeacher groupTeacher: teacherAdapter.getDataSet()) {
-            if(groupTeacher.isSelected()) {
+        for(TeacherSet teacherSet : teacherAdapter.getDataSet()) {
+            if(teacherSet.isSelected()) {
                 UserGroup userGroup = new UserGroup();
-                userGroup.setUserId(groupTeacher.getId());
+                userGroup.setUserId(teacherSet.getId());
                 userGroup.setRole("teacher");
                 userGroup.setGroupId(group.getId());
                 userGroup.setActive(true);
@@ -190,23 +191,23 @@ public class UserGroupActivity extends AppCompatActivity implements
         userGroups = groupUsers.getUserGroupList();
         adapter.setDataSet(userGroups, multiselect_list);
 
-        ArrayList<GroupStudent> groupStudents = new ArrayList<>();
+        ArrayList<StudentSet> studentSets = new ArrayList<>();
         for(Student s: groupUsers.getStudents()) {
-            groupStudents.add(new GroupStudent(s.getId(), s.getStudentName()));
+            studentSets.add(new StudentSet(s.getId(), s.getRollNo(), s.getStudentName()));
         }
-        studentAdapter = new StudentMemberAdapter(groupStudents);
+        studentAdapter = new StudentMemberAdapter(studentSets);
         studentView.setAdapter(studentAdapter);
-        if(groupStudents.size() == 0) {
+        if(studentSets.size() == 0) {
             addStudentsLayout.setVisibility(View.GONE);
         }
 
-        ArrayList<GroupTeacher> groupTeachers = new ArrayList<>();
+        ArrayList<TeacherSet> teacherSets = new ArrayList<>();
         for(Teacher t: groupUsers.getTeachers()) {
-            groupTeachers.add(new GroupTeacher(t.getId(), t.getTeacherName()));
+            teacherSets.add(new TeacherSet(t.getId(), t.getTeacherName()));
         }
-        teacherAdapter = new TeacherMemberAdapter(groupTeachers);
+        teacherAdapter = new TeacherMemberAdapter(teacherSets);
         teacherView.setAdapter(teacherAdapter);
-        if(groupTeachers.size() == 0) {
+        if(teacherSets.size() == 0) {
             addTeacherLayout.setVisibility(View.GONE);
         }
     }

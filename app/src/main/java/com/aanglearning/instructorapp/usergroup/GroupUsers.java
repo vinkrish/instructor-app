@@ -16,27 +16,27 @@ public class GroupUsers {
     private ArrayList<Student> students;
     private ArrayList<Teacher> teachers;
 
-    public ArrayList<UserGroup> getUserGroupList() {
+    ArrayList<UserGroup> getUserGroupList() {
         return userGroupList;
     }
 
-    public void setUserGroupList(ArrayList<UserGroup> userGroupList) {
+    void setUserGroupList(ArrayList<UserGroup> userGroupList) {
         this.userGroupList = userGroupList;
     }
 
-    public ArrayList<Student> getStudents() {
+    ArrayList<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(ArrayList<Student> students) {
+    void setStudents(ArrayList<Student> students) {
         this.students = students;
     }
 
-    public ArrayList<Teacher> getTeachers() {
+    ArrayList<Teacher> getTeachers() {
         return teachers;
     }
 
-    public void setTeachers(ArrayList<Teacher> teachers) {
+    void setTeachers(ArrayList<Teacher> teachers) {
         this.teachers = teachers;
     }
 }

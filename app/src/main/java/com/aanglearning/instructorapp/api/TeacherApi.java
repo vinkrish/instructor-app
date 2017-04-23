@@ -1,5 +1,7 @@
 package com.aanglearning.instructorapp.api;
 
+import com.aanglearning.instructorapp.attendance.AttendanceSet;
+import com.aanglearning.instructorapp.model.Attendance;
 import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Message;
@@ -26,8 +28,15 @@ public interface TeacherApi {
     @GET("class/school/{schoolId}")
     Call<List<Clas>> getClassList(@Path("schoolId") long schoolId);
 
+    @GET("class/teacher/{teacherId}")
+    Call<List<Clas>> getSectionTeacherClasses(@Path("teacherId") long teacherId);
+
     @GET("section/class/{classId}")
     Call<List<Section>> getSectionList(@Path("classId") long classId);
+
+    @GET("section/class/{classId}/teacher/{teacherId}")
+    Call<List<Section>> getSectionTeacherSections(@Path("classId") long classId,
+                                                  @Path("teacherId") long teacherId);
 
     @POST("groups")
     Call<Groups> saveGroup(@Body Groups groups);
@@ -56,4 +65,15 @@ public interface TeacherApi {
 
     @POST("usergroup/delete")
     Call<Void> deleteUserGroupUsers(@Body ArrayList<UserGroup> userGroups);
+
+    @GET("app/attendance/section/{sectionId}/date/{dateAttendance}/session/{session}")
+    Call<AttendanceSet> getAttendanceSet(@Path("sectionId") long sectionId,
+                                         @Path("dateAttendance") String dateAttendance,
+                                         @Path("session") int session);
+
+    @POST("app/attendance")
+    Call<Void> saveAttendance(@Body ArrayList<Attendance> attendances);
+
+    @POST("app/attendance/delete")
+    Call<Void> deleteAttendance(@Body ArrayList<Attendance> attendanceList);
 }

@@ -13,9 +13,7 @@ import android.widget.TextView;
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.model.UserGroup;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,8 +67,7 @@ public class UserGroupAdapter extends RecyclerView.Adapter<UserGroupAdapter.View
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.name) TextView name;
         @BindView(R.id.role) TextView role;
-        @BindView(R.id.ll_listitem)
-        LinearLayout item_layout;
+        @BindView(R.id.ll_listitem) LinearLayout item_layout;
 
         ViewHolder(View view) {
             super(view);
