@@ -91,7 +91,7 @@
         <activity
             android:name=".homework.HomeworkActivity"
             android:label="@string/homework"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/AppTheme.UserGroupTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".dashboard.DashboardActivity" />

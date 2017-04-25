@@ -35,16 +35,18 @@
     <string name="select_image">Click here to choose image</string>
     <string name="send">Send</string>
 
-    <!-- Attendance View -->
+    <!-- Attendance View & Homework View-->
+    <string name="attendance">Attendance</string>
+    <string name="homework">Homework</string>
     <string name="absentees">Absentees</string>
     <string name="mark_absentees">Mark Absentees</string>
     <string name="change">Change</string>
     <string name="future_date">Selected date can\'t be future to present day</string>
+    <string name="enter_homework">Enter homework for &#8230;</string>
+    <string name="enter_hw">Enter homework</string>
 
     <string name="title_activity_group">New Group</string>
     <string name="title_activity_user_group">Group Members</string>
     <string name="title_activity_new_group">New Group</string>
     <string name="title_activity_message">Messages</string>
-    <string name="attendance">Attendance</string>
-    <string name="homework">Homework</string>
 </resources>

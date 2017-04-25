@@ -4,6 +4,7 @@ import com.aanglearning.instructorapp.attendance.AttendanceSet;
 import com.aanglearning.instructorapp.model.Attendance;
 import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Groups;
+import com.aanglearning.instructorapp.model.Homework;
 import com.aanglearning.instructorapp.model.Message;
 import com.aanglearning.instructorapp.model.Section;
 import com.aanglearning.instructorapp.model.UserGroup;
@@ -17,6 +18,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -38,6 +40,8 @@ public interface TeacherApi {
     Call<List<Section>> getSectionTeacherSections(@Path("classId") long classId,
                                                   @Path("teacherId") long teacherId);
 
+    //Group and Message API
+
     @POST("groups")
     Call<Groups> saveGroup(@Body Groups groups);
 
@@ -54,6 +58,8 @@ public interface TeacherApi {
     Call<ArrayList<Message>> getGroupMessagesFromId(@Path("groupId") long groupId,
                                                @Path("messageId") long messageId);
 
+    //UserGroup API
+
     @GET("usergroup/groupusers/groups/{groupId}")
     Call<GroupUsers> getUserGroup(@Path("groupId") long groupId);
 
@@ -66,6 +72,8 @@ public interface TeacherApi {
     @POST("usergroup/delete")
     Call<Void> deleteUserGroupUsers(@Body ArrayList<UserGroup> userGroups);
 
+    //Attendance API
+
     @GET("app/attendance/section/{sectionId}/date/{dateAttendance}/session/{session}")
     Call<AttendanceSet> getAttendanceSet(@Path("sectionId") long sectionId,
                                          @Path("dateAttendance") String dateAttendance,
@@ -76,4 +84,19 @@ public interface TeacherApi {
 
     @POST("app/attendance/delete")
     Call<Void> deleteAttendance(@Body ArrayList<Attendance> attendanceList);
+
+    //Homework API
+
+    @GET("homework/section/{sectionId}/date/{homeworkDate}")
+    Call<List<Homework>> getHomework(@Path("sectionId") long sectionId,
+                                       @Path("homeworkDate") String homeworkDate);
+
+    @POST("homework")
+    Call<Homework> saveHomework(@Body Homework homework);
+
+    @PUT("homework")
+    Call<Void> updateHomework(@Body Homework homework);
+
+    @POST("homework/delete")
+    Call<Void> deleteHomework(@Body List<Homework> homeworks);
 }

@@ -89,6 +89,5 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
                 absent.setText("Absent");
             }
         }
-
     }
 }

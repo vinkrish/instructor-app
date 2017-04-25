@@ -66,14 +66,16 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
     @BindView(R.id.mark_students) TextView markStudentsTv;
 
     private AttendancePresenter presenter;
-    private AttendanceAdapter attendanceAdapter;
-    private StudentAdapter studentAdapter;
     private String attendanceDate;
     ActionMode mActionMode;
     boolean isMultiSelect = false;
     AlertDialogHelper alertDialogHelper;
+
     ArrayList<Attendance> absentees = new ArrayList<>();
     ArrayList<Attendance> multiselect_list = new ArrayList<>();
+
+    private AttendanceAdapter attendanceAdapter;
+    private StudentAdapter studentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -294,8 +296,8 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
                 presenter.getSectionList(((Clas) classSpinner.getSelectedItem()).getId(), TeacherDao.getTeacher().getId());
                 break;
             case R.id.spinner_section:
-                presenter.getAttendance(((Section)sectionSpinner.getSelectedItem()).getId(), attendanceDate,
-                        0);
+                getAttendance();
+                //presenter.getAttendance(((Section)sectionSpinner.getSelectedItem()).getId(), attendanceDate, 0);
                 break;
             default:
                 break;

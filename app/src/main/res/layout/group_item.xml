@@ -13,7 +13,7 @@
         android:lineSpacingExtra="3dp"
         android:maxLines="2"
         android:textColor="@color/primaryTextColor"
-        android:textSize="@dimen/text_medium" />
+        android:textSize="@dimen/text_xsmall" />
 
     <View
         android:layout_width="match_parent"
