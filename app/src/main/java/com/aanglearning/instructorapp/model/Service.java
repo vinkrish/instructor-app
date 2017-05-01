@@ -5,6 +5,7 @@ public class Service {
     private long schoolId;
     private boolean isMessage;
     private boolean isSms;
+    private boolean isChat;
     private boolean isAttendance;
     private boolean isHomework;
     private boolean isAttendanceSms;
@@ -40,6 +41,13 @@ public class Service {
 
     public void setIsSms(boolean isSms) {
         this.isSms = isSms;
+    }
+
+    public boolean getIsChat() {
+        return isChat;
+    }
+    public void setIsChat(boolean isChat) {
+        this.isChat = isChat;
     }
 
     public boolean getIsAttendance() {

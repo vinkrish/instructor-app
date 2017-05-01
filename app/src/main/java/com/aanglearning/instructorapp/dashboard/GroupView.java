@@ -8,14 +8,12 @@ import java.util.List;
  * Created by Vinay on 02-04-2017.
  */
 
-public interface GroupView {
+interface GroupView {
     void showProgress();
 
     void hideProgess();
 
-    void showError();
-
-    void showAPIError(String message);
+    void showError(String message);
 
     void setGroups(List<Groups> groups);
 }

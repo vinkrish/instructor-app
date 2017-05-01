@@ -17,6 +17,11 @@
             android:icon="@drawable/dashboard"
             android:title="@string/homework" />
         <item
+            android:id="@+id/chat_item"
+            android:checked="false"
+            android:icon="@drawable/dashboard"
+            android:title="@string/chat" />
+        <item
             android:id="@+id/logout_item"
             android:checked="false"
             android:icon="@drawable/exit"

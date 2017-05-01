@@ -2,6 +2,7 @@ package com.aanglearning.instructorapp.api;
 
 import com.aanglearning.instructorapp.attendance.AttendanceSet;
 import com.aanglearning.instructorapp.model.Attendance;
+import com.aanglearning.instructorapp.model.Chat;
 import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Homework;
@@ -33,6 +34,9 @@ public interface TeacherApi {
     @GET("class/teacher/{teacherId}")
     Call<List<Clas>> getSectionTeacherClasses(@Path("teacherId") long teacherId);
 
+    @GET("class/subjectteacher/{teacherId}")
+    Call<List<Clas>> getSubjectTeacherClasses(@Path("teacherId") long teacherId);
+
     @GET("section/class/{classId}")
     Call<List<Section>> getSectionList(@Path("classId") long classId);
 
@@ -40,13 +44,20 @@ public interface TeacherApi {
     Call<List<Section>> getSectionTeacherSections(@Path("classId") long classId,
                                                   @Path("teacherId") long teacherId);
 
-    //Group and Message API
+    @GET("section/class/{classId}/subjectteacher/{teacherId}")
+    Call<List<Section>> getSubjectTeacherSections(@Path("classId") long classId,
+                                                  @Path("teacherId") long teacherId);
+
+    //Groups and MessageGroup API
 
     @POST("groups")
     Call<Groups> saveGroup(@Body Groups groups);
 
     @GET("groups/teacher/{id}")
     Call<List<Groups>> getGroups(@Path("id") long id);
+
+    @GET("groups/{groupId}")
+    Call<Void> deleteGroup(@Path("groupId") long groupId);
 
     @POST("message")
     Call<Message> saveMessage(@Body Message message);
@@ -56,7 +67,7 @@ public interface TeacherApi {
 
     @GET("message/group/{groupId}/message/{messageId}")
     Call<ArrayList<Message>> getGroupMessagesFromId(@Path("groupId") long groupId,
-                                               @Path("messageId") long messageId);
+                                                    @Path("messageId") long messageId);
 
     //UserGroup API
 
@@ -66,11 +77,25 @@ public interface TeacherApi {
     @POST("usergroup")
     Call<Void> saveUserGroupList(@Body ArrayList<UserGroup> userGroupList);
 
-    @GET("groups/{groupId}")
-    Call<Void> deleteGroup(@Path("groupId") long groupId);
-
     @POST("usergroup/delete")
     Call<Void> deleteUserGroupUsers(@Body ArrayList<UserGroup> userGroups);
+
+    //Chat API
+    @POST("chat")
+    Call<Chat> saveChat(@Body Chat chat);
+
+    @GET("chat/teacher/{id}")
+    Call<List<Chat>> getChats(@Path("id") long id);
+
+    @GET("chat/{chatId}")
+    Call<Void> deleteChat(@Path("chatId") long chatId);
+
+    @GET("message/{senderRole}/{senderId}/{recipientRole}/{recipientId}")
+    Call<ArrayList<Message>> getChatMessages(@Path("groupId") long groupId);
+
+    @GET("message/{senderRole}/{senderId}/{recipientRole}/{recipientId}/message/{messageId}")
+    Call<ArrayList<Message>> getChatMessagesFromId(@Path("groupId") long groupId,
+                                                    @Path("messageId") long messageId);
 
     //Attendance API
 
@@ -89,7 +114,7 @@ public interface TeacherApi {
 
     @GET("homework/section/{sectionId}/date/{homeworkDate}")
     Call<List<Homework>> getHomework(@Path("sectionId") long sectionId,
-                                       @Path("homeworkDate") String homeworkDate);
+                                     @Path("homeworkDate") String homeworkDate);
 
     @POST("homework")
     Call<Homework> saveHomework(@Body Homework homework);

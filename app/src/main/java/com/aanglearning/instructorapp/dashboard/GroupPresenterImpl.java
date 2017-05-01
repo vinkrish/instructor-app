@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Vinay on 02-04-2017.
  */
 
-public class GroupPresenterImpl implements GroupPresenter, GroupInteractor.OnFinishedListener {
+class GroupPresenterImpl implements GroupPresenter, GroupInteractor.OnFinishedListener {
     private GroupView mView;
     private GroupInteractor mInteractor;
 
@@ -31,18 +31,10 @@ public class GroupPresenterImpl implements GroupPresenter, GroupInteractor.OnFin
     }
 
     @Override
-    public void onError() {
+    public void onError(String message) {
         if (mView != null) {
             mView.hideProgess();
-            mView.showError();
-        }
-    }
-
-    @Override
-    public void onAPIError(String message) {
-        if (mView != null) {
-            mView.hideProgess();
-            mView.showAPIError(message);
+            mView.showError(message);
         }
     }
 

@@ -83,7 +83,7 @@
         <activity
             android:name=".attendance.AttendanceActivity"
             android:label="@string/attendance"
-            android:theme="@style/AppTheme.UserGroupTheme" >
+            android:theme="@style/AppTheme.UserGroupTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".dashboard.DashboardActivity" />
@@ -96,6 +96,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".dashboard.DashboardActivity" />
         </activity>
+        <activity
+            android:name=".chat.ChatActivity"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".newchat.NewChatActivity"
+            android:label="@string/title_activity_new_chat"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".chathome.ChatsActivity"
+            android:label="@string/title_activity_chats"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

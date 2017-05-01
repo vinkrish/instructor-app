@@ -175,6 +175,7 @@ package com.aanglearning.instructorapp.sqlite;
            " SchoolId INTEGER, " +
            " IsMessage TEXT, " +
            " IsSms TEXT, " +
+           " IsChat TEXT, " +
            " IsAttendance TEXT, " +
            " IsAttendanceSms TEXT," +
            " IsHomework TEXT, " +

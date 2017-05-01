@@ -1,10 +1,10 @@
-package com.aanglearning.instructorapp.dashboard;
+package com.aanglearning.instructorapp.chathome;
 
 import com.aanglearning.instructorapp.App;
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.api.ApiClient;
 import com.aanglearning.instructorapp.api.TeacherApi;
-import com.aanglearning.instructorapp.model.Groups;
+import com.aanglearning.instructorapp.model.Chat;
 
 import java.util.List;
 
@@ -13,27 +13,27 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by Vinay on 02-04-2017.
+ * Created by Vinay on 28-04-2017.
  */
 
-class GroupInteractorImpl implements GroupInteractor {
+class ChatsInteractorImpl implements ChatsInteractor {
     @Override
-    public void getGroups(long userId, final OnFinishedListener listener) {
+    public void getChats(long teacherId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<List<Groups>> classList = api.getGroups(userId);
-        classList.enqueue(new Callback<List<Groups>>() {
+        Call<List<Chat>> classList = api.getChats(teacherId);
+        classList.enqueue(new Callback<List<Chat>>() {
             @Override
-            public void onResponse(Call<List<Groups>> call, Response<List<Groups>> response) {
+            public void onResponse(Call<List<Chat>> call, Response<List<Chat>> response) {
                 if(response.isSuccessful()) {
-                    listener.onGroupsReceived(response.body());
+                    listener.onChatsReceived(response.body());
                 } else {
                     listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Groups>> call, Throwable t) {
+            public void onFailure(Call<List<Chat>> call, Throwable t) {
                 listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });

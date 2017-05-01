@@ -13,8 +13,8 @@ import com.aanglearning.instructorapp.util.AppGlobal;
 
 public class ServiceDao {
     public static int insert(Service service) {
-        String sql = "insert into service(Id, SchoolId, IsMessage, IsSms, IsAttendance, IsAttendanceSms, isHomework, isHomeworkSms) " +
-                "values(?,?,?,?,?,?,?,?)";
+        String sql = "insert into service(Id, SchoolId, IsMessage, IsSms, IsChat, IsAttendance, IsAttendanceSms, isHomework, isHomeworkSms) " +
+                "values(?,?,?,?,?,?,?,?,?)";
         SQLiteDatabase db = AppGlobal.getSqlDbHelper().getWritableDatabase();
         db.beginTransactionNonExclusive();
         SQLiteStatement stmt = db.compileStatement(sql);
@@ -23,10 +23,11 @@ public class ServiceDao {
             stmt.bindLong(2, service.getSchoolId());
             stmt.bindString(3, Boolean.toString(service.getIsMessage()));
             stmt.bindString(4, Boolean.toString(service.getIsSms()));
-            stmt.bindString(5, Boolean.toString(service.getIsAttendance()));
-            stmt.bindString(6, Boolean.toString(service.getIsAttendanceSms()));
-            stmt.bindString(7, Boolean.toString(service.getIsHomework()));
-            stmt.bindString(8, Boolean.toString(service.getIsHomeworkSms()));
+            stmt.bindString(5, Boolean.toString(service.getIsChat()));
+            stmt.bindString(6, Boolean.toString(service.getIsAttendance()));
+            stmt.bindString(7, Boolean.toString(service.getIsAttendanceSms()));
+            stmt.bindString(8, Boolean.toString(service.getIsHomework()));
+            stmt.bindString(9, Boolean.toString(service.getIsHomeworkSms()));
             stmt.execute();
             stmt.clearBindings();
         } catch (Exception e) {
@@ -48,6 +49,7 @@ public class ServiceDao {
             service.setSchoolId(c.getLong(c.getColumnIndex("SchoolId")));
             service.setIsMessage(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsMessage"))));
             service.setIsSms(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsSms"))));
+            service.setIsChat(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsChat"))));
             service.setIsAttendance(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsAttendance"))));
             service.setIsAttendanceSms(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsAttendanceSms"))));
             service.setIsHomework(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsHomework"))));

@@ -7,7 +7,9 @@
     <string name="enter_password">Enter password</string>
     <string name="no_user">User doesn\'t exist</string>
 
-    <string name="request_error">Error while requesting, please try again.</string>
+    <string name="network_error">A network error has occurred.</string>
+    <string name="request_error">Connection timed out.</string>
+    <string name="retry">Retry</string>
 
     <string name="dashboard">Dashboard</string>
     <string name="logout">Logout</string>
@@ -29,6 +31,7 @@
     <string name="select_all">Select All</string>
     <string name="menu_item_delete">Delete</string>
 
+    <string name="chat">Chat</string>
     <string name="type_your_message">Enter msg</string>
     <string name="msg_if_any">Message if any..</string>
     <string name="upload_image">Upload Image</string>
@@ -49,4 +52,7 @@
     <string name="title_activity_user_group">Group Members</string>
     <string name="title_activity_new_group">New Group</string>
     <string name="title_activity_message">Messages</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="title_activity_new_chat">NewChatActivity</string>
+    <string name="title_activity_chats">ChatsActivity</string>
 </resources>

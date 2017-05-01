@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -159,7 +160,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             TextDrawable drawable = builder.build(message.getSenderName().substring(0,1), color);
             senderImage.setImageDrawable(drawable);
             senderName.setText(message.getSenderName());
-            createdDate.setText("07-04-2017 21:25");
+            DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
+            createdDate.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
             messageTV.setText(message.getMessageBody());
 
             sharedImage.setOnClickListener(new View.OnClickListener() {

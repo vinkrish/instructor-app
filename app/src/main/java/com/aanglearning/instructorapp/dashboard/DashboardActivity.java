@@ -1,6 +1,7 @@
 package com.aanglearning.instructorapp.dashboard;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -8,12 +9,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +22,7 @@ import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.attendance.AttendanceActivity;
+import com.aanglearning.instructorapp.chathome.ChatsActivity;
 import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.dao.ServiceDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
@@ -32,7 +32,7 @@ import com.aanglearning.instructorapp.messagegroup.MessageActivity;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Service;
 import com.aanglearning.instructorapp.newgroup.NewGroupActivity;
-import com.aanglearning.instructorapp.util.AppGlobal;
+import com.aanglearning.instructorapp.util.DividerItemDecoration;
 import com.aanglearning.instructorapp.util.NetworkUtil;
 import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
@@ -41,7 +41,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DashboardActivity extends AppCompatActivity implements GroupView{
+public class DashboardActivity extends AppCompatActivity
+        implements GroupView, View.OnClickListener{
+
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.navigation_view) NavigationView navigationView;
@@ -66,6 +68,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this));
 
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -80,6 +83,9 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                                 break;
                             case R.id.homework_item:
                                 startActivity(new Intent(DashboardActivity.this, HomeworkActivity.class));
+                                break;
+                            case R.id.chat_item:
+                                startActivity(new Intent(DashboardActivity.this, ChatsActivity.class));
                                 break;
                             case R.id.logout_item:
                                 SharedPreferenceUtil.logout(DashboardActivity.this);
@@ -156,6 +162,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         Service service = ServiceDao.getServices();
         if(!service.getIsAttendance()) menu.findItem(R.id.attendance_item).setVisible(false);
         if(!service.getIsHomework()) menu.findItem(R.id.homework_item).setVisible(false);
+        if(!service.getIsChat()) menu.findItem(R.id.chat_item).setVisible(false);
     }
 
     public void addGroup(View view) {
@@ -167,7 +174,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     }
 
     private void showSnackbar(String message) {
-        Snackbar.make(coordinatorLayout, message, 3000).show();
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -181,13 +188,10 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     }
 
     @Override
-    public void showError() {
-        showSnackbar(getString(R.string.request_error));
-    }
-
-    @Override
-    public void showAPIError(String message) {
-        showSnackbar(message);
+    public void showError(String message) {
+        Snackbar errorSnackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG);
+        errorSnackbar.setAction(R.string.retry, this);
+        errorSnackbar.show();
     }
 
     @Override
@@ -201,5 +205,10 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
             }
         });
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClick(View view) {
+        presenter.getGroups(TeacherDao.getTeacher().getId());
     }
 }

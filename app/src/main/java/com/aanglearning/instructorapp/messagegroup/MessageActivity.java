@@ -247,7 +247,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
                 message.setMessageType(messageType);
                 message.setImageUrl(imgUrl);
                 message.setMessageBody(newMsg.getText().toString());
-                message.setCreatedAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                message.setCreatedAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(new Date()));
                 presenter.saveMessage(message);
             } else {
                 showAPIError("You are offline,check your internet.");
