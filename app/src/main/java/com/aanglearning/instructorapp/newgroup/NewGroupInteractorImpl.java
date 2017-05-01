@@ -18,7 +18,7 @@ import retrofit2.Response;
  * Created by Vinay on 30-03-2017.
  */
 
-public class NewGroupInteractorImpl implements NewGroupInteractor {
+class NewGroupInteractorImpl implements NewGroupInteractor {
     @Override
     public void getClassList(long schoolId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);

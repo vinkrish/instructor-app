@@ -35,7 +35,7 @@ public class NewHomeworkAdapter extends RecyclerView.Adapter<NewHomeworkAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.group_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_homework_item, parent, false);
         return new NewHomeworkAdapter.ViewHolder(v);
     }
 

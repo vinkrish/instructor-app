@@ -6,7 +6,7 @@ import com.aanglearning.instructorapp.model.Groups;
  * Created by Vinay on 30-03-2017.
  */
 
-public interface NewGroupPresenter {
+interface NewGroupPresenter {
     void getClassList(long schoolId);
 
     void getSectionList(long classId);

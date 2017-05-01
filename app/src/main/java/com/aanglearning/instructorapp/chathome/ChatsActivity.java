@@ -34,7 +34,7 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView, View.
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.fab) FloatingActionButton fab;
-    @BindView(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
 
     private ChatsPresenter presenter;
@@ -47,7 +47,8 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView, View.
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         presenter = new ChatsPresenterImpl(this, new ChatsInteractorImpl());
 

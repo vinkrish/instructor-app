@@ -25,7 +25,7 @@ public class ChatActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void showSnackbar(String message) {

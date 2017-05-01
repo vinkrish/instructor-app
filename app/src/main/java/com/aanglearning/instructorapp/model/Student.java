@@ -210,4 +210,9 @@ public class Student {
         this.pincode = pincode;
     }
 
+    public String toString() {
+        return studentName;
+    }
+
+
 }

@@ -8,6 +8,7 @@ import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Homework;
 import com.aanglearning.instructorapp.model.Message;
 import com.aanglearning.instructorapp.model.Section;
+import com.aanglearning.instructorapp.model.Student;
 import com.aanglearning.instructorapp.model.UserGroup;
 import com.aanglearning.instructorapp.usergroup.GroupUsers;
 
@@ -47,6 +48,9 @@ public interface TeacherApi {
     @GET("section/class/{classId}/subjectteacher/{teacherId}")
     Call<List<Section>> getSubjectTeacherSections(@Path("classId") long classId,
                                                   @Path("teacherId") long teacherId);
+
+    @GET("student/section/{sectionId}")
+    Call<List<Student>> getStudents(@Path("sectionId") long sectionId);
 
     //Groups and MessageGroup API
 

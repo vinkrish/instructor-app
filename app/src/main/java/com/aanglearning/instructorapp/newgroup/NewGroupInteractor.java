@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Vinay on 30-03-2017.
  */
 
-public interface NewGroupInteractor {
+interface NewGroupInteractor {
     interface OnFinishedListener {
         void onError();
 

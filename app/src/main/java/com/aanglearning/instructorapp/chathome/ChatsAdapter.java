@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
  * Created by Vinay on 28-04-2017.
  */
 
-public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
+class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
     private final List<Chat> items;
     private final ChatsAdapter.OnItemClickListener listener;
 
@@ -58,10 +58,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.group_name)
-        TextView groupName;
+        @BindView(R.id.student_name)
+        TextView studentName;
         @BindView(R.id.image_view)
-        ImageView groupImage;
+        ImageView studentImage;
 
         ViewHolder(View view) {
             super(view);
@@ -69,10 +69,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
         }
 
         void bind(final Chat chat, final ChatsAdapter.OnItemClickListener listener) {
-            int color = generator.getColor(chat.getSectionName());
-            TextDrawable drawable = builder.build(chat.getSectionName().substring(0,1), color);
-            groupImage.setImageDrawable(drawable);
-            groupName.setText(chat.getSectionName());
+            int color = generator.getColor(chat.getStudentName());
+            TextDrawable drawable = builder.build(chat.getStudentName().substring(0,1), color);
+            studentImage.setImageDrawable(drawable);
+            studentName.setText(chat.getStudentName());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

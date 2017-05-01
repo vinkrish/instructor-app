@@ -48,7 +48,7 @@ public class DashboardActivity extends AppCompatActivity
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.navigation_view) NavigationView navigationView;
     @BindView(R.id.drawer) DrawerLayout drawerLayout;
-    @BindView(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
 
     private GroupPresenter presenter;
