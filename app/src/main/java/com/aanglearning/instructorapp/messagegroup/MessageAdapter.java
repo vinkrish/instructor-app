@@ -5,14 +5,12 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
@@ -33,7 +31,7 @@ import butterknife.ButterKnife;
  * Created by Vinay on 07-04-2017.
  */
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
+class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     private Context mContext;
     private ArrayList<Message> messages;
 

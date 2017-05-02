@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by Vinay on 07-04-2017.
  */
 
-public class MessagePresenterImpl implements MessagePresenter, MessageInteractor.OnFinishedListener {
+class MessagePresenterImpl implements MessagePresenter, MessageInteractor.OnFinishedListener {
     private MessageView mView;
     private MessageInteractor mInteractor;
 

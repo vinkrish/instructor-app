@@ -55,7 +55,7 @@
             android:name=".usergroup.UserGroupActivity"
             android:label="@string/title_activity_user_group"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.UserGroupTheme">
+            android:theme="@style/AppTheme.ContextToolbarTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".messagegroup.MessageActivity" />
@@ -83,7 +83,7 @@
         <activity
             android:name=".attendance.AttendanceActivity"
             android:label="@string/attendance"
-            android:theme="@style/AppTheme.UserGroupTheme">
+            android:theme="@style/AppTheme.ContextToolbarTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".dashboard.DashboardActivity" />
@@ -91,7 +91,7 @@
         <activity
             android:name=".homework.HomeworkActivity"
             android:label="@string/homework"
-            android:theme="@style/AppTheme.UserGroupTheme">
+            android:theme="@style/AppTheme.ContextToolbarTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".dashboard.DashboardActivity" />

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Created by Vinay on 07-04-2017.
  */
 
-public interface MessageInteractor {
+interface MessageInteractor {
     interface OnFinishedListener {
         void onError();
 

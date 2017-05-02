@@ -95,11 +95,17 @@ public interface TeacherApi {
     Call<Void> deleteChat(@Path("chatId") long chatId);
 
     @GET("message/{senderRole}/{senderId}/{recipientRole}/{recipientId}")
-    Call<ArrayList<Message>> getChatMessages(@Path("groupId") long groupId);
+    Call<ArrayList<Message>> getChatMessages(@Path("senderRole") String senderRole,
+                                             @Path("senderId") long senderId,
+                                             @Path("recipientRole") String recipientRole,
+                                             @Path("recipientId") long recipientId);
 
     @GET("message/{senderRole}/{senderId}/{recipientRole}/{recipientId}/message/{messageId}")
-    Call<ArrayList<Message>> getChatMessagesFromId(@Path("groupId") long groupId,
-                                                    @Path("messageId") long messageId);
+    Call<ArrayList<Message>> getChatMessagesFromId(@Path("senderRole") String senderRole,
+                                                   @Path("senderId") long senderId,
+                                                   @Path("recipientRole") String recipientRole,
+                                                   @Path("recipientId") long recipientId,
+                                                   @Path("messageId") long messageId);
 
     //Attendance API
 

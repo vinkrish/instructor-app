@@ -14,7 +14,7 @@ import retrofit2.Response;
  * Created by Vinay on 07-04-2017.
  */
 
-public class MessageInteractorImpl implements MessageInteractor {
+class MessageInteractorImpl implements MessageInteractor {
     @Override
     public void saveMessage(Message message, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);

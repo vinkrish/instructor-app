@@ -103,9 +103,9 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView, View.
         adapter = new ChatsAdapter(chats, new ChatsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Chat chat) {
-                //GroupDao.clear();
-                //GroupDao.insert(group);
-                startActivity(new Intent(ChatsActivity.this, ChatActivity.class));
+                Intent intent = new Intent(ChatsActivity.this, ChatActivity.class);
+                intent.putExtra("recipientId", chat.getStudentId());
+                startActivity(intent);
             }
         });
         recyclerView.setAdapter(adapter);
@@ -113,6 +113,10 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView, View.
 
     @Override
     public void onClick(View view) {
-        presenter.getChats(TeacherDao.getTeacher().getId());
+        switch (view.getId()){
+            default:
+                presenter.getChats(TeacherDao.getTeacher().getId());
+                break;
+        }
     }
 }

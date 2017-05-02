@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by Vinay on 07-04-2017.
  */
 
-public interface MessageView {
+interface MessageView {
     void showProgress();
 
     void hideProgress();
