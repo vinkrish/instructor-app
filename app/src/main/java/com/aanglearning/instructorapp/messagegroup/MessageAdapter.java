@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.model.Message;
+import com.aanglearning.instructorapp.util.TouchImageView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.squareup.picasso.Picasso;
@@ -185,7 +186,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_image_item);
 
-        ImageView fullImage = (ImageView) dialog.findViewById(R.id.full_image);
+        TouchImageView fullImage = (TouchImageView) dialog.findViewById(R.id.full_image);
         Picasso.with(mContext)
                 .load("https://s3.ap-south-1.amazonaws.com/aang-solutions/" + message.getImageUrl())
                 .placeholder(R.drawable.books)
@@ -194,14 +195,14 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
         dialog.show();
 
-        //Grab the window of the dialog, and change the width
+        //Grab the window of the dialog, and change the width and height
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         Window window = dialog.getWindow();
         lp.copyFrom(window.getAttributes());
 
-        //This makes the dialog take up the full width
+        //This makes the dialog take up the full width and height
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(lp);
 
         return dialog;
