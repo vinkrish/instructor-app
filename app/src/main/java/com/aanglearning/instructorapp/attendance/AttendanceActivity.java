@@ -82,7 +82,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
     private AttendanceAdapter attendanceAdapter;
     private StudentAdapter studentAdapter;
 
-    private String[] days = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    private String[] days = {"", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

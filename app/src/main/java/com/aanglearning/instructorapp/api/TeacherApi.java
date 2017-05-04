@@ -110,9 +110,9 @@ public interface TeacherApi {
 
     //Attendance API
 
-    @GET("timetable/section/sectionId/day/dayOfWeek")
+    @GET("timetable/section/{sectionId}/day/{dayOfWeek}")
     Call<List<Timetable>> getTimetable(@Path("sectionId") long sectionId,
-                                            @Path("dayOfWeek") String dayOfWeek);
+                                       @Path("dayOfWeek") String dayOfWeek);
 
     @GET("app/attendance/section/{sectionId}/date/{dateAttendance}/session/{session}")
     Call<AttendanceSet> getAttendanceSet(@Path("sectionId") long sectionId,
