@@ -291,12 +291,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
     }
 
     @Override
-    public void setError() {
-        showSnackbar(getString(R.string.request_error));
-    }
-
-    @Override
-    public void showAPIError(String message) {
+    public void showError(String message) {
         showSnackbar(message);
     }
 

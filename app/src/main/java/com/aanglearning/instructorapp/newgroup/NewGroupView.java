@@ -17,9 +17,7 @@ interface NewGroupView {
 
     void hideProgress();
 
-    void setError();
-
-    void showAPIError(String message);
+    void showError(String message);
 
     void showClass(List<Clas> clasList);
 

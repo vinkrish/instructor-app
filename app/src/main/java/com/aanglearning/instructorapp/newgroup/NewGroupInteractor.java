@@ -12,9 +12,7 @@ import java.util.List;
 
 interface NewGroupInteractor {
     interface OnFinishedListener {
-        void onError();
-
-        void onAPIError(String message);
+        void onError(String message);
 
         void onClasReceived(List<Clas> clasList);
 

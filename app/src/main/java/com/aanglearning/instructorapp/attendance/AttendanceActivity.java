@@ -19,7 +19,8 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -30,8 +31,7 @@ import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Section;
 import com.aanglearning.instructorapp.model.Student;
 import com.aanglearning.instructorapp.model.StudentSet;
-import com.aanglearning.instructorapp.model.UserGroup;
-import com.aanglearning.instructorapp.usergroup.StudentMemberAdapter;
+import com.aanglearning.instructorapp.model.Timetable;
 import com.aanglearning.instructorapp.util.AlertDialogHelper;
 import com.aanglearning.instructorapp.util.DatePickerFragment;
 import com.aanglearning.instructorapp.util.DateUtil;
@@ -43,6 +43,7 @@ import org.joda.time.LocalDate;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -60,6 +61,10 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
     @BindView(R.id.spinner_class) Spinner classSpinner;
     @BindView(R.id.spinner_section) Spinner sectionSpinner;
     @BindView(R.id.date_tv) TextView dateView;
+    @BindView(R.id.session_spinner) Spinner sessionSpinner;
+    @BindView(R.id.session_layout) LinearLayout sessionLayout;
+    @BindView(R.id.period_spinner) Spinner periodSpinner;
+    @BindView(R.id.period_layout) LinearLayout periodLayout;
     @BindView(R.id.absentees_recycler_view) RecyclerView absenteesRecycler;
     @BindView(R.id.student_recycler_view) RecyclerView studentRecycler;
     @BindView(R.id.absentees_tv) TextView absenteesTv;
@@ -77,6 +82,8 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
     private AttendanceAdapter attendanceAdapter;
     private StudentAdapter studentAdapter;
 
+    private String[] days = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +99,8 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
         alertDialogHelper = new AlertDialogHelper(this);
 
         initRecyclerView();
+
+        showSession();
     }
 
     @Override
@@ -208,12 +217,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
     }
 
     @Override
-    public void setError() {
-        showSnackbar(getString(R.string.request_error));
-    }
-
-    @Override
-    public void showAPIError(String message) {
+    public void showError(String message) {
         showSnackbar(message);
     }
 
@@ -233,6 +237,24 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sectionSpinner.setAdapter(adapter);
         sectionSpinner.setOnItemSelectedListener(this);
+    }
+
+    private void showSession() {
+        String[] sessions = {"Morning", "Afternoon"};
+        ArrayAdapter<String> adapter = new
+                ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Arrays.asList(sessions));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sessionSpinner.setAdapter(adapter);
+        sessionSpinner.setOnItemSelectedListener(this);
+    }
+
+    @Override
+    public void showTimetable(List<Timetable> timetableList) {
+        ArrayAdapter<Timetable> adapter = new
+                ArrayAdapter<>(this, android.R.layout.simple_spinner_item, timetableList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        periodSpinner.setAdapter(adapter);
+        periodSpinner.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -265,8 +287,21 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
                 att.setSectionId(((Section)sectionSpinner.getSelectedItem()).getId());
                 att.setDateAttendance(attendanceDate);
                 att.setTypeOfLeave("Absent");
-                att.setType("Daily");
-                att.setSession(0);
+                String attendanceType = ((Clas)classSpinner.getSelectedItem()).getAttendanceType();
+                att.setType(attendanceType);
+                switch (attendanceType) {
+                    case "Daily":
+                        att.setSession(0);
+                        break;
+                    case "Session":
+                        att.setSession(sessionSpinner.getSelectedItem().equals("Morning") ? 0: 1);
+                        break;
+                    case "Period":
+                        att.setSession(((Timetable)periodSpinner.getSelectedItem()).getPeriodNo());
+                        break;
+                    default:
+                        break;
+                }
                 attList.add(att);
             }
         }
@@ -290,14 +325,20 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
-        //Clas clas = (Clas) classSpinner.getSelectedItem();
         switch (parent.getId()) {
             case R.id.spinner_class:
                 presenter.getSectionList(((Clas) classSpinner.getSelectedItem()).getId(), TeacherDao.getTeacher().getId());
                 break;
             case R.id.spinner_section:
                 getAttendance();
-                //presenter.getAttendance(((Section)sectionSpinner.getSelectedItem()).getId(), attendanceDate, 0);
+                break;
+            case R.id.session_spinner:
+                presenter.getAttendance(((Section)sectionSpinner.getSelectedItem()).getId(), attendanceDate,
+                        sessionSpinner.getSelectedItem().equals("Morning") ? 0: 1);
+                break;
+            case R.id.period_spinner:
+                presenter.getAttendance(((Section)sectionSpinner.getSelectedItem()).getId(), attendanceDate,
+                        ((Timetable)periodSpinner.getSelectedItem()).getPeriodNo());
                 break;
             default:
                 break;
@@ -315,16 +356,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
     }
 
     public void changeDate(View view) {
-        SimpleDateFormat defaultFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        Date date = new Date();
-        try {
-            date = defaultFormat.parse(attendanceDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
+        Calendar cal = getFormattedCalendar();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
@@ -337,6 +369,20 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
         newFragment.setCallBack(onDate);
         newFragment.setArguments(bundle);
         newFragment.show(this.getSupportFragmentManager(), "datePicker");
+    }
+
+    private Calendar getFormattedCalendar() {
+        SimpleDateFormat defaultFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date date = new Date();
+        try {
+            date = defaultFormat.parse(attendanceDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal;
     }
 
     DatePickerDialog.OnDateSetListener onDate = new DatePickerDialog.OnDateSetListener() {
@@ -362,8 +408,26 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
     };
 
     private void getAttendance() {
-        presenter.getAttendance(((Section)sectionSpinner.getSelectedItem()).getId(), attendanceDate,
-                0);
+        String attendanceType = ((Clas)classSpinner.getSelectedItem()).getAttendanceType();
+        switch (attendanceType){
+            case "Daily":
+                presenter.getAttendance(((Section)sectionSpinner.getSelectedItem()).getId(), attendanceDate, 0);
+                break;
+            case "Session":
+                periodLayout.setVisibility(View.GONE);
+                sessionLayout.setVisibility(View.VISIBLE);
+                presenter.getAttendance(((Section)sectionSpinner.getSelectedItem()).getId(),
+                        attendanceDate, sessionSpinner.getSelectedItem().equals("Morning") ? 0: 1);
+                break;
+            case "Period":
+                sessionLayout.setVisibility(View.GONE);
+                periodLayout.setVisibility(View.VISIBLE);
+                presenter.getTimetable(((Section)sectionSpinner.getSelectedItem()).getId(),
+                        days[getFormattedCalendar().get(Calendar.DAY_OF_WEEK)]);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

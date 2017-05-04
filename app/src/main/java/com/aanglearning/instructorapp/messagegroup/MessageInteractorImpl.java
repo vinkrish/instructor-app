@@ -1,5 +1,7 @@
 package com.aanglearning.instructorapp.messagegroup;
 
+import com.aanglearning.instructorapp.App;
+import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.api.ApiClient;
 import com.aanglearning.instructorapp.api.TeacherApi;
 import com.aanglearning.instructorapp.model.Message;
@@ -26,13 +28,13 @@ class MessageInteractorImpl implements MessageInteractor {
                 if(response.isSuccessful()) {
                     listener.onMessageSaved(response.body());
                 } else {
-                    listener.onError();
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }
@@ -48,13 +50,13 @@ class MessageInteractorImpl implements MessageInteractor {
                 if(response.isSuccessful()) {
                     listener.onMessageReceived(response.body());
                 } else {
-                    listener.onError();
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<Message>> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }
@@ -70,13 +72,13 @@ class MessageInteractorImpl implements MessageInteractor {
                 if(response.isSuccessful()) {
                     listener.onFollowupMessagesReceived(response.body());
                 } else {
-                    listener.onError();
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<Message>> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }

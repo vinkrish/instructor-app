@@ -33,7 +33,9 @@
                 android:id="@+id/spinner_class"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/spacing_small" />
+                android:layout_marginLeft="@dimen/spacing_small"
+                android:layout_marginRight="@dimen/spacing_small"
+                android:layout_marginTop="@dimen/spacing_tiny" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -50,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/spacing_small"
                 android:layout_marginRight="@dimen/spacing_small"
-                android:layout_marginTop="@dimen/spacing_small" />
+                android:layout_marginTop="@dimen/spacing_tiny" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,12 +91,58 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/session_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_small"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/session"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/session_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_tiny" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/period_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_small"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_period"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/period_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_tiny" />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/absentees_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/spacing_tiny"
                 android:paddingLeft="@dimen/spacing_small"
+                android:paddingTop="@dimen/spacing_tiny"
                 android:text="@string/absentees"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/text_small"

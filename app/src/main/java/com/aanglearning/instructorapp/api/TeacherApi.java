@@ -9,6 +9,7 @@ import com.aanglearning.instructorapp.model.Homework;
 import com.aanglearning.instructorapp.model.Message;
 import com.aanglearning.instructorapp.model.Section;
 import com.aanglearning.instructorapp.model.Student;
+import com.aanglearning.instructorapp.model.Timetable;
 import com.aanglearning.instructorapp.model.UserGroup;
 import com.aanglearning.instructorapp.usergroup.GroupUsers;
 
@@ -108,6 +109,10 @@ public interface TeacherApi {
                                                    @Path("messageId") long messageId);
 
     //Attendance API
+
+    @GET("timetable/section/sectionId/day/dayOfWeek")
+    Call<List<Timetable>> getTimetable(@Path("sectionId") long sectionId,
+                                            @Path("dayOfWeek") String dayOfWeek);
 
     @GET("app/attendance/section/{sectionId}/date/{dateAttendance}/session/{session}")
     Call<AttendanceSet> getAttendanceSet(@Path("sectionId") long sectionId,

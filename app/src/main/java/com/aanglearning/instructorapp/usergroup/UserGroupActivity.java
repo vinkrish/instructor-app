@@ -177,12 +177,7 @@ public class UserGroupActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void setError() {
-        showSnackbar(getString(R.string.request_error));
-    }
-
-    @Override
-    public void showAPIError(String message) {
+    public void showError(String message) {
         showSnackbar(message);
     }
 

@@ -9,9 +9,7 @@ interface UserGroupView {
 
     void hideProgress();
 
-    void setError();
-
-    void showAPIError(String message);
+    void showError(String message);
 
     void showUserGroup(GroupUsers groupUsers);
 

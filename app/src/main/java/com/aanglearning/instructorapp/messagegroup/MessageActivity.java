@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -22,25 +21,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Message;
-import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.usergroup.UserGroupActivity;
 import com.aanglearning.instructorapp.util.EndlessRecyclerViewScrollListener;
 import com.aanglearning.instructorapp.util.FloatingActionButton;
 import com.aanglearning.instructorapp.util.NetworkUtil;
-import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
-
-import org.joda.time.DateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,7 +57,6 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     private ArrayList<Message> messages = new ArrayList<>();
     private MessageAdapter adapter;
     private EndlessRecyclerViewScrollListener scrollListener;
-    private int previousSize;
     private FloatingActionButton fabButton;
     final static int REQ_CODE = 999;
 
@@ -121,8 +113,6 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
                 newMsg.requestFocus();
                 InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(newMsg, InputMethodManager.SHOW_IMPLICIT);
-                //enterMsg.bringToFront();
-                //(enterMsg.getParent()).requestLayout();
             }
         });
     }
@@ -170,7 +160,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     }
 
     private void showSnackbar(String message) {
-        Snackbar.make(coordinatorLayout, message, 3000).show();
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -184,12 +174,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     }
 
     @Override
-    public void setError() {
-        showSnackbar(getString(R.string.request_error));
-    }
-
-    @Override
-    public void showAPIError(String message) {
+    public void showError(String message) {
         showSnackbar(message);
     }
 
@@ -201,7 +186,6 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     @Override
     public void showMessages(ArrayList<Message> messages) {
         this.messages = messages;
-        previousSize = messages.size();
         adapter.setDataSet(messages);
     }
 
@@ -216,7 +200,6 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
         //adapter.setDataSet(messages);
         adapter.updateDataSet(msgs);
         this.messages = adapter.getDataSet();
-        previousSize = messages.size();
     }
 
     public void uploadImage (View view) {
@@ -236,7 +219,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
         if(newMsg.getText().toString().trim().isEmpty()) {
-            showAPIError("Please enter message");
+            showError("Please enter message");
         } else {
             if (NetworkUtil.isNetworkAvailable(this)) {
                 Message message = new Message();
@@ -250,7 +233,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
                 message.setCreatedAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(new Date()));
                 presenter.saveMessage(message);
             } else {
-                showAPIError("You are offline,check your internet.");
+                showError("You are offline,check your internet.");
             }
         }
     }
@@ -264,11 +247,11 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
                     String msg = data.getStringExtra("text");
                     newMsg.setText(msg);
                     String imgName = data.getStringExtra("imgName");
-                    Log.e(TAG,  msg + " Result from child activity " + imgName);
+                    //Log.e(TAG,  msg + " Result from child activity " + imgName);
                     sendMessage("image", imgName);
                 } else {
                     hideProgress();
-                    showAPIError("Error in sending message");
+                    //showSnackbar("Error in sending message");
                 }
                 break;
             }

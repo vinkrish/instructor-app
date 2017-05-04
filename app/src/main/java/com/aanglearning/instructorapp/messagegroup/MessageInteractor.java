@@ -12,9 +12,7 @@ import java.util.ArrayList;
 
 interface MessageInteractor {
     interface OnFinishedListener {
-        void onError();
-
-        void onAPIError(String message);
+        void onError(String message);
 
         void onMessageSaved(Message message);
 

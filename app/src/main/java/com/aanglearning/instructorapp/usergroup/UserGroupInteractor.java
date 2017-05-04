@@ -14,9 +14,7 @@ import java.util.List;
 public interface UserGroupInteractor {
 
     interface OnFinishedListener {
-        void onError();
-
-        void onAPIError(String message);
+        void onError(String message);
 
         void onUserGroupReceived(GroupUsers groupUsers);
 

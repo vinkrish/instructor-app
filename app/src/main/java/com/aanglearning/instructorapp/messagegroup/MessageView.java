@@ -13,9 +13,7 @@ interface MessageView {
 
     void hideProgress();
 
-    void setError();
-
-    void showAPIError(String message);
+    void showError(String message);
 
     void onMessageSaved(Message message);
 

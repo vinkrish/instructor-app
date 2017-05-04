@@ -49,18 +49,10 @@ public class UserGroupPresenterImpl implements UserGroupPresenter,
     }
 
     @Override
-    public void onError() {
+    public void onError(String message) {
         if (mView != null) {
             mView.hideProgress();
-            mView.setError();
-        }
-    }
-
-    @Override
-    public void onAPIError(String message) {
-        if (mView != null) {
-            mView.hideProgress();
-            mView.showAPIError(message);
+            mView.showError(message);
         }
     }
 

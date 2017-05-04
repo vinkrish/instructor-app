@@ -13,9 +13,7 @@ import java.util.List;
 
 public interface HomeworkInteractor {
     interface OnFinishedListener {
-        void onError();
-
-        void onAPIError(String message);
+        void onError(String message);
 
         void onClassReceived(List<Clas> clasList);
 

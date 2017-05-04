@@ -3,6 +3,7 @@ package com.aanglearning.instructorapp.attendance;
 import com.aanglearning.instructorapp.model.Attendance;
 import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Section;
+import com.aanglearning.instructorapp.model.Timetable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,14 @@ public class AttendancePresenterImpl implements AttendancePresenter,
     }
 
     @Override
+    public void getTimetable(long sectionId, String dayOfWeek) {
+        if (mView != null) {
+            mView.showProgress();
+            mInteractor.getTimetable(sectionId, dayOfWeek, this);
+        }
+    }
+
+    @Override
     public void saveAttendance(ArrayList<Attendance> attendances) {
         if (mView != null) {
             mView.showProgress();
@@ -68,18 +77,10 @@ public class AttendancePresenterImpl implements AttendancePresenter,
     }
 
     @Override
-    public void onError() {
+    public void onError(String message) {
         if (mView != null) {
             mView.hideProgress();
-            mView.setError();
-        }
-    }
-
-    @Override
-    public void onAPIError(String message) {
-        if (mView != null) {
-            mView.hideProgress();
-            mView.showAPIError(message);
+            mView.showError(message);
         }
     }
 
@@ -95,6 +96,14 @@ public class AttendancePresenterImpl implements AttendancePresenter,
     public void onSectionReceived(List<Section> sectionList) {
         if (mView != null) {
             mView.showSection(sectionList);
+            mView.hideProgress();
+        }
+    }
+
+    @Override
+    public void onTimetableReceived(List<Timetable> timetables) {
+        if (mView != null) {
+            mView.showTimetable(timetables);
             mView.hideProgress();
         }
     }

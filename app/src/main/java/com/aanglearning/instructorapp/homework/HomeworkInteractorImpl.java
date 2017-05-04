@@ -1,5 +1,7 @@
 package com.aanglearning.instructorapp.homework;
 
+import com.aanglearning.instructorapp.App;
+import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.api.ApiClient;
 import com.aanglearning.instructorapp.api.TeacherApi;
 import com.aanglearning.instructorapp.model.Clas;
@@ -31,12 +33,12 @@ public class HomeworkInteractorImpl implements HomeworkInteractor {
                 if(response.isSuccessful()) {
                     listener.onClassReceived(response.body());
                 } else {
-                    listener.onError();
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
             @Override
             public void onFailure(Call<List<Clas>> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }
@@ -52,12 +54,12 @@ public class HomeworkInteractorImpl implements HomeworkInteractor {
                 if(response.isSuccessful()) {
                     listener.onSectionReceived(response.body());
                 } else {
-                    listener.onError();
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
             @Override
             public void onFailure(Call<List<Section>> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }
@@ -73,13 +75,13 @@ public class HomeworkInteractorImpl implements HomeworkInteractor {
                 if(response.isSuccessful()) {
                     listener.onHomeworkReceived(response.body());
                 } else {
-                    listener.onError();
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
 
             @Override
             public void onFailure(Call<List<Homework>> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }
@@ -95,13 +97,13 @@ public class HomeworkInteractorImpl implements HomeworkInteractor {
                 if(response.isSuccessful()) {
                     listener.onHomeworkSaved(response.body());
                 } else {
-                    listener.onError();
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
 
             @Override
             public void onFailure(Call<Homework> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }
@@ -117,13 +119,13 @@ public class HomeworkInteractorImpl implements HomeworkInteractor {
                 if(response.isSuccessful()) {
                     listener.onHomeworkUpdated();
                 } else {
-                    listener.onError();
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }
@@ -139,12 +141,12 @@ public class HomeworkInteractorImpl implements HomeworkInteractor {
                 if(response.isSuccessful()) {
                     listener.onHomeworkDeleted();
                 } else {
-                    listener.onError();
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }

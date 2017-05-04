@@ -1,6 +1,8 @@
 package com.aanglearning.instructorapp.chat;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -10,13 +12,19 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.TeacherDao;
+import com.aanglearning.instructorapp.messagegroup.ImageUploadActivity;
+import com.aanglearning.instructorapp.messagegroup.MessageActivity;
 import com.aanglearning.instructorapp.model.Message;
 import com.aanglearning.instructorapp.util.EndlessRecyclerViewScrollListener;
 import com.aanglearning.instructorapp.util.NetworkUtil;
@@ -33,6 +41,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.new_msg) EditText newMsg;
+    @BindView(R.id.enter_msg) ImageView enterMsg;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
 
     private long recipientId;
@@ -40,6 +49,8 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
     private ArrayList<Message> messages = new ArrayList<>();
     private ChatAdapter adapter;
     private EndlessRecyclerViewScrollListener scrollListener;
+
+    final static int REQ_CODE = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +69,8 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
         presenter = new ChatPresenterImpl(this, new ChatInteractorImpl());
 
         setupRecyclerView();
+
+        newMsg.addTextChangedListener(newMsgWatcher);
     }
 
     @Override
@@ -146,6 +159,30 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
         this.messages = adapter.getDataSet();
     }
 
+    public void uploadImage (View view) {
+        Intent intent = new Intent(ChatActivity.this, ImageUploadActivity.class);
+        startActivityForResult(intent, REQ_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (REQ_CODE) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    String msg = data.getStringExtra("text");
+                    newMsg.setText(msg);
+                    String imgName = data.getStringExtra("imgName");
+                    sendMessage("image", imgName);
+                } else {
+                    hideProgress();
+                    //showSnackbar("Error in sending message");
+                }
+                break;
+            }
+        }
+    }
+
     public void newMsgSendListener (View view) {
         sendMessage("text", "");
         newMsg.setText("");
@@ -183,4 +220,27 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
     public void onClick(View view) {
 
     }
+
+    private final TextWatcher newMsgWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            if (newMsg.getText().toString().equals("")) {
+            } else {
+                enterMsg.setImageResource(R.drawable.ic_chat_send);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if(editable.length()==0){
+                enterMsg.setImageResource(R.drawable.ic_chat_send);
+            }else{
+                enterMsg.setImageResource(R.drawable.ic_chat_send_active);
+            }
+        }
+    };
 }

@@ -15,6 +15,8 @@ public interface AttendancePresenter {
 
     void getAttendance(long sectionId, String date, int session);
 
+    void getTimetable(long sectionId, String dayOfWeek);
+
     void saveAttendance(ArrayList<Attendance> attendances);
 
     void deleteAttendance(ArrayList<Attendance> attendances);

@@ -3,7 +3,6 @@ package com.aanglearning.instructorapp.newgroup;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -36,24 +35,16 @@ import butterknife.ButterKnife;
 
 public class NewGroupActivity extends AppCompatActivity implements NewGroupView,
         AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener {
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.progress)
-    ProgressBar progressBar;
-    @BindView(R.id.coordinatorLayout)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.group_et)
-    EditText groupName;
-    @BindView(R.id.group)
-    TextInputLayout groupLayout;
-    @BindView(R.id.spinner_class)
-    Spinner classSpinner;
-    @BindView(R.id.spinner_section)
-    Spinner sectionSpinner;
-    @BindView(R.id.section_layout)
-    LinearLayout sectionLayout;
-    @BindView(R.id.checkBox)
-    CheckBox isForClass;
+
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.group_et) EditText groupName;
+    @BindView(R.id.group) TextInputLayout groupLayout;
+    @BindView(R.id.spinner_class) Spinner classSpinner;
+    @BindView(R.id.spinner_section) Spinner sectionSpinner;
+    @BindView(R.id.section_layout) LinearLayout sectionLayout;
+    @BindView(R.id.checkBox) CheckBox isForClass;
 
     private NewGroupPresenter presenter;
 
@@ -117,12 +108,7 @@ public class NewGroupActivity extends AppCompatActivity implements NewGroupView,
     }
 
     @Override
-    public void setError() {
-        showSnackbar(getString(R.string.request_error));
-    }
-
-    @Override
-    public void showAPIError(String message) {
+    public void showError(String message) {
         showSnackbar(message);
     }
 

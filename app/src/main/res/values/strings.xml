@@ -22,6 +22,7 @@
     <string name="select_class">Select Class</string>
     <string name="select_section">Select Section</string>
     <string name="select_student">Select Student</string>
+    <string name="select_period">Select Period</string>
     <string name="for_class">This group is for class</string>
     <string name="save">Save</string>
 
@@ -41,6 +42,10 @@
 
     <!-- Attendance View & Homework View-->
     <string name="attendance">Attendance</string>
+    <string name="session">Session :</string>
+    <string name="morning">Morning</string>
+    <string name="afternoon">Afternoon</string>
+    <string name="period">Period</string>
     <string name="homework">Homework</string>
     <string name="absentees">Absentees</string>
     <string name="mark_absentees">Mark Absentees</string>

@@ -2,6 +2,7 @@ package com.aanglearning.instructorapp.attendance;
 
 import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Section;
+import com.aanglearning.instructorapp.model.Timetable;
 
 import java.util.List;
 
@@ -14,13 +15,13 @@ interface AttendanceView {
 
     void hideProgress();
 
-    void setError();
-
-    void showAPIError(String message);
+    void showError(String message);
 
     void showClass(List<Clas> clasList);
 
     void showSection(List<Section> sectionList);
+
+    void showTimetable(List<Timetable> timetableList);
 
     void showAttendance(AttendanceSet attendanceSet);
 

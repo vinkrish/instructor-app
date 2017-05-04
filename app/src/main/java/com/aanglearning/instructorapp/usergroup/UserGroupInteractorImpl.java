@@ -1,5 +1,7 @@
 package com.aanglearning.instructorapp.usergroup;
 
+import com.aanglearning.instructorapp.App;
+import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.api.ApiClient;
 import com.aanglearning.instructorapp.api.TeacherApi;
 import com.aanglearning.instructorapp.model.Groups;
@@ -29,13 +31,13 @@ public class UserGroupInteractorImpl implements UserGroupInteractor {
                 if(response.isSuccessful()) {
                     listener.onUserGroupReceived(response.body());
                 } else {
-                    listener.onError();
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
 
             @Override
             public void onFailure(Call<GroupUsers> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }
@@ -51,13 +53,13 @@ public class UserGroupInteractorImpl implements UserGroupInteractor {
                 if(response.isSuccessful()) {
                     listener.onUserGroupSaved();
                 } else {
-                    listener.onError();
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }
@@ -73,13 +75,13 @@ public class UserGroupInteractorImpl implements UserGroupInteractor {
                 if(response.isSuccessful()) {
                     listener.onUsersDeleted();
                 } else {
-                    listener.onError();
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }

@@ -65,4 +65,8 @@ public class Timetable {
         this.timingTo = timingTo;
     }
 
+    public String toString() {
+        return periodNo + "";
+    }
+
 }
