@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,8 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -57,6 +57,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
     @BindView(R.id.progress) ProgressBar progressBar;
     @BindView(R.id.spinner_class) Spinner classSpinner;
     @BindView(R.id.spinner_section) Spinner sectionSpinner;
@@ -101,6 +102,19 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
         initRecyclerView();
 
         showSession();
+
+        refreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(this, R.color.colorPrimary),
+                ContextCompat.getColor(this, R.color.colorAccent),
+                ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        );
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.getClassList(TeacherDao.getTeacher().getId());
+            }
+        });
     }
 
     @Override
@@ -119,8 +133,9 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
         absenteesRecycler.setLayoutManager(new LinearLayoutManager(this));
         absenteesRecycler.setNestedScrollingEnabled(false);
         absenteesRecycler.setItemAnimator(new DefaultItemAnimator());
+        absenteesRecycler.addItemDecoration(new DividerItemDecoration(this));
 
-        attendanceAdapter = new AttendanceAdapter(this, absentees, multiselect_list);
+        attendanceAdapter = new AttendanceAdapter(this, new ArrayList<Attendance>(0), new ArrayList<Attendance>(0));
         absenteesRecycler.setAdapter(attendanceAdapter);
 
         absenteesRecycler.addOnItemTouchListener(new RecyclerItemClickListener(this, absenteesRecycler, new RecyclerItemClickListener.OnItemClickListener() {
@@ -147,6 +162,8 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
         studentRecycler.setNestedScrollingEnabled(false);
         studentRecycler.setItemAnimator(new DefaultItemAnimator());
         studentRecycler.addItemDecoration(new DividerItemDecoration(this));
+        studentAdapter = new StudentAdapter(new ArrayList<StudentSet>(0), getApplicationContext());
+        studentRecycler.setAdapter(studentAdapter);
     }
 
     public void multi_select(int position) {
@@ -203,7 +220,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
     }
 
     private void showSnackbar(String message) {
-        Snackbar.make(coordinatorLayout, message, 3000).show();
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -218,6 +235,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
 
     @Override
     public void showError(String message) {
+        refreshLayout.setRefreshing(false);
         showSnackbar(message);
     }
 
@@ -259,21 +277,21 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
 
     @Override
     public void showAttendance(AttendanceSet attendanceSet) {
+        refreshLayout.setRefreshing(false);
         absentees = attendanceSet.getAttendanceList();
         attendanceAdapter.setDataSet(absentees, multiselect_list);
-        if(absentees.size() == 0) {
-            absenteesTv.setVisibility(View.GONE);
-        }
+        if(absentees.size() == 0) absenteesTv.setVisibility(View.GONE);
+        else absenteesTv.setVisibility(View.VISIBLE);
+
 
         ArrayList<StudentSet> studentSets = new ArrayList<>();
         for(Student s: attendanceSet.getStudents()) {
             studentSets.add(new StudentSet(s.getId(), s.getRollNo(), s.getStudentName()));
         }
-        studentAdapter = new StudentAdapter(studentSets, getApplicationContext());
-        studentRecycler.setAdapter(studentAdapter);
-        if(studentSets.size() == 0) {
-            markStudentsTv.setVisibility(View.GONE);
-        }
+        studentAdapter.setDataSet(studentSets);
+        if(studentSets.size() == 0) markStudentsTv.setVisibility(View.GONE);
+        else markStudentsTv.setVisibility(View.VISIBLE);
+
     }
 
     public void saveAbsentees(View view) {
@@ -306,11 +324,9 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
             }
         }
         hideProgress();
-        if(attList.size() == 0) {
-            showSnackbar("No changes detected");
-        } else {
-            presenter.saveAttendance(attList);
-        }
+        if(attList.size() == 0) showSnackbar("No changes detected");
+        else presenter.saveAttendance(attList);
+
     }
 
     @Override

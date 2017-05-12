@@ -1,12 +1,12 @@
 package com.aanglearning.instructorapp.homework;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -14,13 +14,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.ActionMode;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -30,16 +27,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
-import com.aanglearning.instructorapp.attendance.AttendanceAdapter;
-import com.aanglearning.instructorapp.attendance.StudentAdapter;
-import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
-import com.aanglearning.instructorapp.dashboard.DashboardActivity;
-import com.aanglearning.instructorapp.dashboard.GroupAdapter;
-import com.aanglearning.instructorapp.messagegroup.MessageActivity;
-import com.aanglearning.instructorapp.model.Attendance;
 import com.aanglearning.instructorapp.model.Clas;
-import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Homework;
 import com.aanglearning.instructorapp.model.Section;
 import com.aanglearning.instructorapp.util.AlertDialogHelper;
@@ -49,7 +38,6 @@ import com.aanglearning.instructorapp.util.DividerItemDecoration;
 import com.aanglearning.instructorapp.util.RecyclerItemClickListener;
 
 import org.joda.time.LocalDate;
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,9 +51,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
-        AdapterView.OnItemSelectedListener, AlertDialogHelper.AlertDialogListener{
+        AdapterView.OnItemSelectedListener, AlertDialogHelper.AlertDialogListener {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
     @BindView(R.id.progress) ProgressBar progressBar;
     @BindView(R.id.spinner_class) Spinner classSpinner;
     @BindView(R.id.spinner_section) Spinner sectionSpinner;
@@ -103,11 +92,25 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         initRecyclerView();
 
         setDefaultDate();
+
+        refreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(this, R.color.colorPrimary),
+                ContextCompat.getColor(this, R.color.colorAccent),
+                ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        );
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.getClassList(TeacherDao.getTeacher().getId());
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        homeworks = new ArrayList<>();
         presenter.getClassList(TeacherDao.getTeacher().getId());
     }
 
@@ -174,7 +177,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         homeworkRecycler.setNestedScrollingEnabled(false);
         homeworkRecycler.setItemAnimator(new DefaultItemAnimator());
 
-        homeworkAdapter = new HomeworkAdapter(this, homeworks, multiselect_list);
+        homeworkAdapter = new HomeworkAdapter(this, new ArrayList<Homework>(0), new ArrayList<Homework>(0));
         homeworkRecycler.setAdapter(homeworkAdapter);
 
         homeworkRecycler.addOnItemTouchListener(new RecyclerItemClickListener(this, homeworkRecycler, new RecyclerItemClickListener.OnItemClickListener() {
@@ -221,6 +224,8 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         subjectRecycler.setNestedScrollingEnabled(false);
         subjectRecycler.setItemAnimator(new DefaultItemAnimator());
         subjectRecycler.addItemDecoration(new DividerItemDecoration(this));
+        newHomeworkAdapter = new NewHomeworkAdapter(new ArrayList<Homework>(0), mItemListener);
+        subjectRecycler.setAdapter(newHomeworkAdapter);
     }
 
     public void multi_select(int position) {
@@ -256,7 +261,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.action_delete:
-                    alertDialogHelper.showAlertDialog("","Delete Homework","DELETE","CANCEL", 1, false);
+                    alertDialogHelper.showAlertDialog("", "Delete Homework", "DELETE", "CANCEL", 1, false);
                     return true;
                 default:
                     return false;
@@ -277,7 +282,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
     }
 
     private void showSnackbar(String message) {
-        Snackbar.make(coordinatorLayout, message, 3000).show();
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -292,6 +297,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
 
     @Override
     public void showError(String message) {
+        refreshLayout.setRefreshing(false);
         showSnackbar(message);
     }
 
@@ -315,48 +321,21 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
 
     @Override
     public void showHomeworks(List<Homework> hws) {
+        refreshLayout.setRefreshing(false);
+        homeworks = new ArrayList<>();
         List<Homework> newHomework = new ArrayList<>();
-        for(Homework hw: hws) {
-            if(hw.getId() == 0) newHomework.add(hw);
+        for (Homework hw : hws) {
+            if (hw.getId() == 0) newHomework.add(hw);
             else homeworks.add(hw);
         }
         homeworkAdapter.setDataSet(homeworks, multiselect_list);
-        if(homeworks.size() == 0) {
-            homeworkTv.setVisibility(View.GONE);
-        }
+        if (homeworks.size() == 0) homeworkTv.setVisibility(View.GONE);
+        else homeworkTv.setVisibility(View.VISIBLE);
 
-        newHomeworkAdapter = new NewHomeworkAdapter(newHomework,new NewHomeworkAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(final Homework homework) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(HomeworkActivity.this);
-                View view = getLayoutInflater().inflate(R.layout.homework_dialog, null);
-                TextView subjectName = (TextView) view.findViewById(R.id.hw_subject);
-                subjectName.setText(homework.getSubjectName());
-                final EditText homeworkText = (EditText) view.findViewById(R.id.hw_et);
-                builder.setView(view);
+        newHomeworkAdapter.setDataSet(newHomework);
+        if (newHomework.size() == 0) enterHomeworkTv.setVisibility(View.GONE);
+        else enterHomeworkTv.setVisibility(View.VISIBLE);
 
-                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        homework.setHomeworkMessage(homeworkText.getText().toString());
-                        presenter.saveHomework(homework);
-                    }
-                });
-                builder.setNegativeButton("Cancel", null);
-                builder.show();
-
-                /*AlertDialog dialog = builder.create();
-                dialog.getWindow().setGravity(Gravity.TOP);
-                WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-                layoutParams.y = 150;
-                dialog.getWindow().setAttributes(layoutParams);
-                dialog.show();*/
-            }
-        });
-        subjectRecycler.setAdapter(newHomeworkAdapter);
-        if(newHomework.size() == 0) {
-            enterHomeworkTv.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -375,7 +354,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
     }
 
     private void getHomework() {
-        presenter.getHomework(((Section)sectionSpinner.getSelectedItem()).getId(), homeworkDate);
+        presenter.getHomework(((Section) sectionSpinner.getSelectedItem()).getId(), homeworkDate);
     }
 
     @Override
@@ -399,8 +378,8 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
 
     @Override
     public void onPositiveClick(int from) {
-        if(from==1) {
-            if(multiselect_list.size()>0) {
+        if (from == 1) {
+            if (multiselect_list.size() > 0) {
                 presenter.deleteHomework(multiselect_list);
                 if (mActionMode != null) {
                     mActionMode.finish();
@@ -418,4 +397,33 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
     public void onNeutralClick(int from) {
 
     }
+
+    NewHomeworkAdapter.OnItemClickListener mItemListener = new NewHomeworkAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(final Homework homework) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeworkActivity.this);
+            View view = getLayoutInflater().inflate(R.layout.homework_dialog, null);
+            TextView subjectName = (TextView) view.findViewById(R.id.hw_subject);
+            subjectName.setText(homework.getSubjectName());
+            final EditText homeworkText = (EditText) view.findViewById(R.id.hw_et);
+            builder.setView(view);
+
+            builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    homework.setHomeworkMessage(homeworkText.getText().toString());
+                    presenter.saveHomework(homework);
+                }
+            });
+            builder.setNegativeButton("Cancel", null);
+            builder.show();
+
+            /*AlertDialog dialog = builder.create();
+            dialog.getWindow().setGravity(Gravity.TOP);
+            WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+            layoutParams.y = 150;
+            dialog.getWindow().setAttributes(layoutParams);
+            dialog.show();*/
+        }
+    };
 }

@@ -3,6 +3,8 @@ package com.aanglearning.instructorapp.usergroup;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +28,7 @@ import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.model.TeacherSet;
 import com.aanglearning.instructorapp.model.UserGroup;
 import com.aanglearning.instructorapp.util.AlertDialogHelper;
+import com.aanglearning.instructorapp.util.DividerItemDecoration;
 import com.aanglearning.instructorapp.util.RecyclerItemClickListener;
 
 import java.util.ArrayList;
@@ -38,6 +41,7 @@ public class UserGroupActivity extends AppCompatActivity implements
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
     @BindView(R.id.progress) ProgressBar progressBar;
     @BindView(R.id.group_name_tv) TextView groupName;
     @BindView(R.id.add_students_layout) RelativeLayout addStudentsLayout;
@@ -72,14 +76,28 @@ public class UserGroupActivity extends AppCompatActivity implements
         alertDialogHelper = new AlertDialogHelper(this);
 
         initRecyclerView();
+
+        refreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(this, R.color.colorPrimary),
+                ContextCompat.getColor(this, R.color.colorAccent),
+                ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        );
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.getUserGroup(group.getId());
+            }
+        });
     }
 
     private void initRecyclerView() {
         memberView.setLayoutManager(new LinearLayoutManager(this));
         memberView.setNestedScrollingEnabled(false);
         memberView.setItemAnimator(new DefaultItemAnimator());
+        memberView.addItemDecoration(new DividerItemDecoration(this));
 
-        adapter = new UserGroupAdapter(this, userGroups, multiselect_list);
+        adapter = new UserGroupAdapter(this, new ArrayList<UserGroup>(0), new ArrayList<UserGroup>(0));
         memberView.setAdapter(adapter);
 
         memberView.addOnItemTouchListener(new RecyclerItemClickListener(this, memberView, new RecyclerItemClickListener.OnItemClickListener() {
@@ -105,10 +123,14 @@ public class UserGroupActivity extends AppCompatActivity implements
         studentView.setLayoutManager(new LinearLayoutManager(this));
         studentView.setNestedScrollingEnabled(false);
         studentView.setItemAnimator(new DefaultItemAnimator());
+        studentAdapter = new StudentMemberAdapter(new ArrayList<StudentSet>(0));
+        studentView.setAdapter(studentAdapter);
 
         teacherView.setLayoutManager(new LinearLayoutManager(this));
         teacherView.setNestedScrollingEnabled(false);
         teacherView.setItemAnimator(new DefaultItemAnimator());
+        teacherAdapter = new TeacherMemberAdapter(new ArrayList<TeacherSet>(0));
+        teacherView.setAdapter(teacherAdapter);
     }
 
     @Override
@@ -137,7 +159,7 @@ public class UserGroupActivity extends AppCompatActivity implements
 
     public void saveUsers(View view) {
         showProgress();
-        ArrayList<UserGroup> userGroups = new ArrayList<>();
+        ArrayList<UserGroup> usrGroups = new ArrayList<>();
         for(StudentSet studentSet : studentAdapter.getDataSet()) {
             if(studentSet.isSelected()) {
                 UserGroup userGroup = new UserGroup();
@@ -145,7 +167,7 @@ public class UserGroupActivity extends AppCompatActivity implements
                 userGroup.setRole("student");
                 userGroup.setGroupId(group.getId());
                 userGroup.setActive(true);
-                userGroups.add(userGroup);
+                usrGroups.add(userGroup);
             }
         }
         for(TeacherSet teacherSet : teacherAdapter.getDataSet()) {
@@ -155,14 +177,14 @@ public class UserGroupActivity extends AppCompatActivity implements
                 userGroup.setRole("teacher");
                 userGroup.setGroupId(group.getId());
                 userGroup.setActive(true);
-                userGroups.add(userGroup);
+                usrGroups.add(userGroup);
             }
         }
         hideProgress();
-        if(userGroups.size() == 0) {
+        if(usrGroups.size() == 0) {
             showSnackbar("No changes detected");
         } else {
-            presenter.saveUserGroup(userGroups);
+            presenter.saveUserGroup(usrGroups);
         }
     }
 
@@ -178,11 +200,13 @@ public class UserGroupActivity extends AppCompatActivity implements
 
     @Override
     public void showError(String message) {
+        refreshLayout.setRefreshing(false);
         showSnackbar(message);
     }
 
     @Override
     public void showUserGroup(GroupUsers groupUsers) {
+        refreshLayout.setRefreshing(false);
         userGroups = groupUsers.getUserGroupList();
         adapter.setDataSet(userGroups, multiselect_list);
 
@@ -190,8 +214,7 @@ public class UserGroupActivity extends AppCompatActivity implements
         for(Student s: groupUsers.getStudents()) {
             studentSets.add(new StudentSet(s.getId(), s.getRollNo(), s.getStudentName()));
         }
-        studentAdapter = new StudentMemberAdapter(studentSets);
-        studentView.setAdapter(studentAdapter);
+        studentAdapter.setDataSet(studentSets);
         if(studentSets.size() == 0) {
             addStudentsLayout.setVisibility(View.GONE);
         }
@@ -200,8 +223,7 @@ public class UserGroupActivity extends AppCompatActivity implements
         for(Teacher t: groupUsers.getTeachers()) {
             teacherSets.add(new TeacherSet(t.getId(), t.getTeacherName()));
         }
-        teacherAdapter = new TeacherMemberAdapter(teacherSets);
-        teacherView.setAdapter(teacherAdapter);
+        teacherAdapter.setDataSet(teacherSets);
         if(teacherSets.size() == 0) {
             addTeacherLayout.setVisibility(View.GONE);
         }
@@ -237,7 +259,7 @@ public class UserGroupActivity extends AppCompatActivity implements
     }
 
     private void showSnackbar(String message) {
-        Snackbar.make(coordinatorLayout, message, 3000).show();
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {

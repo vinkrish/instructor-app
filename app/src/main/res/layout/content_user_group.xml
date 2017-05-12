@@ -1,135 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/refreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/default_white"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.aanglearning.instructorapp.usergroup.UserGroupActivity"
     tools:showIn="@layout/activity_user_group">
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/myScrollingContent"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:background="@color/default_white">
 
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/myScrollingContent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textStyle="bold"
-                android:text="@string/group_name"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/text_small" />
-
-            <TextView
-                android:id="@+id/group_name_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
-                android:layout_marginBottom="15dp"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="@dimen/text_xsmall" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
-                android:text="@string/members"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/text_small"
-                android:textStyle="bold" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/member_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <RelativeLayout
-                android:id="@+id/add_students_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/add_students"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/group_name"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/text_small"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/group_name_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:paddingLeft="15dp"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="@dimen/text_xsmall" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="15dp"
-                    android:text="@string/add_students"
-                    android:textStyle="bold"
+                    android:text="@string/members"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/text_small" />
+                    android:textSize="@dimen/text_small"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/member_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <RelativeLayout
+                    android:id="@+id/add_students_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp">
+
+                    <TextView
+                        android:id="@+id/add_students"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:text="@string/add_students"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="@dimen/text_small"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/all_students_btn"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@+id/add_students"
+                        android:layout_alignParentRight="true"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:onClick="selectAllStudents"
+                        android:text="@string/select_all"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="@dimen/text_xsmall" />
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/student_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/add_teacher_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:paddingLeft="15dp"
+                    android:text="@string/add_teachers"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/text_small"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/teacher_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <Button
-                    android:id="@+id/all_students_btn"
+                    android:id="@+id/save_btn"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignBaseline="@+id/add_students"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="15dp"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
-                    android:onClick="selectAllStudents"
-                    android:text="@string/select_all"
+                    android:onClick="saveUsers"
+                    android:text="@string/save"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/text_xsmall" />
-            </RelativeLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/student_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/add_teacher_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:paddingLeft="15dp"
-                android:text="@string/add_teachers"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/text_small" />
+        </android.support.v4.widget.NestedScrollView>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/teacher_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
 
-            <Button
-                android:id="@+id/save_btn"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="15dp"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:onClick="saveUsers"
-                android:text="@string/save"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/text_xsmall" />
+    </RelativeLayout>
 
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
-
-    <ProgressBar
-        android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-
-</RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

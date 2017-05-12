@@ -26,7 +26,6 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -55,6 +54,7 @@
             android:name=".usergroup.UserGroupActivity"
             android:label="@string/title_activity_user_group"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ContextToolbarTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -63,6 +63,7 @@
         <activity
             android:name=".messagegroup.MessageActivity"
             android:label="@string/title_activity_message"
+            android:screenOrientation="portrait"
             android:theme="@style/NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -70,7 +71,8 @@
         </activity>
         <activity
             android:name=".messagegroup.ImageUploadActivity"
-            android:label="@string/upload_image">
+            android:label="@string/upload_image"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".messagegroup.MessageActivity" />
@@ -83,6 +85,7 @@
         <activity
             android:name=".attendance.AttendanceActivity"
             android:label="@string/attendance"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ContextToolbarTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -91,6 +94,7 @@
         <activity
             android:name=".homework.HomeworkActivity"
             android:label="@string/homework"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ContextToolbarTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -100,6 +104,7 @@
             android:name=".chat.ChatActivity"
             android:label="@string/title_activity_chat"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -109,6 +114,7 @@
             android:name=".newchat.NewChatActivity"
             android:label="@string/title_activity_new_chat"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -118,6 +124,7 @@
             android:name=".chathome.ChatsActivity"
             android:label="@string/title_activity_chats"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:theme="@style/NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

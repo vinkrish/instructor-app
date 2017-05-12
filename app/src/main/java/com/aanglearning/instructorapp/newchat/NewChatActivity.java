@@ -155,7 +155,7 @@ public class NewChatActivity extends AppCompatActivity implements
         newChat.setTeacherId(t.getId());
         newChat.setTeacherName(t.getTeacherName());
         newChat.setCreatedBy(t.getId());
-        newChat.setCreatorRole("Teacher");
+        newChat.setCreatorRole("teacher");
         presenter.saveChat(newChat);
     }
 }

@@ -78,6 +78,5 @@ public class UserGroupAdapter extends RecyclerView.Adapter<UserGroupAdapter.View
             name.setText(userGroup.getName());
             role.setText(userGroup.getRole());
         }
-
     }
 }

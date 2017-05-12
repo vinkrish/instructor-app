@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
  * Created by Vinay on 04-04-2017.
  */
 
-public class StudentMemberAdapter extends RecyclerView.Adapter<StudentMemberAdapter.ViewHolder> {
+class StudentMemberAdapter extends RecyclerView.Adapter<StudentMemberAdapter.ViewHolder> {
     private ArrayList<StudentSet> items;
 
     StudentMemberAdapter(ArrayList<StudentSet> items) {
@@ -70,6 +70,5 @@ public class StudentMemberAdapter extends RecyclerView.Adapter<StudentMemberAdap
             super(view);
             ButterKnife.bind(this, view);
         }
-
     }
 }

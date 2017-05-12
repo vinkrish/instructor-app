@@ -18,25 +18,18 @@ import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.dashboard.DashboardActivity;
 import com.aanglearning.instructorapp.model.Credentials;
 import com.aanglearning.instructorapp.model.TeacherCredentials;
-import com.aanglearning.instructorapp.util.AppGlobal;
 import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
-    @BindView(R.id.login_id_et)
-    EditText loginId;
-    @BindView(R.id.password_et)
-    EditText password;
-    @BindView(R.id.login_id)
-    TextInputLayout loginLayout;
-    @BindView(R.id.password)
-    TextInputLayout passwordLayout;
-    @BindView(R.id.progress)
-    ProgressBar progressBar;
-    @BindView(R.id.coordinatorLayout)
-    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.login_id_et) EditText loginId;
+    @BindView(R.id.password_et) EditText password;
+    @BindView(R.id.login_id) TextInputLayout loginLayout;
+    @BindView(R.id.password) TextInputLayout passwordLayout;
+    @BindView(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
 
     private LoginPresenter presenter;
 
@@ -70,7 +63,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     private void showSnackbar(String message) {
-        Snackbar.make(coordinatorLayout, message, 3000).show();
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -84,12 +77,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     @Override
-    public void setError() {
-        showSnackbar(getString(R.string.request_error));
-    }
-
-    @Override
-    public void showAPIError(String message) {
+    public void showError(String message) {
         showSnackbar(message);
     }
 

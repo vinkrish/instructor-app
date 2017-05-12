@@ -66,10 +66,7 @@ public class ImageUploadActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         progressBar.setVisibility(View.GONE);
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("text", newMsg.getText().toString().trim());
-        resultIntent.putExtra("imgName", "vinkrish.jpeg");
-        setResult(Activity.RESULT_OK, resultIntent);
+        setResult(Activity.RESULT_CANCELED, new Intent());
         finish();
     }
 

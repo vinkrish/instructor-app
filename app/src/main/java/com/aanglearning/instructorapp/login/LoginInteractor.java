@@ -16,9 +16,7 @@ public interface LoginInteractor {
 
         void onNoUser();
 
-        void onError();
-
-        void onAPIError(String message);
+        void onError(String message);
     }
 
     void login(Credentials credentials, OnLoginFinishedListener listener);

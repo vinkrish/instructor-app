@@ -1,5 +1,6 @@
 package com.aanglearning.instructorapp.chathome;
 
+import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
  */
 
 class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
-    private final List<Chat> items;
+    private List<Chat> items;
     private final ChatsAdapter.OnItemClickListener listener;
 
     ColorGenerator generator = ColorGenerator.MATERIAL;
@@ -39,6 +40,16 @@ class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
     ChatsAdapter(List<Chat> items, ChatsAdapter.OnItemClickListener listener) {
         this.items = items;
         this.listener = listener;
+    }
+
+    List<Chat> getDataSet() {
+        return items;
+    }
+
+    @UiThread
+    void setDataSet(List<Chat> items) {
+        this.items = items;
+        notifyDataSetChanged();
     }
 
     @Override

@@ -58,7 +58,7 @@
                     android:id="@+id/login_id_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/enter_login_id"
+                    android:hint="@string/login_id"
                     android:inputType="text" />
 
             </android.support.design.widget.TextInputLayout>
@@ -75,7 +75,7 @@
                     android:id="@+id/password_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/enter_password"
+                    android:hint="@string/password"
                     android:inputType="textPassword" />
 
             </android.support.design.widget.TextInputLayout>
@@ -89,7 +89,7 @@
                 android:onClick="forgotPassword"
                 android:text="@string/forgot_password"
                 android:textAllCaps="false"
-                android:textColor="@color/blue"
+                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/text_xsmall" />
 
             <LinearLayout

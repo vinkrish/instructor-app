@@ -63,9 +63,6 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
     @UiThread
     void updateDataSet(ArrayList<Message> msgs) {
-        //ArrayList<Message> oldMessages = messages;
-        //this.messages = new ArrayList<>();
-        //this.messages.addAll(oldMessages);
         int pos = messages.size();
         this.messages.addAll(msgs);
         notifyItemRangeInserted(pos, messages.size() - 1);

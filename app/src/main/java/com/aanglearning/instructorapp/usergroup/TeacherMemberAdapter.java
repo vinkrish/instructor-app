@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by Vinay on 04-04-2017.
  */
 
-public class TeacherMemberAdapter extends RecyclerView.Adapter<TeacherMemberAdapter.ViewHolder>{
+class TeacherMemberAdapter extends RecyclerView.Adapter<TeacherMemberAdapter.ViewHolder>{
     private ArrayList<TeacherSet> items;
 
     TeacherMemberAdapter(ArrayList<TeacherSet> items) {
@@ -61,15 +61,12 @@ public class TeacherMemberAdapter extends RecyclerView.Adapter<TeacherMemberAdap
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.name)
-        TextView name;
-        @BindView(R.id.checkBox)
-        CheckBox isSelected;
+        @BindView(R.id.name) TextView name;
+        @BindView(R.id.checkBox) CheckBox isSelected;
 
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
-
     }
 }

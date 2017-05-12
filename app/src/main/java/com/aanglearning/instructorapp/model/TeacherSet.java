@@ -1,7 +1,5 @@
 package com.aanglearning.instructorapp.model;
 
-import com.aanglearning.instructorapp.model.Teacher;
-
 /**
  * Created by Vinay on 04-04-2017.
  */

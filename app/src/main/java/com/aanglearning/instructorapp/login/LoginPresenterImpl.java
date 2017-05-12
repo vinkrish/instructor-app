@@ -64,18 +64,10 @@ public class LoginPresenterImpl implements LoginPresenter, LoginInteractor.OnLog
     }
 
     @Override
-    public void onError() {
+    public void onError(String message) {
         if(loginView != null) {
             loginView.hideProgress();
-            loginView.setError();
-        }
-    }
-
-    @Override
-    public void onAPIError(String message) {
-        if(loginView != null) {
-            loginView.hideProgress();
-            loginView.showAPIError(message);
+            loginView.showError(message);
         }
     }
 }

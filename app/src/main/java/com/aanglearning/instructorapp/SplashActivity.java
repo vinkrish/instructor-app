@@ -21,11 +21,11 @@ public class SplashActivity extends AppCompatActivity {
         SharedPreferenceUtil.saveAttendanceDate(this, localDate.toString());
         SharedPreferenceUtil.saveHomeworkDate(this, localDate.toString());
 
-        if (SharedPreferenceUtil.getTeacher(this).getAuthToken() != "") {
-            startActivity(new Intent(this, DashboardActivity.class));
+        if (SharedPreferenceUtil.getTeacher(this).getAuthToken().equals("")) {
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
         } else {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, DashboardActivity.class));
             finish();
         }
 

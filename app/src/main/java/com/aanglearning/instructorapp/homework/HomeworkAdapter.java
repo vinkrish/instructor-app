@@ -8,13 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.model.Homework;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,23 +22,23 @@ import butterknife.ButterKnife;
  * Created by Vinay on 24-04-2017.
  */
 
-public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.ViewHolder>{
+class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.ViewHolder>{
     private Context mContext;
-    private ArrayList<Homework> homeworks;
-    private ArrayList<Homework> selected_homeworks;
+    private List<Homework> homeworks;
+    private List<Homework> selected_homeworks;
 
-    HomeworkAdapter(Context context, ArrayList<Homework> homeworks, ArrayList<Homework> selected_homeworks) {
+    HomeworkAdapter(Context context, List<Homework> homeworks, List<Homework> selected_homeworks) {
         mContext = context;
         this.homeworks = homeworks;
         this.selected_homeworks = selected_homeworks;
     }
 
-    public ArrayList<Homework> getDataSet() {
+    public List<Homework> getDataSet() {
         return homeworks;
     }
 
     @UiThread
-    public void setDataSet(ArrayList<Homework> homeworks, ArrayList<Homework> selected_homeworks) {
+    public void setDataSet(List<Homework> homeworks, List<Homework> selected_homeworks) {
         this.homeworks = homeworks;
         this.selected_homeworks = selected_homeworks;
         notifyDataSetChanged();
@@ -54,10 +53,6 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.bind(homeworks.get(position));
-        if(selected_homeworks.contains(homeworks.get(position)))
-            holder.cardView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.list_item_selected_state));
-        else
-            holder.cardView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.list_item_normal_state));
     }
 
     @Override
@@ -78,6 +73,10 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.ViewHo
         void bind(final Homework homework) {
             subjectName.setText(homework.getSubjectName());
             hwMessage.setText(homework.getHomeworkMessage());
+            if(selected_homeworks.contains(homework))
+                cardView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.list_item_selected_state));
+            else
+                cardView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.list_item_normal_state));
         }
     }
 }

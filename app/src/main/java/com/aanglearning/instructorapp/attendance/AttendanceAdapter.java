@@ -18,6 +18,7 @@ import com.aanglearning.instructorapp.usergroup.UserGroupAdapter;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,21 +29,21 @@ import butterknife.ButterKnife;
 
 public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.ViewHolder>{
     private Context mContext;
-    private ArrayList<Attendance> absentees;
-    private ArrayList<Attendance> selected_absentees;
+    private List<Attendance> absentees;
+    private List<Attendance> selected_absentees;
 
-    AttendanceAdapter(Context context, ArrayList<Attendance> absentees, ArrayList<Attendance> selected_absentees) {
+    AttendanceAdapter(Context context, List<Attendance> absentees, List<Attendance> selected_absentees) {
         this.mContext = context;
         this.absentees = absentees;
         this.selected_absentees = selected_absentees;
     }
 
-    public ArrayList<Attendance> getDataSet() {
+    public List<Attendance> getDataSet() {
         return absentees;
     }
 
     @UiThread
-    public void setDataSet(ArrayList<Attendance> absentees, ArrayList<Attendance> selected_absentees) {
+    public void setDataSet(List<Attendance> absentees, List<Attendance> selected_absentees) {
         this.absentees = absentees;
         this.selected_absentees = selected_absentees;
         notifyDataSetChanged();
@@ -69,11 +70,9 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.name)
-        TextView name;
+        @BindView(R.id.name) TextView name;
         @BindView(R.id.absent) TextView absent;
-        @BindView(R.id.ll_listitem)
-        LinearLayout item_layout;
+        @BindView(R.id.ll_listitem) LinearLayout item_layout;
 
 
         ViewHolder(View view) {

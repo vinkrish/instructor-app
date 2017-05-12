@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Instructor App</string>
+    <string name="app_name">Teacher</string>
 
     <string name="login">Login</string>
     <string name="forgot_password">Forgot password?</string>
-    <string name="enter_login_id">Enter login id</string>
-    <string name="enter_password">Enter password</string>
+    <string name="login_id">Login Id</string>
+    <string name="password">Password</string>
     <string name="no_user">User doesn\'t exist</string>
 
     <string name="network_error">A network error has occurred.</string>
@@ -15,7 +15,7 @@
     <string name="logout">Logout</string>
 
     <string name="no_data_available">No Data Available</string>
-    <string name="existing_groups">Existing Groups</string>
+    <string name="groups">Groups</string>
     <string name="new_group">Create new group</string>
 
     <string name="group_name">Group Name</string>
@@ -58,7 +58,7 @@
     <string name="title_activity_user_group">Group Members</string>
     <string name="title_activity_new_group">New Group</string>
     <string name="title_activity_message">Messages</string>
-    <string name="title_activity_chat">ChatActivity</string>
-    <string name="title_activity_new_chat">NewChatActivity</string>
-    <string name="title_activity_chats">ChatsActivity</string>
+    <string name="title_activity_chat">Chat</string>
+    <string name="title_activity_new_chat">New Chat</string>
+    <string name="title_activity_chats">Chat</string>
 </resources>

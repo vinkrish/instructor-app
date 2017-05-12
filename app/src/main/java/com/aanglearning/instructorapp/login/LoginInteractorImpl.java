@@ -1,9 +1,9 @@
 package com.aanglearning.instructorapp.login;
 
-import com.aanglearning.instructorapp.api.APIError;
+import com.aanglearning.instructorapp.App;
+import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.api.ApiClient;
 import com.aanglearning.instructorapp.api.AuthApi;
-import com.aanglearning.instructorapp.api.ErrorUtils;
 import com.aanglearning.instructorapp.model.CommonResponse;
 import com.aanglearning.instructorapp.model.Credentials;
 import com.aanglearning.instructorapp.model.TeacherCredentials;
@@ -28,13 +28,13 @@ public class LoginInteractorImpl implements LoginInteractor {
                 if(response.isSuccessful()) {
                     listener.onSuccess(response.body());
                 } else {
-                    listener.onAPIError("Mobile number and password don't match");
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
 
             @Override
             public void onFailure(Call<TeacherCredentials> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }
@@ -54,14 +54,14 @@ public class LoginInteractorImpl implements LoginInteractor {
                         listener.onNoUser();
                     }
                 } else {
-                    APIError error = ErrorUtils.parseError(response);
-                    listener.onAPIError(error.getMessage());
+                    //APIError error = ErrorUtils.parseError(response);
+                    listener.onError(App.getInstance().getString(R.string.request_error));
                 }
             }
 
             @Override
             public void onFailure(Call<CommonResponse> call, Throwable t) {
-                listener.onError();
+                listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.aanglearning.instructorapp.homework;
 
+import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +20,8 @@ import butterknife.ButterKnife;
  * Created by Vinay on 24-04-2017.
  */
 
-public class NewHomeworkAdapter extends RecyclerView.Adapter<NewHomeworkAdapter.ViewHolder>  {
-
-    private final List<Homework> items;
+class NewHomeworkAdapter extends RecyclerView.Adapter<NewHomeworkAdapter.ViewHolder>  {
+    private  List<Homework> items;
     private final NewHomeworkAdapter.OnItemClickListener listener;
 
     interface OnItemClickListener {
@@ -31,6 +31,12 @@ public class NewHomeworkAdapter extends RecyclerView.Adapter<NewHomeworkAdapter.
     NewHomeworkAdapter(List<Homework> items, NewHomeworkAdapter.OnItemClickListener listener) {
         this.items = items;
         this.listener = listener;
+    }
+
+    @UiThread
+    public void setDataSet(List<Homework> homeworks) {
+        this.items = homeworks;
+        notifyDataSetChanged();
     }
 
     @Override
