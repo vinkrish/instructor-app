@@ -9,133 +9,120 @@
     tools:context="com.aanglearning.instructorapp.homework.HomeworkActivity"
     tools:showIn="@layout/activity_homework">
 
-    <RelativeLayout
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/myScrollingContent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/myScrollingContent"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/spacing_small"
+                android:paddingTop="@dimen/spacing_normal"
+                android:text="@string/select_class"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinner_class"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_small" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/spacing_small"
+                android:paddingTop="@dimen/spacing_small"
+                android:text="@string/select_section"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinner_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/spacing_small"
+                android:layout_marginRight="@dimen/spacing_small"
+                android:layout_marginTop="@dimen/spacing_small" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_margin="@dimen/spacing_small"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/calendar" />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/spacing_small"
-                    android:paddingTop="@dimen/spacing_normal"
-                    android:text="@string/select_class"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/spinner_class"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/spacing_small" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/spacing_small"
-                    android:paddingTop="@dimen/spacing_small"
-                    android:text="@string/select_section"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/spinner_section"
-                    android:layout_width="match_parent"
+                    android:id="@+id/date_tv"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/spacing_small"
-                    android:layout_marginRight="@dimen/spacing_small"
-                    android:layout_marginTop="@dimen/spacing_small" />
+                    android:layout_marginRight="@dimen/spacing_tiny"
+                    android:layout_weight="1"
+                    android:lineSpacingExtra="3dp"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="@dimen/text_xsmall" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/change_btn"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/spacing_small"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:contentDescription="@string/app_name"
-                        android:src="@drawable/calendar" />
-
-                    <TextView
-                        android:id="@+id/date_tv"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/spacing_small"
-                        android:layout_marginRight="@dimen/spacing_tiny"
-                        android:layout_weight="1"
-                        android:lineSpacingExtra="3dp"
-                        android:textColor="@color/primaryTextColor"
-                        android:textSize="@dimen/text_xsmall" />
-
-                    <Button
-                        android:id="@+id/change_btn"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="changeDate"
-                        android:text="@string/change"
-                        android:textAllCaps="false"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/text_xsmall" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/homework_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/spacing_small"
-                    android:text="@string/homework"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/text_small"
-                    android:textStyle="bold" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/homework_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/enter_homework"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/spacing_small"
-                    android:paddingTop="@dimen/spacing_normal"
-                    android:text="@string/enter_homework"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/text_small"
-                    android:textStyle="bold" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/subject_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:onClick="changeDate"
+                    android:text="@string/change"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_xsmall" />
 
             </LinearLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+            <TextView
+                android:id="@+id/homework_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/spacing_small"
+                android:text="@string/homework"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text_small"
+                android:textStyle="bold" />
 
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/homework_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/enter_homework"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/spacing_small"
+                android:paddingTop="@dimen/spacing_normal"
+                android:text="@string/enter_homework"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text_small"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/subject_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.v4.widget.SwipeRefreshLayout>
 

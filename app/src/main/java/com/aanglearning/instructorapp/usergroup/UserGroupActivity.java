@@ -42,7 +42,6 @@ public class UserGroupActivity extends AppCompatActivity implements
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.progress) ProgressBar progressBar;
     @BindView(R.id.group_name_tv) TextView groupName;
     @BindView(R.id.add_students_layout) RelativeLayout addStudentsLayout;
     @BindView(R.id.add_teacher_layout) TextView addTeacherLayout;
@@ -190,12 +189,12 @@ public class UserGroupActivity extends AppCompatActivity implements
 
     @Override
     public void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
+        refreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideProgress() {
-        progressBar.setVisibility(View.GONE);
+        refreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -263,7 +262,6 @@ public class UserGroupActivity extends AppCompatActivity implements
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             MenuInflater inflater = mode.getMenuInflater();

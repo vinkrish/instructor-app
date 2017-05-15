@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiClient {
-    private static final String BASE_URL = "http://192.168.1.3:8080/guldu/webapi/";
+    private static final String BASE_URL = "http://ec2-34-210-168-143.us-west-2.compute.amazonaws.com/webapi/";
     private static Retrofit authRetrofit = null;
     private static Retrofit retrofit = null;
 

@@ -48,7 +48,6 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
-    @BindView(R.id.progress) ProgressBar progressBar;
     @BindView(R.id.new_msg_layout) LinearLayout newMsgLayout;
     @BindView(R.id.new_msg) EditText newMsg;
     @BindView(R.id.enter_msg) ImageView enterMsg;
@@ -179,12 +178,12 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
 
     @Override
     public void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
+        refreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideProgress() {
-        progressBar.setVisibility(View.GONE);
+        refreshLayout.setRefreshing(false);
     }
 
     @Override

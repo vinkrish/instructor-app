@@ -33,7 +33,6 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
     @BindView(R.id.fab) FloatingActionButton fab;
-    @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
 
     private ChatsPresenter presenter;
@@ -46,7 +45,6 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         presenter = new ChatsPresenterImpl(this, new ChatsInteractorImpl());
@@ -98,12 +96,12 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
 
     @Override
     public void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
+        refreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideProgess() {
-        progressBar.setVisibility(View.GONE);
+        refreshLayout.setRefreshing(true);
     }
 
     @Override
