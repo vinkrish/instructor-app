@@ -60,7 +60,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            recipientId = getIntent().getLongExtra("recipientId", 0);
+            recipientId = extras.getLong("recipientId", 0);
         }
 
         presenter = new ChatPresenterImpl(this, new ChatInteractorImpl());

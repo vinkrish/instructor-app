@@ -24,10 +24,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.aanglearning.instructorapp.R;
-import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Message;
@@ -69,6 +67,13 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            group = new Groups();
+            group.setId(extras.getLong("groupId"));
+            group.setName(extras.getString("groupName"));
+        }
 
         presenter = new MessagePresenterImpl(this, new MessageInteractorImpl());
 
@@ -151,7 +156,10 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.disclaimer:
-                startActivity(new Intent(this, UserGroupActivity.class));
+                Intent intent = new Intent(this, UserGroupActivity.class);
+                intent.putExtra("groupId", group.getId());
+                intent.putExtra("groupName", group.getName());
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -161,7 +169,6 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     @Override
     public void onResume() {
         super.onResume();
-        group = GroupDao.getGroup();
         getSupportActionBar().setTitle(group.getName());
         presenter.getMessages(group.getId());
     }

@@ -70,6 +70,13 @@ public class UserGroupActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            group = new Groups();
+            group.setId(extras.getLong("groupId"));
+            group.setName(extras.getString("groupName"));
+        }
+
         presenter = new UserGroupPresenterImpl(this, new UserGroupInteractorImpl());
 
         alertDialogHelper = new AlertDialogHelper(this);
@@ -135,7 +142,6 @@ public class UserGroupActivity extends AppCompatActivity implements
     @Override
     public void onResume() {
         super.onResume();
-        group = GroupDao.getGroup();
         groupName.setText(group.getName());
         presenter.getUserGroup(group.getId());
     }

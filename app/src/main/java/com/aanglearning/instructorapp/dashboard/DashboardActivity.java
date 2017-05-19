@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -50,6 +51,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     @BindView(R.id.navigation_view) NavigationView navigationView;
     @BindView(R.id.drawer) DrawerLayout drawerLayout;
     @BindView(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.noGroups) LinearLayout noGroups;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
 
     private GroupPresenter presenter;
@@ -80,7 +82,6 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
 
         ActionBarDrawerToggle actionBarDrawerToggle = new
                 ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name) {
-
                     @Override
                     public void onDrawerClosed(View drawerView) {
                         super.onDrawerClosed(drawerView);
@@ -114,12 +115,23 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                 presenter.getGroups(TeacherDao.getTeacher().getId());
             }
         });
+
+        if(NetworkUtil.isNetworkAvailable(this)) {
+            presenter.getGroups(TeacherDao.getTeacher().getId());
+        } else {
+            List<Groups> groups = GroupDao.getGroups();
+            if(groups.size() == 0) {
+                noGroups.setVisibility(View.VISIBLE);
+            } else {
+                noGroups.setVisibility(View.INVISIBLE);
+                adapter.replaceData(groups);
+            }
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getGroups(TeacherDao.getTeacher().getId());
     }
 
     @Override
@@ -185,8 +197,24 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
 
     @Override
     public void setGroups(List<Groups> groups) {
+        if(groups.size() == 0) {
+            noGroups.setVisibility(View.VISIBLE);
+        } else {
+            noGroups.setVisibility(View.INVISIBLE);
+            adapter.replaceData(groups);
+            backupGroups(groups);
+        }
         refreshLayout.setRefreshing(false);
-        adapter.replaceData(groups);
+    }
+
+    private void backupGroups(final List<Groups> groups) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                GroupDao.clear();
+                GroupDao.insertMany(groups);
+            }
+        }).start();
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -224,9 +252,10 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     GroupAdapter.OnItemClickListener mItemListener = new GroupAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(Groups group) {
-            GroupDao.clear();
-            GroupDao.insert(group);
-            startActivity(new Intent(DashboardActivity.this, MessageActivity.class));
+            Intent intent = new Intent(DashboardActivity.this, MessageActivity.class);
+            intent.putExtra("groupId", group.getId());
+            intent.putExtra("groupName", group.getName());
+            startActivity(intent);
         }
     };
 }

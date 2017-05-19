@@ -41,7 +41,7 @@ class ChatsPresenterImpl implements ChatsPresenter, ChatsInteractor.OnFinishedLi
     @Override
     public void onChatsReceived(List<Chat> chats) {
         if (mView != null) {
-            mView.setGroups(chats);
+            mView.setChats(chats);
             mView.hideProgess();
         }
     }

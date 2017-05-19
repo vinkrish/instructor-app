@@ -168,9 +168,9 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             });
             //sharedImage.setImageResource(R.drawable.books);
             Picasso.with(mContext)
-                    .load(message.getImageUrl())
-                    .placeholder(R.drawable.books)
-                    .error(R.drawable.books)
+                    .load("https://s3.ap-south-1.amazonaws.com/aang-solutions/" + message.getImageUrl())
+                    .placeholder(R.drawable.splash_image)
+                    .error(R.drawable.splash_image)
                     .into(sharedImage);
         }
 
@@ -186,8 +186,8 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         TouchImageView fullImage = (TouchImageView) dialog.findViewById(R.id.full_image);
         Picasso.with(mContext)
                 .load("https://s3.ap-south-1.amazonaws.com/aang-solutions/" + message.getImageUrl())
-                .placeholder(R.drawable.books)
-                .error(R.drawable.books)
+                .placeholder(R.drawable.splash_image)
+                .error(R.drawable.splash_image)
                 .into(fullImage);
 
         dialog.show();

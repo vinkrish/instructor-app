@@ -63,6 +63,7 @@
         <activity
             android:name=".messagegroup.MessageActivity"
             android:label="@string/title_activity_message"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBar">
             <meta-data
@@ -85,6 +86,7 @@
         <activity
             android:name=".attendance.AttendanceActivity"
             android:label="@string/attendance"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ContextToolbarTheme">
             <meta-data
@@ -94,6 +96,7 @@
         <activity
             android:name=".homework.HomeworkActivity"
             android:label="@string/homework"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ContextToolbarTheme">
             <meta-data

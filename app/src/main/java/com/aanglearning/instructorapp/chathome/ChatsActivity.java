@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.aanglearning.instructorapp.R;
@@ -33,6 +34,7 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
     @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.no_chats) LinearLayout noChats;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
 
     private ChatsPresenter presenter;
@@ -101,7 +103,7 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
 
     @Override
     public void hideProgess() {
-        refreshLayout.setRefreshing(true);
+        refreshLayout.setRefreshing(false );
     }
 
     @Override
@@ -111,9 +113,14 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
     }
 
     @Override
-    public void setGroups(List<Chat> chats) {
+    public void setChats(List<Chat> chats) {
+        if(chats.size() == 0) {
+            noChats.setVisibility(View.VISIBLE);
+        } else {
+            noChats.setVisibility(View.INVISIBLE);
+            adapter.setDataSet(chats);
+        }
         refreshLayout.setRefreshing(false);
-        adapter.setDataSet(chats);
     }
 
     ChatsAdapter.OnItemClickListener mItemListener = new ChatsAdapter.OnItemClickListener() {

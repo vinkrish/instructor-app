@@ -15,6 +15,7 @@
     <string name="logout">Logout</string>
 
     <string name="no_data_available">No Data Available</string>
+    <string name="no_groups">You are not part of any group</string>
     <string name="groups">Groups</string>
     <string name="new_group">Create new group</string>
 
@@ -34,6 +35,7 @@
     <string name="select_all">Select All</string>
     <string name="menu_item_delete">Delete</string>
 
+    <string name="no_chats">No Chats!</string>
     <string name="chat">Chat</string>
     <string name="type_your_message">Enter msg</string>
     <string name="msg_if_any">Message if any..</string>

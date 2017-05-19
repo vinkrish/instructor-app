@@ -4,6 +4,7 @@ import com.aanglearning.instructorapp.App;
 import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -18,7 +19,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiClient {
-    private static final String BASE_URL = "http://ec2-34-210-168-143.us-west-2.compute.amazonaws.com/webapi/";
+    private static final String BASE_URL = "http://192.168.1.3:8080/guldu/webapi/";
+    //private static final String BASE_URL = "http://ec2-34-210-168-143.us-west-2.compute.amazonaws.com/webapi/";
     private static Retrofit authRetrofit = null;
     private static Retrofit retrofit = null;
 
@@ -38,6 +40,9 @@ public class ApiClient {
                         return chain.proceed(request);
                     }
                 })
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
                 .addInterceptor(logging)
                 .build();
 
@@ -55,6 +60,9 @@ public class ApiClient {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
                 .addInterceptor(logging)
                 .build();
         if (retrofit == null) {

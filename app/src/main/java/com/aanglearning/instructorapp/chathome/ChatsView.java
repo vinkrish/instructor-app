@@ -15,5 +15,5 @@ interface ChatsView {
 
     void showError(String message);
 
-    void setGroups(List<Chat> chats);
+    void setChats(List<Chat> chats);
 }
