@@ -14,14 +14,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.chat.ChatActivity;
+import com.aanglearning.instructorapp.dao.ChatDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.model.Chat;
 import com.aanglearning.instructorapp.newchat.NewChatActivity;
 import com.aanglearning.instructorapp.util.DividerItemDecoration;
+import com.aanglearning.instructorapp.util.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,14 +77,21 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ChatsActivity.this, NewChatActivity.class));
+                finish();
             }
         });
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        presenter.getChats(TeacherDao.getTeacher().getId());
+        if(NetworkUtil.isNetworkAvailable(this)) {
+            presenter.getChats(TeacherDao.getTeacher().getId());
+        } else {
+            List<Chat> chats = ChatDao.getChats();
+            if(chats.size() == 0) {
+                noChats.setVisibility(View.VISIBLE);
+            } else {
+                noChats.setVisibility(View.INVISIBLE);
+                adapter.setDataSet(chats);
+            }
+        }
     }
 
     @Override
@@ -119,8 +127,19 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
         } else {
             noChats.setVisibility(View.INVISIBLE);
             adapter.setDataSet(chats);
+            backupChats(chats);
         }
         refreshLayout.setRefreshing(false);
+    }
+
+    private void backupChats(final List<Chat> chats) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ChatDao.clear();
+                ChatDao.insertMany(chats);
+            }
+        }).start();
     }
 
     ChatsAdapter.OnItemClickListener mItemListener = new ChatsAdapter.OnItemClickListener() {

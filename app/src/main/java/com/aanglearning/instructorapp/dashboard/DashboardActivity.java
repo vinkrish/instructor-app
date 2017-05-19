@@ -130,11 +130,6 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         presenter.onDestroy();

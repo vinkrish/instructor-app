@@ -17,33 +17,6 @@ import java.util.List;
 
 public class GroupDao {
 
-    public static int insert(Groups group) {
-        String sql = "insert into groups(Id, Name, SectionId, IsSection, ClassId, IsClass, CreatedBy, CreatedDate, IsActive) " +
-                "values(?,?,?,?,?,?,?,?,?)";
-        SQLiteDatabase db = AppGlobal.getSqlDbHelper().getWritableDatabase();
-        db.beginTransactionNonExclusive();
-        SQLiteStatement stmt = db.compileStatement(sql);
-        try {
-            stmt.bindLong(1, group.getId());
-            stmt.bindString(2, group.getName());
-            stmt.bindLong(3, group.getSectionId());
-            stmt.bindString(4, Boolean.toString(group.isSection()));
-            stmt.bindLong(5, group.getClassId());
-            stmt.bindString(6, Boolean.toString(group.isClas()));
-            stmt.bindLong(7, group.getCreatedBy());
-            stmt.bindString(8, group.getCreatedDate());
-            stmt.bindString(9, Boolean.toString(group.isActive()));
-            stmt.execute();
-            stmt.clearBindings();
-        } catch (Exception e) {
-            db.endTransaction();
-            return 0;
-        }
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        return 1;
-    }
-
     public static int insertMany(List<Groups> groups) {
         String sql = "insert into groups(Id, Name, SectionId, IsSection, ClassId, IsClass, CreatedBy, CreatedDate, IsActive) " +
                 "values(?,?,?,?,?,?,?,?,?)";
