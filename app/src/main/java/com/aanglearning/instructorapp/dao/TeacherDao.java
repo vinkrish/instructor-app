@@ -31,7 +31,7 @@ public class TeacherDao {
             stmt.bindString(8, teacher.getDateOfJoining());
             stmt.bindString(9, teacher.getGender());
             stmt.bindString(10, teacher.getEmail());
-            stmt.execute();
+            stmt.executeInsert();
             stmt.clearBindings();
         } catch (Exception e) {
             db.endTransaction();

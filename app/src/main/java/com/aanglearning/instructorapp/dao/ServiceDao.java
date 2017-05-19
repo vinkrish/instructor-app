@@ -29,7 +29,7 @@ public class ServiceDao {
             stmt.bindString(7, Boolean.toString(service.getIsAttendanceSms()));
             stmt.bindString(8, Boolean.toString(service.getIsHomework()));
             stmt.bindString(9, Boolean.toString(service.getIsHomeworkSms()));
-            stmt.execute();
+            stmt.executeInsert();
             stmt.clearBindings();
         } catch (Exception e) {
             db.endTransaction();

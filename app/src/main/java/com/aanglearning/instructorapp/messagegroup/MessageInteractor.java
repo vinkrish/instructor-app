@@ -1,10 +1,8 @@
 package com.aanglearning.instructorapp.messagegroup;
 
 import com.aanglearning.instructorapp.model.Message;
-import com.aanglearning.instructorapp.usergroup.GroupUsers;
-import com.aanglearning.instructorapp.usergroup.UserGroupInteractor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vinay on 07-04-2017.
@@ -16,9 +14,9 @@ interface MessageInteractor {
 
         void onMessageSaved(Message message);
 
-        void onMessageReceived(ArrayList<Message> messages);
+        void onMessageReceived(List<Message> messages);
 
-        void onFollowupMessagesReceived(ArrayList<Message> messages);
+        void onFollowupMessagesReceived(List<Message> messages);
     }
 
     void saveMessage(Message message, MessageInteractor.OnFinishedListener listener);

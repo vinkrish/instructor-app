@@ -2,7 +2,7 @@ package com.aanglearning.instructorapp.messagegroup;
 
 import com.aanglearning.instructorapp.model.Message;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vinay on 07-04-2017.
@@ -17,7 +17,7 @@ interface MessageView {
 
     void onMessageSaved(Message message);
 
-    void showMessages(ArrayList<Message> messages);
+    void showMessages(List<Message> messages);
 
-    void showFollowupMessages(ArrayList<Message> messages);
+    void showFollowupMessages(List<Message> messages);
 }

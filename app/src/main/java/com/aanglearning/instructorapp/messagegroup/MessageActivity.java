@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -26,6 +27,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.aanglearning.instructorapp.R;
+import com.aanglearning.instructorapp.dao.GroupDao;
+import com.aanglearning.instructorapp.dao.MessageDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Message;
@@ -37,6 +40,7 @@ import com.aanglearning.instructorapp.util.NetworkUtil;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,6 +78,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
             group.setId(extras.getLong("groupId"));
             group.setName(extras.getString("groupName"));
         }
+        getSupportActionBar().setTitle(group.getName());
 
         presenter = new MessagePresenterImpl(this, new MessageInteractorImpl());
 
@@ -83,6 +88,13 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
 
         newMsg.setOnKeyListener(this);
         newMsg.addTextChangedListener(newMsgWatcher);
+
+        if(NetworkUtil.isNetworkAvailable(this)) {
+            presenter.getMessages(group.getId());
+        } else {
+            List<Message> messages = MessageDao.getGroupMessages(group.getId());
+            adapter.setDataSet(messages);
+        }
     }
 
     private void setupRecyclerView() {
@@ -96,7 +108,9 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                presenter.getFollowupMessages(group.getId(), adapter.getDataSet().get(adapter.getDataSet().size()-1).getId());
+                if(NetworkUtil.isNetworkAvailable(MessageActivity.this)) {
+                    presenter.getFollowupMessages(group.getId(), adapter.getDataSet().get(adapter.getDataSet().size()-1).getId());
+                }
             }
         };
         recyclerView.addOnScrollListener(scrollListener);
@@ -167,13 +181,6 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getSupportActionBar().setTitle(group.getName());
-        presenter.getMessages(group.getId());
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         presenter.onDestroy();
@@ -205,13 +212,24 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     }
 
     @Override
-    public void showMessages(ArrayList<Message> messages) {
+    public void showMessages(List<Message> messages) {
         refreshLayout.setRefreshing(false);
         adapter.setDataSet(messages);
+        backupMessages(messages);
+    }
+
+    private void backupMessages(final List<Message> messages) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MessageDao.clearGroupMessages(group.getId());
+                MessageDao.insertMany(messages);
+            }
+        }).start();
     }
 
     @Override
-    public void showFollowupMessages(ArrayList<Message> msgs) {
+    public void showFollowupMessages(List<Message> msgs) {
         adapter.updateDataSet(msgs);
     }
 
@@ -240,6 +258,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
                 message.setSenderName(TeacherDao.getTeacher().getTeacherName());
                 message.setSenderRole("teacher");
                 message.setGroupId(group.getId());
+                message.setRecipientRole("group");
                 message.setMessageType(messageType);
                 message.setImageUrl(imgUrl);
                 message.setMessageBody(newMsg.getText().toString());

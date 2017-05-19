@@ -41,6 +41,7 @@ public class SqlDbHelper extends SQLiteOpenHelper implements SqlConstant {
         db.execSQL(CREATE_GROUPS);
         db.execSQL(CREATE_CHAT);
         db.execSQL(CREATE_SERVICE);
+        db.execSQL(CREATE_MESSAGE);
     }
 
     @Override
@@ -61,6 +62,7 @@ public class SqlDbHelper extends SQLiteOpenHelper implements SqlConstant {
         db.execSQL("DROP TABLE IF EXISTS timetable");
         db.execSQL("DROP TABLE IF EXISTS groups");
         db.execSQL("DROP TABLE IF EXISTS chat");
+        db.execSQL("DROP TABLE IF EXISTS message");
         db.execSQL("DROP TABLE IF EXISTS service");
         onCreate(db);
     }
@@ -83,6 +85,7 @@ public class SqlDbHelper extends SQLiteOpenHelper implements SqlConstant {
         sqliteDatabase.delete("timetable", null, null);
         sqliteDatabase.delete("groups", null, null);
         sqliteDatabase.delete("chat", null, null);
+        sqliteDatabase.delete("message", null, null);
         sqliteDatabase.delete("service", null, null);
     }
 }

@@ -34,7 +34,7 @@ public class ChatDao {
                 stmt.bindString(7, chat.getTeacherName());
                 stmt.bindLong(8, chat.getCreatedBy());
                 stmt.bindString(9, chat.getCreatorRole());
-                stmt.execute();
+                stmt.executeInsert();
                 stmt.clearBindings();
             }
         } catch (Exception e) {

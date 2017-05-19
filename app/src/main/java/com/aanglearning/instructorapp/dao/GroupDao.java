@@ -34,7 +34,7 @@ public class GroupDao {
                 stmt.bindLong(7, group.getCreatedBy());
                 stmt.bindString(8, group.getCreatedDate());
                 stmt.bindString(9, Boolean.toString(group.isActive()));
-                stmt.execute();
+                stmt.executeInsert();
                 stmt.clearBindings();
             }
         } catch (Exception e) {

@@ -2,7 +2,7 @@ package com.aanglearning.instructorapp.messagegroup;
 
 import com.aanglearning.instructorapp.model.Message;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vinay on 07-04-2017.
@@ -63,7 +63,7 @@ class MessagePresenterImpl implements MessagePresenter, MessageInteractor.OnFini
     }
 
     @Override
-    public void onMessageReceived(ArrayList<Message> messages) {
+    public void onMessageReceived(List<Message> messages) {
         if(mView != null) {
             mView.showMessages(messages);
             mView.hideProgress();
@@ -71,7 +71,7 @@ class MessagePresenterImpl implements MessagePresenter, MessageInteractor.OnFini
     }
 
     @Override
-    public void onFollowupMessagesReceived(ArrayList<Message> messages) {
+    public void onFollowupMessagesReceived(List<Message> messages) {
         if(mView != null) {
             mView.showFollowupMessages(messages);
             mView.hideProgress();

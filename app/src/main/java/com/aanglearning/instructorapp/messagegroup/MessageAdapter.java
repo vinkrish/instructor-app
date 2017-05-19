@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 
 class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     private Context mContext;
-    private ArrayList<Message> messages;
+    private List<Message> messages;
 
     private static final int ITEM_TYPE_TEXT = 0;
     private static final int ITEM_TYPE_IMAGE = 1;
@@ -46,23 +46,23 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             .endConfig()
             .round();
 
-    MessageAdapter(Context context, ArrayList<Message> messages) {
+    MessageAdapter(Context context, List<Message> messages) {
         this.mContext = context;
         this.messages = messages;
     }
 
-    ArrayList<Message> getDataSet() {
+    List<Message> getDataSet() {
         return messages;
     }
 
     @UiThread
-    void setDataSet(ArrayList<Message> messages) {
+    void setDataSet(List<Message> messages) {
         this.messages = messages;
         notifyDataSetChanged();
     }
 
     @UiThread
-    void updateDataSet(ArrayList<Message> msgs) {
+    void updateDataSet(List<Message> msgs) {
         int pos = messages.size();
         this.messages.addAll(msgs);
         notifyItemRangeInserted(pos, messages.size() - 1);
