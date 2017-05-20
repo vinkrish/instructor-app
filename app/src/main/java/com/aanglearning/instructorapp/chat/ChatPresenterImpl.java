@@ -3,6 +3,7 @@ package com.aanglearning.instructorapp.chat;
 import com.aanglearning.instructorapp.model.Message;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vinay on 28-04-2017.
@@ -63,7 +64,7 @@ public class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFi
     }
 
     @Override
-    public void onMessageReceived(ArrayList<Message> messages) {
+    public void onMessageReceived(List<Message> messages) {
         if(mView != null) {
             mView.showMessages(messages);
             mView.hideProgress();
@@ -71,7 +72,7 @@ public class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFi
     }
 
     @Override
-    public void onFollowupMessagesReceived(ArrayList<Message> messages) {
+    public void onFollowupMessagesReceived(List<Message> messages) {
         if(mView != null) {
             mView.showFollowupMessages(messages);
             mView.hideProgress();

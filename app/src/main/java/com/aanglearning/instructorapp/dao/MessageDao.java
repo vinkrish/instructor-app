@@ -17,7 +17,7 @@ import java.util.List;
 
 public class MessageDao {
 
-    public static int insertMany(List<Message> messages) {
+    public static int insertGroupMessages(List<Message> messages) {
         String sql = "insert into message(Id, SenderId, SenderRole, SenderName, RecipientId, " +
                 "RecipientRole, GroupId, MessageType, MessageBody, ImageUrl, CreatedAt) " +
                 "values(?,?,?,?,?,?,?,?,?,?,?)";
@@ -30,6 +30,38 @@ public class MessageDao {
                 stmt.bindLong(2, message.getSenderId());
                 stmt.bindString(3, message.getSenderRole());
                 stmt.bindString(4, message.getSenderName());
+                stmt.bindLong(5, message.getRecipientId());
+                stmt.bindString(6, message.getRecipientRole());
+                stmt.bindLong(7, message.getGroupId());
+                stmt.bindString(8, message.getMessageType());
+                stmt.bindString(9, message.getMessageBody());
+                stmt.bindString(10, message.getImageUrl());
+                stmt.bindString(11, message.getCreatedAt());
+                stmt.executeInsert();
+                stmt.clearBindings();
+            }
+        } catch (Exception e) {
+            db.endTransaction();
+            return 0;
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        return 1;
+    }
+
+    public static int insertChatMessages(List<Message> messages) {
+        String sql = "insert into message(Id, SenderId, SenderRole, SenderName, RecipientId, " +
+                "RecipientRole, GroupId, MessageType, MessageBody, ImageUrl, CreatedAt) " +
+                "values(?,?,?,?,?,?,?,?,?,?,?)";
+        SQLiteDatabase db = AppGlobal.getSqlDbHelper().getWritableDatabase();
+        db.beginTransactionNonExclusive();
+        SQLiteStatement stmt = db.compileStatement(sql);
+        try {
+            for(Message message: messages) {
+                stmt.bindLong(1, message.getId());
+                stmt.bindLong(2, message.getSenderId());
+                stmt.bindString(3, message.getSenderRole());
+                stmt.bindString(4, "");
                 stmt.bindLong(5, message.getRecipientId());
                 stmt.bindString(6, message.getRecipientRole());
                 stmt.bindLong(7, message.getGroupId());
@@ -163,6 +195,19 @@ public class MessageDao {
         SQLiteDatabase sqliteDb = AppGlobal.getSqlDbHelper().getWritableDatabase();
         try {
             sqliteDb.execSQL("delete from message where GroupId = " + groupId);
+        } catch(SQLException e) {
+            return 0;
+        }
+        return 1;
+    }
+
+    public static int clearChatMessages(long senderId, String senderRole, long recipientId, String recipientRole) {
+        SQLiteDatabase sqliteDb = AppGlobal.getSqlDbHelper().getWritableDatabase();
+        try {
+            String query = "delete from message where " +
+                    "((SenderId=" + senderId + " and SenderRole= '" + senderRole + "' and RecipientId=" + recipientId + " and RecipientRole='" + recipientRole + "') or " +
+                    "(SenderId=" + recipientId + " and SenderRole='" + recipientRole + "' and RecipientId=" + senderId + " and RecipientRole='" + senderRole + "')) ";
+            sqliteDb.execSQL(query);
         } catch(SQLException e) {
             return 0;
         }
