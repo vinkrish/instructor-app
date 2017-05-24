@@ -14,6 +14,7 @@ import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.model.UserGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,21 +25,21 @@ import butterknife.ButterKnife;
 
 public class UserGroupAdapter extends RecyclerView.Adapter<UserGroupAdapter.ViewHolder> {
     private Context mContext;
-    private ArrayList<UserGroup> users;
-    private ArrayList<UserGroup> selected_users;
+    private List<UserGroup> users;
+    private List<UserGroup> selected_users;
 
-    UserGroupAdapter(Context context, ArrayList<UserGroup> users, ArrayList<UserGroup> selected_users) {
+    UserGroupAdapter(Context context, List<UserGroup> users, List<UserGroup> selected_users) {
         this.mContext = context;
         this.users = users;
         this.selected_users = selected_users;
     }
 
-    public ArrayList<UserGroup> getDataSet() {
+    public List<UserGroup> getDataSet() {
         return users;
     }
 
     @UiThread
-    public void setDataSet(ArrayList<UserGroup> users, ArrayList<UserGroup> selected_users) {
+    public void setDataSet(List<UserGroup> users, List<UserGroup> selected_users) {
         this.users = users;
         this.selected_users = selected_users;
         notifyDataSetChanged();

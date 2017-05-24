@@ -33,6 +33,7 @@
     <string name="add_students">Add Student</string>
     <string name="add_teachers">Add Teacher</string>
     <string name="select_all">Select All</string>
+    <string name="no_members">No members!</string>
     <string name="menu_item_delete">Delete</string>
 
     <string name="no_chats">No Chats!</string>

@@ -1,5 +1,6 @@
 package com.aanglearning.instructorapp.usergroup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -15,12 +16,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.GroupDao;
+import com.aanglearning.instructorapp.dao.UserGroupDao;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Student;
 import com.aanglearning.instructorapp.model.StudentSet;
@@ -29,9 +32,11 @@ import com.aanglearning.instructorapp.model.TeacherSet;
 import com.aanglearning.instructorapp.model.UserGroup;
 import com.aanglearning.instructorapp.util.AlertDialogHelper;
 import com.aanglearning.instructorapp.util.DividerItemDecoration;
+import com.aanglearning.instructorapp.util.NetworkUtil;
 import com.aanglearning.instructorapp.util.RecyclerItemClickListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,6 +50,7 @@ public class UserGroupActivity extends AppCompatActivity implements
     @BindView(R.id.group_name_tv) TextView groupName;
     @BindView(R.id.add_students_layout) RelativeLayout addStudentsLayout;
     @BindView(R.id.add_teacher_layout) TextView addTeacherLayout;
+    @BindView(R.id.no_members) LinearLayout noMembers;
     @BindView(R.id.member_recycler_view) RecyclerView memberView;
     @BindView(R.id.student_recycler_view) RecyclerView studentView;
     @BindView(R.id.teacher_recycler_view) RecyclerView teacherView;
@@ -55,6 +61,8 @@ public class UserGroupActivity extends AppCompatActivity implements
     private StudentMemberAdapter studentAdapter;
     private TeacherMemberAdapter teacherAdapter;
     AlertDialogHelper alertDialogHelper;
+
+    private Menu menu;
 
     ActionMode mActionMode;
     boolean isMultiSelect = false;
@@ -75,6 +83,7 @@ public class UserGroupActivity extends AppCompatActivity implements
             group = new Groups();
             group.setId(extras.getLong("groupId"));
             group.setName(extras.getString("groupName"));
+            groupName.setText(group.getName());
         }
 
         presenter = new UserGroupPresenterImpl(this, new UserGroupInteractorImpl());
@@ -95,6 +104,20 @@ public class UserGroupActivity extends AppCompatActivity implements
                 presenter.getUserGroup(group.getId());
             }
         });
+
+        if(NetworkUtil.isNetworkAvailable(this)) {
+            presenter.getUserGroup(group.getId());
+        } else {
+            List<UserGroup> usrGroups = UserGroupDao.getUserGroups(group.getId());
+            if(usrGroups.size() == 0) {
+                noMembers.setVisibility(View.VISIBLE);
+            } else {
+                noMembers.setVisibility(View.GONE);
+                adapter.setDataSet(usrGroups, multiselect_list);
+            }
+            addStudentsLayout.setVisibility(View.GONE);
+            addTeacherLayout.setVisibility(View.GONE);
+        }
     }
 
     private void initRecyclerView() {
@@ -140,10 +163,10 @@ public class UserGroupActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        groupName.setText(group.getName());
-        presenter.getUserGroup(group.getId());
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.user_group_overflow, menu);
+        this.menu = menu;
+        return true;
     }
 
     @Override
@@ -162,7 +185,7 @@ public class UserGroupActivity extends AppCompatActivity implements
         hideProgress();
     }
 
-    public void saveUsers(View view) {
+    public void saveUsers(MenuItem item) {
         showProgress();
         ArrayList<UserGroup> usrGroups = new ArrayList<>();
         for(StudentSet studentSet : studentAdapter.getDataSet()) {
@@ -211,10 +234,15 @@ public class UserGroupActivity extends AppCompatActivity implements
 
     @Override
     public void showUserGroup(GroupUsers groupUsers) {
-        refreshLayout.setRefreshing(false);
         userGroups = groupUsers.getUserGroupList();
-        adapter.setDataSet(userGroups, multiselect_list);
 
+        if(userGroups.size() == 0) {
+            noMembers.setVisibility(View.VISIBLE);
+        } else {
+            menu.findItem(R.id.action_save).setVisible(true);
+            noMembers.setVisibility(View.GONE);
+            adapter.setDataSet(userGroups, multiselect_list);
+        }
         ArrayList<StudentSet> studentSets = new ArrayList<>();
         for(Student s: groupUsers.getStudents()) {
             studentSets.add(new StudentSet(s.getId(), s.getRollNo(), s.getStudentName()));
@@ -232,6 +260,18 @@ public class UserGroupActivity extends AppCompatActivity implements
         if(teacherSets.size() == 0) {
             addTeacherLayout.setVisibility(View.GONE);
         }
+        refreshLayout.setRefreshing(false);
+        backupUserGroup(userGroups);
+    }
+
+    private void backupUserGroup(final List<UserGroup> userGroupList) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                UserGroupDao.clear(group.getId());
+                UserGroupDao.insert(userGroupList);
+            }
+        }).start();
     }
 
     public void multi_select(int position) {
@@ -255,6 +295,7 @@ public class UserGroupActivity extends AppCompatActivity implements
 
     @Override
     public void userGroupSaved() {
+        noMembers.setVisibility(View.GONE);
         recreate();
     }
 
@@ -295,7 +336,7 @@ public class UserGroupActivity extends AppCompatActivity implements
         public void onDestroyActionMode(ActionMode mode) {
             mActionMode = null;
             isMultiSelect = false;
-            multiselect_list = new ArrayList<UserGroup>();
+            multiselect_list = new ArrayList<>();
             refreshAdapter();
         }
     };

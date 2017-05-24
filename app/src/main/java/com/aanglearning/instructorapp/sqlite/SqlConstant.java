@@ -3,7 +3,7 @@ package com.aanglearning.instructorapp.sqlite;
 /**
  * Created by Vinay.
  */
- interface SqlConstant {
+interface SqlConstant {
 
     String DATABASE_NAME = "teacher.db";
     int DATABASE_VERSION = 1;
@@ -170,17 +170,17 @@ package com.aanglearning.instructorapp.sqlite;
             " IsActive INTEGER" +
             ")";
 
-   String CREATE_CHAT = "CREATE TABLE chat (" +
-           " Id INTEGER, " +
-           " StudentId INTEGER, " +
-           " StudentName TEXT, " +
-           " ClassName TEXT, " +
-           " SectionName TEXT, " +
-           " TeacherId INTEGER, " +
-           " TeacherName TEXT, " +
-           " CreatedBy INTEGER, " +
-           " CreatorRole TEXT" +
-           ")";
+    String CREATE_CHAT = "CREATE TABLE chat (" +
+            " Id INTEGER, " +
+            " StudentId INTEGER, " +
+            " StudentName TEXT, " +
+            " ClassName TEXT, " +
+            " SectionName TEXT, " +
+            " TeacherId INTEGER, " +
+            " TeacherName TEXT, " +
+            " CreatedBy INTEGER, " +
+            " CreatorRole TEXT" +
+            ")";
 
     String CREATE_MESSAGE = "CREATE TABLE message (" +
             " Id INTEGER, " +
@@ -196,15 +196,24 @@ package com.aanglearning.instructorapp.sqlite;
             " CreatedAt TEXT" +
             ")";
 
-   String CREATE_SERVICE = "CREATE TABLE service (" +
-           " Id INTEGER, " +
-           " SchoolId INTEGER, " +
-           " IsMessage TEXT, " +
-           " IsSms TEXT, " +
-           " IsChat TEXT, " +
-           " IsAttendance TEXT, " +
-           " IsAttendanceSms TEXT," +
-           " IsHomework TEXT, " +
-           " IsHomeworkSms TEXT" +
-           ")";
+    String CREATE_SERVICE = "CREATE TABLE service (" +
+            " Id INTEGER, " +
+            " SchoolId INTEGER, " +
+            " IsMessage TEXT, " +
+            " IsSms TEXT, " +
+            " IsChat TEXT, " +
+            " IsAttendance TEXT, " +
+            " IsAttendanceSms TEXT," +
+            " IsHomework TEXT, " +
+            " IsHomeworkSms TEXT" +
+            ")";
+
+    String CREATE_USER_GROUP = "CREATE TABLE user_group (" +
+            " Id INTEGER, " +
+            " UserId INTEGER, " +
+            " Name TEXT, " +
+            " Role TEXT, " +
+            " GroupId INTEGER, " +
+            " IsActive TEXT" +
+            ")";
 }
