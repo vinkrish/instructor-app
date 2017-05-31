@@ -63,7 +63,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         setContentView(R.layout.activity_dashboard);
         ButterKnife.bind(this);
 
-        toolbar.setTitle("Thy Campus");
+        toolbar.setTitle("Thy Ward");
         toolbar.setSubtitle("Teacher");
         setSupportActionBar(toolbar);
         //getSupportActionBar().setTitle("Thy Campus");

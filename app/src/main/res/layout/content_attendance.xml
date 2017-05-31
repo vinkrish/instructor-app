@@ -169,21 +169,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <Button
-                android:id="@+id/save_btn"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="15dp"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:onClick="saveAbsentees"
-                android:text="@string/save"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/text_xsmall" />
-
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

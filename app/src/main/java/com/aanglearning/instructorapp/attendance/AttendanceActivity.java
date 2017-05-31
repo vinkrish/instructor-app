@@ -70,6 +70,8 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
     @BindView(R.id.absentees_tv) TextView absenteesTv;
     @BindView(R.id.mark_students) TextView markStudentsTv;
 
+    private Menu menu;
+
     private AttendancePresenter presenter;
     private String attendanceDate;
     ActionMode mActionMode;
@@ -120,6 +122,13 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
     public void onResume() {
         super.onResume();
         presenter.getClassList(TeacherDao.getTeacher().getId());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.attendance_overflow, menu);
+        this.menu = menu;
+        return true;
     }
 
     @Override
@@ -282,18 +291,23 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
         if(absentees.size() == 0) absenteesTv.setVisibility(View.GONE);
         else absenteesTv.setVisibility(View.VISIBLE);
 
-
         ArrayList<StudentSet> studentSets = new ArrayList<>();
         for(Student s: attendanceSet.getStudents()) {
             studentSets.add(new StudentSet(s.getId(), s.getRollNo(), s.getStudentName()));
         }
         studentAdapter.setDataSet(studentSets);
-        if(studentSets.size() == 0) markStudentsTv.setVisibility(View.GONE);
-        else markStudentsTv.setVisibility(View.VISIBLE);
+        if(studentSets.size() == 0) {
+            markStudentsTv.setVisibility(View.GONE);
+            menu.findItem(R.id.action_save).setVisible(false);
+        }
+        else {
+            markStudentsTv.setVisibility(View.VISIBLE);
+            menu.findItem(R.id.action_save).setVisible(true);
+        }
 
     }
 
-    public void saveAbsentees(View view) {
+    public void saveAbsentees(MenuItem item) {
         showProgress();
         ArrayList<Attendance> attList = new ArrayList<>();
         for(StudentSet studentSet : studentAdapter.getDataSet()) {
