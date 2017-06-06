@@ -258,6 +258,10 @@ public class ImageUploadActivity extends AppCompatActivity {
                 resultIntent.putExtra("imgName", imageName);
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
+            } else if(newState.toString().equals("FAILED")) {
+                Intent resultIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED, resultIntent);
+                finish();
             }
         }
     }
@@ -293,7 +297,7 @@ public class ImageUploadActivity extends AppCompatActivity {
             inputStream.close();
 
             // here i override the original image file
-            File dir = new File(Environment.getExternalStorageDirectory().getPath(), "AangSolutions/Images");
+            File dir = new File(Environment.getExternalStorageDirectory().getPath(), "ThyWardTeacher/Images");
             if (!dir.exists()) {
                 dir.mkdirs();
             }

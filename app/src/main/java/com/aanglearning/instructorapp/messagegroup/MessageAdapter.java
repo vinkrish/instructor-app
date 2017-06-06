@@ -2,7 +2,11 @@ package com.aanglearning.instructorapp.messagegroup;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Environment;
 import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,11 +22,15 @@ import com.aanglearning.instructorapp.model.Message;
 import com.aanglearning.instructorapp.util.TouchImageView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -160,18 +168,49 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             createdDate.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
             messageTV.setText(message.getMessageBody());
 
-            sharedImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    displayImageDialog(message);
-                }
-            });
             //sharedImage.setImageResource(R.drawable.books);
-            Picasso.with(mContext)
-                    .load("https://s3.ap-south-1.amazonaws.com/aang-solutions/" + message.getImageUrl())
-                    .placeholder(R.drawable.splash_image)
-                    .error(R.drawable.splash_image)
-                    .into(sharedImage);
+            File dir = new File(Environment.getExternalStorageDirectory().getPath(), "ThyWardTeacher/Images");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            final File file = new File(dir, message.getImageUrl());
+            if(file.exists()) {
+                sharedImage.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+                sharedImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        displayImageDialog(message);
+                    }
+                });
+            } else {
+                Picasso.with(mContext)
+                        .load("https://s3.ap-south-1.amazonaws.com/aang-solutions/" + message.getImageUrl())
+                        .placeholder(R.drawable.splash_image)
+                        .into(sharedImage, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                Bitmap bitmap = ((BitmapDrawable)sharedImage.getDrawable()).getBitmap();
+                                try {
+                                    FileOutputStream fos = new FileOutputStream(file);
+                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                                    fos.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                sharedImage.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        displayImageDialog(message);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onError() {
+
+                            }
+                        });
+            }
         }
 
     }
@@ -184,11 +223,10 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         dialog.setContentView(R.layout.dialog_image_item);
 
         TouchImageView fullImage = (TouchImageView) dialog.findViewById(R.id.full_image);
-        Picasso.with(mContext)
-                .load("https://s3.ap-south-1.amazonaws.com/aang-solutions/" + message.getImageUrl())
-                .placeholder(R.drawable.splash_image)
-                .error(R.drawable.splash_image)
-                .into(fullImage);
+        File file = new File(Environment.getExternalStorageDirectory().getPath(), "ThyWardTeacher/Images/" + message.getImageUrl());
+        if(file.exists()) {
+            fullImage.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+        }
 
         dialog.show();
 

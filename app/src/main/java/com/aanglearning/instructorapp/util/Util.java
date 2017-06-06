@@ -18,6 +18,7 @@ package com.aanglearning.instructorapp.util;
 import android.content.Context;
 import android.net.Uri;
 
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
@@ -68,7 +69,10 @@ public class Util {
      */
     public static AmazonS3Client getS3Client(Context context) {
         if (sS3Client == null) {
-            sS3Client = new AmazonS3Client(getCredProvider(context.getApplicationContext()));
+            ClientConfiguration config  = new ClientConfiguration();
+            config.setMaxErrorRetry(0);
+            config.setSocketTimeout(60000);
+            sS3Client = new AmazonS3Client(getCredProvider(context.getApplicationContext()), config);
             sS3Client.setRegion(Region.getRegion(Regions.fromName(Constants.BUCKET_REGION)));
         }
         return sS3Client;

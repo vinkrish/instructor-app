@@ -249,7 +249,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
             InputMethodManager imm = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
-        if(newMsg.getText().toString().trim().isEmpty()) {
+        if(newMsg.getText().toString().trim().isEmpty() && imgUrl.equals("")) {
             showError("Please enter message");
         } else {
             if (NetworkUtil.isNetworkAvailable(this)) {
