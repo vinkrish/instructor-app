@@ -24,9 +24,11 @@
 
         <Spinner
             android:id="@+id/class_spinner"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="@dimen/spacing_tiny"
+            android:paddingBottom="@dimen/spacing_small" />
 
         <TextView
             android:layout_width="match_parent"
@@ -38,9 +40,11 @@
 
         <Spinner
             android:id="@+id/section_spinner"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="@dimen/spacing_tiny"
+            android:paddingBottom="@dimen/spacing_small" />
 
         <TextView
             android:layout_width="match_parent"
@@ -52,16 +56,18 @@
 
         <Spinner
             android:id="@+id/student_spinner"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="@dimen/spacing_tiny"
+            android:paddingBottom="@dimen/spacing_small" />
 
         <Button
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/spacing_normal"
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:onClick="createChat"

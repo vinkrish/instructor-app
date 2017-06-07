@@ -31,11 +31,13 @@
 
             <Spinner
                 android:id="@+id/spinner_class"
+                style="@style/Widget.AppCompat.Spinner.Underlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/spacing_small"
                 android:layout_marginRight="@dimen/spacing_small"
-                android:layout_marginTop="@dimen/spacing_tiny" />
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:paddingBottom="@dimen/spacing_small" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -48,11 +50,13 @@
 
             <Spinner
                 android:id="@+id/spinner_section"
+                style="@style/Widget.AppCompat.Spinner.Underlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/spacing_small"
                 android:layout_marginRight="@dimen/spacing_small"
-                android:layout_marginTop="@dimen/spacing_tiny" />
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:paddingBottom="@dimen/spacing_small"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
