@@ -61,22 +61,12 @@
         android:paddingBottom="8dp"
         android:paddingTop="8dp">
 
-        <ImageView
-            android:id="@+id/img_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:contentDescription="@string/app_name"
-            android:onClick="uploadImage"
-            android:src="@drawable/ic_image" />
-
         <EditText
             android:id="@+id/new_msg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/spacing_small"
             android:layout_weight="1"
             android:hint="@string/type_your_message"
             android:inputType="textCapSentences|textMultiLine"
