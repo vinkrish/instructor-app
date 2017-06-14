@@ -9,6 +9,7 @@ import com.aanglearning.instructorapp.model.Homework;
 import com.aanglearning.instructorapp.model.Message;
 import com.aanglearning.instructorapp.model.Section;
 import com.aanglearning.instructorapp.model.Student;
+import com.aanglearning.instructorapp.model.TeacherTimetable;
 import com.aanglearning.instructorapp.model.Timetable;
 import com.aanglearning.instructorapp.model.UserGroup;
 import com.aanglearning.instructorapp.usergroup.GroupUsers;
@@ -18,7 +19,6 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -139,4 +139,9 @@ public interface TeacherApi {
 
     @POST("homework/delete")
     Call<Void> deleteHomework(@Body List<Homework> homeworks);
+
+    //Timetable API
+
+    @GET("app/timetable/teacher/{teacherId}")
+    Call<List<TeacherTimetable>> getTimetable(@Path("teacherId") long teacherId);
 }

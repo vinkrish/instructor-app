@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
@@ -35,6 +34,7 @@ import com.aanglearning.instructorapp.messagegroup.MessageActivity;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Service;
 import com.aanglearning.instructorapp.newgroup.NewGroupActivity;
+import com.aanglearning.instructorapp.timetable.TimetableActivity;
 import com.aanglearning.instructorapp.util.DividerItemDecoration;
 import com.aanglearning.instructorapp.util.NetworkUtil;
 import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
@@ -225,6 +225,9 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                         break;
                     case R.id.homework_item:
                         startActivity(new Intent(DashboardActivity.this, HomeworkActivity.class));
+                        break;
+                    case R.id.timetable_item:
+                        startActivity(new Intent(DashboardActivity.this, TimetableActivity.class));
                         break;
                     case R.id.chat_item:
                         startActivity(new Intent(DashboardActivity.this, ChatsActivity.class));

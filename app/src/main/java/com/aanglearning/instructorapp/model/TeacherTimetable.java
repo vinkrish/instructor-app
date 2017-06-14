@@ -1,12 +1,19 @@
 package com.aanglearning.instructorapp.model;
 
-public class Timetable {
+/**
+ * Created by Vinay on 14-06-2017.
+ */
+
+public class TeacherTimetable {
     private long id;
     private long sectionId;
+    private String className;
+    private String sectionName;
     private String dayOfWeek;
     private int periodNo;
     private long subjectId;
     private String subjectName;
+    private String teacherName;
     private String timingFrom;
     private String timingTo;
 
@@ -24,6 +31,22 @@ public class Timetable {
 
     public void setSectionId(long sectionId) {
         this.sectionId = sectionId;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getSectionName() {
+        return sectionName;
+    }
+
+    public void setSectionName(String sectionName) {
+        this.sectionName = sectionName;
     }
 
     public String getDayOfWeek() {
@@ -58,6 +81,14 @@ public class Timetable {
         this.subjectName = subjectName;
     }
 
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+
     public String getTimingFrom() {
         return timingFrom;
     }
@@ -73,9 +104,4 @@ public class Timetable {
     public void setTimingTo(String timingTo) {
         this.timingTo = timingTo;
     }
-
-    public String toString() {
-        return periodNo + "";
-    }
-
 }

@@ -17,6 +17,11 @@
             android:icon="@drawable/ic_homework"
             android:title="@string/homework" />
         <item
+            android:id="@+id/timetable_item"
+            android:checked="false"
+            android:icon="@drawable/ic_timetable"
+            android:title="@string/title_activity_timetable" />
+        <item
             android:id="@+id/chat_item"
             android:checked="false"
             android:icon="@drawable/ic_chat_bubble"
