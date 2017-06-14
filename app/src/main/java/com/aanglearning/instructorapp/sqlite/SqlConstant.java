@@ -154,6 +154,23 @@ interface SqlConstant {
             "  DayOfWeek TEXT," +
             "  PeriodNo INTEGER," +
             "  SubjectId INTEGER," +
+            "  SubjectName TEXT," +
+            "  TeacherName TEXT," +
+            "  TimingFrom time," +
+            "  TimingTo time" +
+            ")";
+
+    String CREATE_TEACHER_TIMETABLE = "CREATE TABLE teacher_timetable (" +
+            "  Id INTEGER," +
+            "  SectionId INTEGER," +
+            "  ClassName TEXT," +
+            "  SectionName TEXT," +
+            "  DayOfWeek TEXT," +
+            "  PeriodNo INTEGER," +
+            "  SubjectId INTEGER," +
+            "  SubjectName TEXT," +
+            "  TeacherId INTEGER," +
+            "  TeacherName TEXT," +
             "  TimingFrom time," +
             "  TimingTo time" +
             ")";

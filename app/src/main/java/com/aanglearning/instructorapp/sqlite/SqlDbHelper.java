@@ -38,6 +38,7 @@ public class SqlDbHelper extends SQLiteOpenHelper implements SqlConstant {
         db.execSQL(CREATE_SUBJECT_TEACHER);
         db.execSQL(CREATE_TEACHER);
         db.execSQL(CREATE_TIMETABLE);
+        db.execSQL(CREATE_TEACHER_TIMETABLE);
         db.execSQL(CREATE_GROUPS);
         db.execSQL(CREATE_CHAT);
         db.execSQL(CREATE_MESSAGE);
@@ -61,6 +62,7 @@ public class SqlDbHelper extends SQLiteOpenHelper implements SqlConstant {
         db.execSQL("DROP TABLE IF EXISTS subject_teacher");
         db.execSQL("DROP TABLE IF EXISTS teacher");
         db.execSQL("DROP TABLE IF EXISTS timetable");
+        db.execSQL("DROP TABLE IF EXISTS teacher_timetable");
         db.execSQL("DROP TABLE IF EXISTS groups");
         db.execSQL("DROP TABLE IF EXISTS chat");
         db.execSQL("DROP TABLE IF EXISTS message");
@@ -85,6 +87,7 @@ public class SqlDbHelper extends SQLiteOpenHelper implements SqlConstant {
         sqliteDatabase.delete("subject_teacher", null, null);
         sqliteDatabase.delete("teacher", null, null);
         sqliteDatabase.delete("timetable", null, null);
+        sqliteDatabase.delete("teacher_timetable", null, null);
         sqliteDatabase.delete("groups", null, null);
         sqliteDatabase.delete("chat", null, null);
         sqliteDatabase.delete("message", null, null);

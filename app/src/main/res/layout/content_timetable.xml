@@ -26,4 +26,28 @@
         android:layout_below="@+id/tableLayout"
         android:background="@color/dividerColor" />
 
+    <LinearLayout
+        android:id="@+id/noTimetable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_storage" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/no_timetable"
+            android:textColor="@color/default_tv_color" />
+
+    </LinearLayout>
+
 </RelativeLayout>

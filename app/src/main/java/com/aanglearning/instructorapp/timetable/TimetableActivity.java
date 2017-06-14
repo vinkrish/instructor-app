@@ -10,9 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -22,8 +24,10 @@ import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.TeacherDao;
+import com.aanglearning.instructorapp.dao.TeacherTimetableDao;
 import com.aanglearning.instructorapp.model.TeacherTimetable;
 import com.aanglearning.instructorapp.model.Timetable;
+import com.aanglearning.instructorapp.util.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -41,6 +45,8 @@ public class TimetableActivity extends AppCompatActivity implements TimetableVie
     ProgressBar progressBar;
     @BindView(R.id.tableLayout)
     FrameLayout tableLayout;
+    @BindView(R.id.noTimetable)
+    LinearLayout noTimetable;
 
     private TimetablePresenter presenter;
 
@@ -59,13 +65,37 @@ public class TimetableActivity extends AppCompatActivity implements TimetableVie
 
         presenter = new TimetablePresenterImpl(this, new TimetableInteractorImpl());
 
-        presenter.getTimetable(TeacherDao.getTeacher().getId());
+        if(NetworkUtil.isNetworkAvailable(this)) {
+            presenter.getTimetable(TeacherDao.getTeacher().getId());
+        } else {
+            List<TeacherTimetable> timetableList = TeacherTimetableDao.getTimetable(TeacherDao.getTeacher().getId());
+            if(timetableList.size() == 0) {
+                noTimetable.setVisibility(View.VISIBLE);
+            } else {
+                noTimetable.setVisibility(View.INVISIBLE);
+                for(String day: days) {
+                    List<TeacherTimetable> timtableList = new ArrayList<>();
+                    for(TeacherTimetable timetable: timetableList) {
+                        if(timetable.getDayOfWeek().equals(day)) {
+                            timtableList.add(timetable);
+                            if(timetable.getPeriodNo() > noOfPeriods) noOfPeriods = timetable.getPeriodNo();
+                        }
+                    }
+                    timetableMap.put(day, timtableList);
+                }
+                tableLayout.addView(new TableMainLayout(this));
+            }
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         presenter.onDestroy();
+    }
+
+    public void loadData(MenuItem item) {
+        presenter.getTimetable(TeacherDao.getTeacher().getId());
     }
 
     private void showSnackbar(String message) {
@@ -90,17 +120,33 @@ public class TimetableActivity extends AppCompatActivity implements TimetableVie
 
     @Override
     public void showTimetable(List<TeacherTimetable> timetableList) {
-        for(String day: days) {
-            List<TeacherTimetable> timtableList = new ArrayList<>();
-            for(TeacherTimetable timetable: timetableList) {
-                if(timetable.getDayOfWeek().equals(day)) {
-                    timtableList.add(timetable);
-                    if(timetable.getPeriodNo() > noOfPeriods) noOfPeriods = timetable.getPeriodNo();
+        if(timetableList.size() == 0) {
+            noTimetable.setVisibility(View.VISIBLE);
+        } else {
+            noTimetable.setVisibility(View.INVISIBLE);
+            for(String day: days) {
+                List<TeacherTimetable> timtableList = new ArrayList<>();
+                for(TeacherTimetable timetable: timetableList) {
+                    if(timetable.getDayOfWeek().equals(day)) {
+                        timtableList.add(timetable);
+                        if(timetable.getPeriodNo() > noOfPeriods) noOfPeriods = timetable.getPeriodNo();
+                    }
                 }
+                timetableMap.put(day, timtableList);
             }
-            timetableMap.put(day, timtableList);
+            tableLayout.addView(new TableMainLayout(this));
+            backupTimetable(timetableList);
         }
-        tableLayout.addView(new TableMainLayout(this));
+    }
+
+    private void backupTimetable(final List<TeacherTimetable> timetableList) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                TeacherTimetableDao.delete(TeacherDao.getTeacher().getId());
+                TeacherTimetableDao.insert(TeacherDao.getTeacher().getId(), timetableList);
+            }
+        }).start();
     }
 
     public class TableMainLayout extends RelativeLayout {

@@ -13,6 +13,7 @@ public class TeacherTimetable {
     private int periodNo;
     private long subjectId;
     private String subjectName;
+    private long teacherId;
     private String teacherName;
     private String timingFrom;
     private String timingTo;
@@ -79,6 +80,14 @@ public class TeacherTimetable {
 
     public void setSubjectName(String subjectName) {
         this.subjectName = subjectName;
+    }
+
+    public long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(long teacherId) {
+        this.teacherId = teacherId;
     }
 
     public String getTeacherName() {

@@ -10,10 +10,12 @@
     <string name="network_error">A network error has occurred.</string>
     <string name="request_error">Connection timed out.</string>
     <string name="retry">Retry</string>
+    <string name="refresh">Refresh</string>
 
     <string name="dashboard">Dashboard</string>
     <string name="logout">Logout</string>
 
+    <string name="no_timetable">No Timetable</string>
     <string name="no_data_available">No Data Available</string>
     <string name="no_groups">You are not part of any group</string>
     <string name="groups">Groups</string>
