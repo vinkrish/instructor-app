@@ -27,6 +27,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
+import com.aanglearning.instructorapp.dao.ClassDao;
+import com.aanglearning.instructorapp.dao.HomeworkDao;
+import com.aanglearning.instructorapp.dao.SectionDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Homework;
@@ -35,6 +38,7 @@ import com.aanglearning.instructorapp.util.AlertDialogHelper;
 import com.aanglearning.instructorapp.util.DatePickerFragment;
 import com.aanglearning.instructorapp.util.DateUtil;
 import com.aanglearning.instructorapp.util.DividerItemDecoration;
+import com.aanglearning.instructorapp.util.NetworkUtil;
 import com.aanglearning.instructorapp.util.RecyclerItemClickListener;
 
 import org.joda.time.LocalDate;
@@ -92,6 +96,17 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
 
         setDefaultDate();
 
+        if(NetworkUtil.isNetworkAvailable(this)) {
+            presenter.getClassList(TeacherDao.getTeacher().getId());
+        } else {
+            List<Clas> clasList = ClassDao.getClassList(TeacherDao.getTeacher().getSchoolId());
+            ArrayAdapter<Clas> adapter = new
+                    ArrayAdapter<>(this, android.R.layout.simple_spinner_item, clasList);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            classSpinner.setAdapter(adapter);
+            classSpinner.setOnItemSelectedListener(this);
+        }
+
         refreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(this, R.color.colorPrimary),
                 ContextCompat.getColor(this, R.color.colorAccent),
@@ -109,8 +124,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
     @Override
     public void onResume() {
         super.onResume();
-        homeworks = new ArrayList<>();
-        presenter.getClassList(TeacherDao.getTeacher().getId());
+        //homeworks = new ArrayList<>();
     }
 
     @Override
@@ -196,8 +210,12 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
                     builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            homework.setHomeworkMessage(homeworkText.getText().toString());
-                            presenter.updateHomework(homework);
+                            if(NetworkUtil.isNetworkAvailable(HomeworkActivity.this)) {
+                                homework.setHomeworkMessage(homeworkText.getText().toString());
+                                presenter.updateHomework(homework);
+                            } else {
+                                showSnackbar("You are offline !");
+                            }
                         }
                     });
                     builder.setNegativeButton("Cancel", null);
@@ -307,6 +325,17 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         classSpinner.setAdapter(adapter);
         classSpinner.setOnItemSelectedListener(this);
+        backupClass(clasList);
+    }
+
+    private void backupClass(final List<Clas> classList) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ClassDao.delete(TeacherDao.getTeacher().getSchoolId());
+                ClassDao.insert(classList);
+            }
+        }).start();
     }
 
     @Override
@@ -316,6 +345,17 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sectionSpinner.setAdapter(adapter);
         sectionSpinner.setOnItemSelectedListener(this);
+        backupSection(sectionList);
+    }
+
+    private void backupSection(final List<Section> sectionList) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SectionDao.delete(((Clas) classSpinner.getSelectedItem()).getId());
+                SectionDao.insert(sectionList);
+            }
+        }).start();
     }
 
     @Override
@@ -334,8 +374,19 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         newHomeworkAdapter.setDataSet(newHomework);
         if (newHomework.size() == 0) enterHomeworkTv.setVisibility(View.GONE);
         else enterHomeworkTv.setVisibility(View.VISIBLE);
-
+        backupHomework(hws);
     }
+
+    private void backupHomework(final List<Homework> homeworkList) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HomeworkDao.delete(((Section)sectionSpinner.getSelectedItem()).getId(), homeworkDate);
+                HomeworkDao.insert(homeworkList);
+            }
+        }).start();
+    }
+
 
     @Override
     public void homeworkSaved(Homework homework) {
@@ -353,14 +404,34 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
     }
 
     private void getHomework() {
-        presenter.getHomework(((Section) sectionSpinner.getSelectedItem()).getId(), homeworkDate);
+        if(NetworkUtil.isNetworkAvailable(this)) {
+            presenter.getHomework(((Section) sectionSpinner.getSelectedItem()).getId(), homeworkDate);
+        } else {
+            List<Homework> homeworkList = HomeworkDao.getHomework(((Section) sectionSpinner.getSelectedItem()).getId(), homeworkDate);
+            homeworks = new ArrayList<>();
+            for (Homework hw : homeworkList) {
+                if (hw.getId() != 0) homeworks.add(hw);
+            }
+            homeworkAdapter.setDataSet(homeworks, multiselect_list);
+            enterHomeworkTv.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
         switch (parent.getId()) {
             case R.id.spinner_class:
-                presenter.getSectionList(((Clas) classSpinner.getSelectedItem()).getId(), TeacherDao.getTeacher().getId());
+                if(NetworkUtil.isNetworkAvailable(this)) {
+                    presenter.getSectionList(((Clas) classSpinner.getSelectedItem()).getId(),
+                            TeacherDao.getTeacher().getId());
+                } else {
+                    List<Section> sectionList = SectionDao.getSectionList(((Clas) classSpinner.getSelectedItem()).getId());
+                    ArrayAdapter<Section> adapter = new
+                            ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sectionList);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    sectionSpinner.setAdapter(adapter);
+                    sectionSpinner.setOnItemSelectedListener(this);
+                }
                 break;
             case R.id.spinner_section:
                 getHomework();
@@ -379,7 +450,11 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
     public void onPositiveClick(int from) {
         if (from == 1) {
             if (multiselect_list.size() > 0) {
-                presenter.deleteHomework(multiselect_list);
+                if(NetworkUtil.isNetworkAvailable(HomeworkActivity.this)) {
+                    presenter.deleteHomework(multiselect_list);
+                } else {
+                    showSnackbar("You are offline !");
+                }
                 if (mActionMode != null) {
                     mActionMode.finish();
                 }
@@ -410,8 +485,12 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
             builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    homework.setHomeworkMessage(homeworkText.getText().toString());
-                    presenter.saveHomework(homework);
+                    if(NetworkUtil.isNetworkAvailable(HomeworkActivity.this)) {
+                        homework.setHomeworkMessage(homeworkText.getText().toString());
+                        presenter.saveHomework(homework);
+                    } else {
+                        showSnackbar("You are offline !");
+                    }
                 }
             });
             builder.setNegativeButton("Cancel", null);

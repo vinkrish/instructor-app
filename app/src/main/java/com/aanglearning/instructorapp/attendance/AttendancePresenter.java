@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by Vinay on 21-04-2017.
  */
 
-public interface AttendancePresenter {
+interface AttendancePresenter {
     void getClassList(long teacherId);
 
     void getSectionList(long classId, long teacherId);

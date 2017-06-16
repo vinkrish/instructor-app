@@ -24,6 +24,7 @@ interface SqlConstant {
             "  Id INTEGER," +
             "  ClassName TEXT," +
             "  SchoolId INTEGER," +
+            "  TeacherId INTEGER," +
             "  AttendanceType TEXT" +
             ")";
 
