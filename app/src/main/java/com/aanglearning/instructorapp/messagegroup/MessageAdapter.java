@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.model.Message;
+import com.aanglearning.instructorapp.util.PermissionUtil;
 import com.aanglearning.instructorapp.util.TouchImageView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
