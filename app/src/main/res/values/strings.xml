@@ -38,6 +38,9 @@
     <string name="no_members">No members!</string>
     <string name="menu_item_delete">Delete</string>
 
+    <string name="from">From :</string>
+    <string name="created_at">Created at :</string>
+
     <string name="no_chats">No Chats!</string>
     <string name="chat">Chat</string>
     <string name="type_your_message">Enter msg</string>

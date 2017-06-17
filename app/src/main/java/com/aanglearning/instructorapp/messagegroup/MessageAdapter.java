@@ -144,6 +144,12 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
             createdDate.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
             messageTV.setText(message.getMessageBody());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    displayTextDialog(message);
+                }
+            });
         }
 
     }
@@ -169,6 +175,13 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             createdDate.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
             messageTV.setText(message.getMessageBody());
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    displayImageDialog(message);
+                }
+            });
+
             //sharedImage.setImageResource(R.drawable.books);
             File dir = new File(Environment.getExternalStorageDirectory().getPath(), "ThyWardTeacher/Images");
             if (!dir.exists()) {
@@ -177,12 +190,6 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             final File file = new File(dir, message.getImageUrl());
             if(file.exists()) {
                 sharedImage.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
-                sharedImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        displayImageDialog(message);
-                    }
-                });
             } else {
                 Picasso.with(mContext)
                         .load("https://s3.ap-south-1.amazonaws.com/aang-solutions/" + message.getImageUrl())
@@ -198,12 +205,6 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                                sharedImage.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        displayImageDialog(message);
-                                    }
-                                });
                             }
 
                             @Override
@@ -216,12 +217,51 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
     }
 
+    private Dialog displayTextDialog(final Message message) {
+        final Dialog dialog = new Dialog(mContext, R.style.DialogFadeAnim);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_text_item);
+
+        TextView sender = (TextView) dialog.findViewById(R.id.sender_name);
+        TextView createdTime = (TextView) dialog.findViewById(R.id.created_date);
+        TextView messageText = (TextView) dialog.findViewById(R.id.message);
+
+        sender.setText(message.getSenderName());
+        DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
+        createdTime.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
+        messageText.setText(message.getMessageBody());
+
+        dialog.show();
+
+        //Grab the window of the dialog, and change the width and height
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        Window window = dialog.getWindow();
+        lp.copyFrom(window.getAttributes());
+
+        //This makes the dialog take up the full width and height
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(lp);
+
+        return dialog;
+    }
+
     private Dialog displayImageDialog(final Message message) {
         final Dialog dialog = new Dialog(mContext, R.style.DialogFadeAnim);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_image_item);
+
+        TextView sender = (TextView) dialog.findViewById(R.id.sender_name);
+        TextView createdTime = (TextView) dialog.findViewById(R.id.created_date);
+        TextView messageText = (TextView) dialog.findViewById(R.id.message);
+
+        sender.setText(message.getSenderName());
+        DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
+        createdTime.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
+        messageText.setText(message.getMessageBody());
 
         TouchImageView fullImage = (TouchImageView) dialog.findViewById(R.id.full_image);
         File file = new File(Environment.getExternalStorageDirectory().getPath(), "ThyWardTeacher/Images/" + message.getImageUrl());
