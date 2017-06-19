@@ -7,7 +7,7 @@ import com.aanglearning.instructorapp.model.TeacherCredentials;
  * Created by Vinay on 28-03-2017.
  */
 
-public class LoginPresenterImpl implements LoginPresenter, LoginInteractor.OnLoginFinishedListener {
+class LoginPresenterImpl implements LoginPresenter, LoginInteractor.OnLoginFinishedListener {
 
     private LoginView loginView;
     private LoginInteractor interactor;

@@ -14,8 +14,9 @@ import com.aanglearning.instructorapp.util.AppGlobal;
 
 public class ServiceDao {
     public static int insert(Service service) {
-        String sql = "insert into service(Id, SchoolId, IsMessage, IsSms, IsChat, IsAttendance, IsAttendanceSms, isHomework, isHomeworkSms) " +
-                "values(?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into service(Id, SchoolId, IsMessage, IsSms, IsChat, " +
+                "IsAttendance, IsAttendanceSms, IsHomework, IsHomeworkSms, isTimetable) " +
+                "values(?,?,?,?,?,?,?,?,?,?)";
         SQLiteDatabase db = AppGlobal.getSqlDbHelper().getWritableDatabase();
         db.beginTransactionNonExclusive();
         SQLiteStatement stmt = db.compileStatement(sql);
@@ -29,6 +30,7 @@ public class ServiceDao {
             stmt.bindString(7, Boolean.toString(service.getIsAttendanceSms()));
             stmt.bindString(8, Boolean.toString(service.getIsHomework()));
             stmt.bindString(9, Boolean.toString(service.getIsHomeworkSms()));
+            stmt.bindString(10, Boolean.toString(service.getIsTimetable()));
             stmt.executeInsert();
             stmt.clearBindings();
         } catch (Exception e) {
@@ -55,6 +57,7 @@ public class ServiceDao {
             service.setIsAttendanceSms(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsAttendanceSms"))));
             service.setIsHomework(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsHomework"))));
             service.setIsHomeworkSms(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsHomeworkSms"))));
+            service.setIsTimetable(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsTimetable"))));
             c.moveToNext();
         }
         c.close();

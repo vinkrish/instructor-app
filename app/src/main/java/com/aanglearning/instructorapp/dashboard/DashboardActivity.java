@@ -2,6 +2,7 @@ package com.aanglearning.instructorapp.dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +30,7 @@ import com.aanglearning.instructorapp.chathome.ChatsActivity;
 import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.dao.ServiceDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
+import com.aanglearning.instructorapp.fcm.MyFirebaseInstanceIDService;
 import com.aanglearning.instructorapp.homework.HomeworkActivity;
 import com.aanglearning.instructorapp.login.LoginActivity;
 import com.aanglearning.instructorapp.messagegroup.MessageActivity;
@@ -38,6 +41,7 @@ import com.aanglearning.instructorapp.timetable.TimetableActivity;
 import com.aanglearning.instructorapp.util.DividerItemDecoration;
 import com.aanglearning.instructorapp.util.NetworkUtil;
 import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,6 +164,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         if(!service.getIsAttendance()) menu.findItem(R.id.attendance_item).setVisible(false);
         if(!service.getIsHomework()) menu.findItem(R.id.homework_item).setVisible(false);
         if(!service.getIsChat()) menu.findItem(R.id.chat_item).setVisible(false);
+        if (!service.getIsTimetable()) menu.findItem(R.id.timetable_item).setVisible(false);
     }
 
     public void addGroup(View view) {
@@ -200,6 +205,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
             backupGroups(groups);
         }
         refreshLayout.setRefreshing(false);
+        updateFcmToken();
     }
 
     private void backupGroups(final List<Groups> groups) {
@@ -210,6 +216,17 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                 GroupDao.insertMany(groups);
             }
         }).start();
+    }
+
+    private void updateFcmToken() {
+        if(!SharedPreferenceUtil.isFcmTokenSaved(DashboardActivity.this)) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    presenter.updateFcmToken(SharedPreferenceUtil.getAuthorization(DashboardActivity.this));
+                }
+            }).start();
+        }
     }
 
     private void setupDrawerContent(NavigationView navigationView) {

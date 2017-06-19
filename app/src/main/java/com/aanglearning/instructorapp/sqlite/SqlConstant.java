@@ -223,7 +223,8 @@ interface SqlConstant {
             " IsAttendance TEXT, " +
             " IsAttendanceSms TEXT," +
             " IsHomework TEXT, " +
-            " IsHomeworkSms TEXT" +
+            " IsHomeworkSms TEXT," +
+            " IsTimetable TEXT" +
             ")";
 
     String CREATE_USER_GROUP = "CREATE TABLE user_group (" +

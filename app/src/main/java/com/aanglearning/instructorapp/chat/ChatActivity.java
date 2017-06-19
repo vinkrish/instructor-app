@@ -1,6 +1,7 @@
 package com.aanglearning.instructorapp.chat;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,7 +37,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ChatActivity extends AppCompatActivity implements ChatView, View.OnClickListener{
+    public class ChatActivity extends AppCompatActivity implements
+        ChatView, View.OnClickListener, Application.ActivityLifecycleCallbacks{
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
@@ -50,6 +52,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
     private ChatPresenter presenter;
     private ChatAdapter adapter;
     private EndlessRecyclerViewScrollListener scrollListener;
+    private static boolean isActivityVisible;
 
     final static int REQ_CODE = 999;
 
@@ -68,6 +71,8 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
             recipientName = extras.getString("recipientName", "");
         }
         getSupportActionBar().setTitle(recipientName);
+
+        getApplication().registerActivityLifecycleCallbacks(this);
 
         presenter = new ChatPresenterImpl(this, new ChatInteractorImpl());
 
@@ -270,4 +275,49 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
             }
         }
     };
+
+    public boolean isActivityVisible() {
+        return isActivityVisible;
+    }
+
+    @Override
+    public void onActivityCreated(Activity activity, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
+        if (activity instanceof ChatActivity) {
+            isActivityVisible = true;
+        }
+    }
+
+    @Override
+    public void onActivityPaused(Activity activity) {
+        if (activity instanceof ChatActivity) {
+            isActivityVisible = false;
+        }
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+        if (activity instanceof ChatActivity) {
+            isActivityVisible = false;
+        }
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
+
+    }
 }
