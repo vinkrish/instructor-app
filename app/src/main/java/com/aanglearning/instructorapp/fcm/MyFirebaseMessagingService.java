@@ -2,8 +2,11 @@ package com.aanglearning.instructorapp.fcm;
 
 import android.util.Log;
 
+import com.aanglearning.instructorapp.model.MessageEvent;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -12,12 +15,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
+            EventBus.getDefault().post(new MessageEvent(remoteMessage.getData().get("message"),
+                            Long.valueOf(remoteMessage.getData().get("sender_id"))));
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         }
 

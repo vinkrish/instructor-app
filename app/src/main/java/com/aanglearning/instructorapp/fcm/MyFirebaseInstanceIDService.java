@@ -23,7 +23,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     }
 
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
         SharedPreferenceUtil.saveFcmToken(App.getInstance(), token);
     }
 

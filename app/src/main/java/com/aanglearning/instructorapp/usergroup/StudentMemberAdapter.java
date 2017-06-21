@@ -47,7 +47,7 @@ class StudentMemberAdapter extends RecyclerView.Adapter<StudentMemberAdapter.Vie
     @Override
     public void onBindViewHolder(StudentMemberAdapter.ViewHolder holder, int position) {
         final StudentSet studentSet = items.get(position);
-        holder.name.setText(studentSet.getStudentName());
+        holder.name.setText(studentSet.getName());
         holder.isSelected.setChecked(studentSet.isSelected());
         holder.isSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

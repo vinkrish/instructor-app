@@ -103,7 +103,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         ImageView imageView = (ImageView) hView.findViewById(R.id.user_image);
         TextView tv = (TextView) hView.findViewById(R.id.name);
         imageView.setImageResource(R.drawable.ic_account);
-        tv.setText(TeacherDao.getTeacher().getTeacherName());
+        tv.setText(TeacherDao.getTeacher().getName());
 
         hideDrawerItem();
 

@@ -15,14 +15,14 @@ import com.aanglearning.instructorapp.util.AppGlobal;
 public class TeacherDao {
 
     public static int insert(Teacher teacher) {
-        String sql = "insert into teacher(Id, TeacherName, Image, SchoolId, DateOfBirth, Mobile, Qualification, DateOfJoining, Gender, Email) " +
+        String sql = "insert into teacher(Id, Name, Image, SchoolId, DateOfBirth, Mobile, Qualification, DateOfJoining, Gender, Email) " +
                 "values(?,?,?,?,?,?,?,?,?,?)";
         SQLiteDatabase db = AppGlobal.getSqlDbHelper().getWritableDatabase();
         db.beginTransactionNonExclusive();
         SQLiteStatement stmt = db.compileStatement(sql);
         try {
             stmt.bindLong(1, teacher.getId());
-            stmt.bindString(2, teacher.getTeacherName());
+            stmt.bindString(2, teacher.getName());
             stmt.bindString(3, teacher.getImage());
             stmt.bindLong(4, teacher.getSchoolId());
             stmt.bindString(5, teacher.getDateOfBirth());
@@ -49,7 +49,7 @@ public class TeacherDao {
         c.moveToFirst();
         while (!c.isAfterLast()) {
             teacher.setId(c.getLong(c.getColumnIndex("Id")));
-            teacher.setTeacherName(c.getString(c.getColumnIndex("TeacherName")));
+            teacher.setName(c.getString(c.getColumnIndex("Name")));
             teacher.setImage(c.getString(c.getColumnIndex("Image")));
             teacher.setSchoolId(c.getLong(c.getColumnIndex("SchoolId")));
             teacher.setDateOfBirth(c.getString(c.getColumnIndex("DateOfBirth")));

@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Vinay on 28-04-2017.
  */
 
-public interface ChatView {
+interface ChatView {
     void showProgress();
 
     void hideProgress();
@@ -16,6 +16,8 @@ public interface ChatView {
     void showError(String message);
 
     void onMessageSaved(Message message);
+
+    void showRecentMessages(List<Message> messages);
 
     void showMessages(List<Message> messages);
 

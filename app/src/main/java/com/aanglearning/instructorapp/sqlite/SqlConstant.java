@@ -74,7 +74,7 @@ interface SqlConstant {
 
     String CREATE_STUDENT = "CREATE TABLE student (" +
             "  Id INTEGER," +
-            "  StudentName TEXT," +
+            "  Name TEXT," +
             "  SchoolId INTEGER," +
             "  SectionId INTEGER," +
             "  AdmissionNo TEXT," +
@@ -136,7 +136,7 @@ interface SqlConstant {
 
     String CREATE_TEACHER = "CREATE TABLE teacher (" +
             "  Id INTEGER," +
-            "  TeacherName TEXT," +
+            "  Name TEXT," +
             "  Image TEXT," +
             "  Username TEXT," +
             "  Password TEXT," +

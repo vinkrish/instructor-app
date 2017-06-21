@@ -2,7 +2,7 @@ package com.aanglearning.instructorapp.model;
 
 public class Student {
     private long id;
-    private String studentName;
+    private String name;
     private long schoolId;
     private long classId;
     private long sectionId;
@@ -28,10 +28,10 @@ public class Student {
 
     }
 
-    public Student(long id, int rollNo, String studentName) {
+    public Student(long id, int rollNo, String name) {
         this.id = id;
         this.rollNo = rollNo;
-        this.studentName = studentName;
+        this.name = name;
     }
 
     public long getId() {
@@ -42,12 +42,12 @@ public class Student {
         this.id = id;
     }
 
-    public String getStudentName() {
-        return studentName;
+    public String getName() {
+        return name;
     }
 
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getSchoolId() {
@@ -211,7 +211,7 @@ public class Student {
     }
 
     public String toString() {
-        return studentName;
+        return name;
     }
 
 }

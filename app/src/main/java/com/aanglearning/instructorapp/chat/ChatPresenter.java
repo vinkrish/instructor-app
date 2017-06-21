@@ -9,6 +9,8 @@ import com.aanglearning.instructorapp.model.Message;
 interface ChatPresenter {
     void saveMessage(Message message);
 
+    void getRecentMessages(String senderRole, long senderId, String recipientRole, long recipeintId, long messageId);
+
     void getMessages(String senderRole, long senderId, String recipientRole, long recipeintId);
 
     void getFollowupMessages(String senderRole, long senderId, String recipientRole, long recipeintId, long messageId);

@@ -20,14 +20,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.MessageDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.messagegroup.ImageUploadActivity;
 import com.aanglearning.instructorapp.model.Message;
+import com.aanglearning.instructorapp.model.MessageEvent;
 import com.aanglearning.instructorapp.util.EndlessRecyclerViewScrollListener;
 import com.aanglearning.instructorapp.util.NetworkUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,7 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
     public class ChatActivity extends AppCompatActivity implements
-        ChatView, View.OnClickListener, Application.ActivityLifecycleCallbacks{
+        ChatView, Application.ActivityLifecycleCallbacks{
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
@@ -94,6 +100,18 @@ import butterknife.ButterKnife;
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         presenter.onDestroy();
@@ -113,8 +131,13 @@ import butterknife.ButterKnife;
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if(NetworkUtil.isNetworkAvailable(ChatActivity.this)) {
-                    presenter.getFollowupMessages("teacher", TeacherDao.getTeacher().getId(), "student",
-                            recipientId, adapter.getDataSet().get(adapter.getDataSet().size()-1).getId());
+                    presenter.getFollowupMessages("teacher", TeacherDao.getTeacher().getId(), "student", recipientId,
+                            adapter.getDataSet().get(adapter.getDataSet().size()-1).getId());
+                } else {
+                    List<Message> messages = MessageDao.getMessagesFromId(TeacherDao.getTeacher().getId(), "teacher",
+                            recipientId, "student",
+                            adapter.getDataSet().get(adapter.getDataSet().size()-1).getId());
+                    adapter.updateDataSet(messages);
                 }
             }
         };
@@ -137,8 +160,16 @@ import butterknife.ButterKnife;
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        if(NetworkUtil.isNetworkAvailable(this) && event.senderId == recipientId){
+            presenter.getRecentMessages("teacher", TeacherDao.getTeacher().getId(), "student", recipientId,
+                    adapter.getDataSet().get(0).getId());
+        }
+    }
+
     private void showSnackbar(String message) {
-        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -153,9 +184,7 @@ import butterknife.ButterKnife;
 
     @Override
     public void showError(String message) {
-        Snackbar errorSnackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG);
-        errorSnackbar.setAction(R.string.retry, this);
-        errorSnackbar.show();
+        showSnackbar(message);
     }
 
     @Override
@@ -165,6 +194,11 @@ import butterknife.ButterKnife;
         recyclerView.smoothScrollToPosition(0);
     }
 
+    @Override
+    public void showRecentMessages(List<Message> messages) {
+        adapter.insertDataSet(messages);
+        recyclerView.smoothScrollToPosition(0);
+    }
     @Override
     public void showMessages(List<Message> messages) {
         if(messages.size() == 0) {
@@ -187,32 +221,9 @@ import butterknife.ButterKnife;
     }
 
     @Override
-    public void showFollowupMessages(List<Message> msgs) {
-        adapter.updateDataSet(msgs);
-    }
-
-    public void uploadImage (View view) {
-        Intent intent = new Intent(ChatActivity.this, ImageUploadActivity.class);
-        startActivityForResult(intent, REQ_CODE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
-            case (REQ_CODE) : {
-                if (resultCode == Activity.RESULT_OK) {
-                    String msg = data.getStringExtra("text");
-                    newMsg.setText(msg);
-                    String imgName = data.getStringExtra("imgName");
-                    sendMessage("image", imgName);
-                } else {
-                    hideProgress();
-                    //showSnackbar("Error in sending message");
-                }
-                break;
-            }
-        }
+    public void showFollowupMessages(List<Message> messages) {
+        adapter.updateDataSet(messages);
+        backupChats(messages);
     }
 
     public void newMsgSendListener (View view) {
@@ -232,7 +243,7 @@ import butterknife.ButterKnife;
             if (NetworkUtil.isNetworkAvailable(this)) {
                 Message message = new Message();
                 message.setSenderId(TeacherDao.getTeacher().getId());
-                message.setSenderName(TeacherDao.getTeacher().getTeacherName());
+                message.setSenderName(TeacherDao.getTeacher().getName());
                 message.setSenderRole("teacher");
                 message.setRecipientId(recipientId);
                 message.setRecipientRole("student");
@@ -246,11 +257,6 @@ import butterknife.ButterKnife;
                 showSnackbar("You are offline,check your internet.");
             }
         }
-    }
-
-    @Override
-    public void onClick(View view) {
-
     }
 
     private final TextWatcher newMsgWatcher = new TextWatcher() {

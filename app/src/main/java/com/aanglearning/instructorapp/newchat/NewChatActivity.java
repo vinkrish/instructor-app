@@ -149,11 +149,11 @@ public class NewChatActivity extends AppCompatActivity implements
         Teacher t = TeacherDao.getTeacher();
         Chat newChat = new Chat();
         newChat.setStudentId(((Student)studentSpinner.getSelectedItem()).getId());
-        newChat.setStudentName(((Student)studentSpinner.getSelectedItem()).getStudentName());
+        newChat.setStudentName(((Student)studentSpinner.getSelectedItem()).getName());
         newChat.setClassName(((Clas) classSpinner.getSelectedItem()).getClassName());
         newChat.setSectionName(((Section) sectionSpinner.getSelectedItem()).getSectionName());
         newChat.setTeacherId(t.getId());
-        newChat.setTeacherName(t.getTeacherName());
+        newChat.setTeacherName(t.getName());
         newChat.setCreatedBy(t.getId());
         newChat.setCreatorRole("teacher");
         presenter.saveChat(newChat);

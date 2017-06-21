@@ -245,7 +245,7 @@ public class UserGroupActivity extends AppCompatActivity implements
         }
         ArrayList<StudentSet> studentSets = new ArrayList<>();
         for(Student s: groupUsers.getStudents()) {
-            studentSets.add(new StudentSet(s.getId(), s.getRollNo(), s.getStudentName()));
+            studentSets.add(new StudentSet(s.getId(), s.getRollNo(), s.getName()));
         }
         studentAdapter.setDataSet(studentSets);
         if(studentSets.size() == 0) {
@@ -254,7 +254,7 @@ public class UserGroupActivity extends AppCompatActivity implements
 
         ArrayList<TeacherSet> teacherSets = new ArrayList<>();
         for(Teacher t: groupUsers.getTeachers()) {
-            teacherSets.add(new TeacherSet(t.getId(), t.getTeacherName()));
+            teacherSets.add(new TeacherSet(t.getId(), t.getName()));
         }
         teacherAdapter.setDataSet(teacherSets);
         if(teacherSets.size() == 0) {

@@ -273,7 +273,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
             if (NetworkUtil.isNetworkAvailable(this)) {
                 Message message = new Message();
                 message.setSenderId(TeacherDao.getTeacher().getId());
-                message.setSenderName(TeacherDao.getTeacher().getTeacherName());
+                message.setSenderName(TeacherDao.getTeacher().getName());
                 message.setSenderRole("teacher");
                 message.setGroupId(group.getId());
                 message.setRecipientRole("group");

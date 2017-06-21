@@ -8,11 +8,13 @@ import java.util.List;
  * Created by Vinay on 28-04-2017.
  */
 
-public interface ChatInteractor {
+interface ChatInteractor {
     interface OnFinishedListener {
         void onError(String message);
 
         void onMessageSaved(Message message);
+
+        void onRecentMessagesReceived(List<Message> messages);
 
         void onMessageReceived(List<Message> messages);
 
@@ -21,9 +23,12 @@ public interface ChatInteractor {
 
     void saveMessage(Message message, ChatInteractor.OnFinishedListener listener);
 
+    void getRecentMessages(String senderRole, long senderId, String recipientRole, long recipientId,
+                             long messageId, ChatInteractor.OnFinishedListener listener);
+
     void getMessages(String senderRole, long senderId, String recipientRole, long recipientId,
                      ChatInteractor.OnFinishedListener listener);
 
-    void getFollowupMessages(String senderRole, long senderId, String recipientRole, long recipeintId,
+    void getFollowupMessages(String senderRole, long senderId, String recipientRole, long recipientId,
                              long messageId, ChatInteractor.OnFinishedListener listener);
 }

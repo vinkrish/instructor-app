@@ -3,6 +3,7 @@ package com.aanglearning.instructorapp.chat;
 import android.content.Context;
 import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import butterknife.ButterKnife;
  * Created by Vinay on 28-04-2017.
  */
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
+class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private Context mContext;
     private List<Message> messages;
 
@@ -43,10 +44,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     @UiThread
-    void updateDataSet(List<Message> msgs) {
-        int pos = messages.size();
-        this.messages.addAll(msgs);
-        notifyItemRangeInserted(pos, messages.size() - 1);
+    void updateDataSet(List<Message> messages) {
+        int pos = this.messages.size();
+        this.messages.addAll(messages);
+        notifyItemRangeInserted(pos, this.messages.size() - 1);
+    }
+
+    @UiThread
+    void insertDataSet(List<Message> messages) {
+        this.messages.addAll(0, messages);
+        notifyItemRangeInserted(0, messages.size());
     }
 
     @UiThread

@@ -71,7 +71,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
 
         void bind(final StudentSet studentSet) {
             rollNo.setText(String.valueOf(studentSet.getRollNo()));
-            name.setText(studentSet.getStudentName());
+            name.setText(studentSet.getName());
             updateAttendanceStatus(studentSet.isSelected());
             toggleAttendance.setOnClickListener(new View.OnClickListener() {
                 @Override

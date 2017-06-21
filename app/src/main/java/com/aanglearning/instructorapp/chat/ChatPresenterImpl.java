@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Vinay on 28-04-2017.
  */
 
-public class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFinishedListener {
+class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFinishedListener {
     private ChatView mView;
     private ChatInteractor mInteractor;
 
@@ -23,6 +23,14 @@ public class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFi
         if(mView != null) {
             mView.showProgress();
             mInteractor.saveMessage(message, this);
+        }
+    }
+
+    @Override
+    public void getRecentMessages(String senderRole, long senderId, String recipientRole, long recipeintId, long messageId) {
+        if(mView != null) {
+            mView.showProgress();
+            mInteractor.getRecentMessages(senderRole, senderId, recipientRole, recipeintId, messageId, this);
         }
     }
 
@@ -59,6 +67,14 @@ public class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFi
     public void onMessageSaved(Message message) {
         if(mView != null) {
             mView.onMessageSaved(message);
+            mView.hideProgress();
+        }
+    }
+
+    @Override
+    public void onRecentMessagesReceived(List<Message> messages) {
+        if(mView != null) {
+            mView.showRecentMessages(messages);
             mView.hideProgress();
         }
     }

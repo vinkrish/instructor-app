@@ -324,7 +324,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
 
         ArrayList<StudentSet> studentSets = new ArrayList<>();
         for(Student s: attendanceSet.getStudents()) {
-            studentSets.add(new StudentSet(s.getId(), s.getRollNo(), s.getStudentName()));
+            studentSets.add(new StudentSet(s.getId(), s.getRollNo(), s.getName()));
         }
         studentAdapter.setDataSet(studentSets);
         if(studentSets.size() == 0) {
@@ -370,7 +370,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
             if(studentSet.isSelected()) {
                 Attendance att = new Attendance();
                 att.setStudentId(studentSet.getId());
-                att.setStudentName(studentSet.getStudentName());
+                att.setStudentName(studentSet.getName());
                 att.setSectionId(((Section)sectionSpinner.getSelectedItem()).getId());
                 att.setDateAttendance(attendanceDate);
                 att.setTypeOfLeave("Absent");
