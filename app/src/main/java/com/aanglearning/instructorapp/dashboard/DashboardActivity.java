@@ -1,8 +1,11 @@
 package com.aanglearning.instructorapp.dashboard;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.Environment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -16,7 +19,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,19 +32,24 @@ import com.aanglearning.instructorapp.chathome.ChatsActivity;
 import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.dao.ServiceDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
-import com.aanglearning.instructorapp.fcm.MyFirebaseInstanceIDService;
 import com.aanglearning.instructorapp.homework.HomeworkActivity;
 import com.aanglearning.instructorapp.login.LoginActivity;
 import com.aanglearning.instructorapp.messagegroup.MessageActivity;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Service;
+import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.newgroup.NewGroupActivity;
 import com.aanglearning.instructorapp.timetable.TimetableActivity;
 import com.aanglearning.instructorapp.util.DividerItemDecoration;
 import com.aanglearning.instructorapp.util.NetworkUtil;
+import com.aanglearning.instructorapp.util.PermissionUtil;
 import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +67,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
 
     private GroupPresenter presenter;
     private GroupAdapter adapter;
+    private Teacher teacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +75,13 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         setContentView(R.layout.activity_dashboard);
         ButterKnife.bind(this);
 
-        toolbar.setTitle("Thy Ward");
+        setupDrawerContent(navigationView);
+
+        teacher = TeacherDao.getTeacher();
+
+        toolbar.setTitle(teacher.getName());
         toolbar.setSubtitle("Teacher");
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setTitle("Thy Campus");
-
-        setupDrawerContent(navigationView);
 
         presenter = new GroupPresenterImpl(this, new GroupInteractorImpl());
 
@@ -99,11 +108,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        View hView = navigationView.inflateHeaderView(R.layout.header);
-        ImageView imageView = (ImageView) hView.findViewById(R.id.user_image);
-        TextView tv = (TextView) hView.findViewById(R.id.name);
-        imageView.setImageResource(R.drawable.ic_account);
-        tv.setText(TeacherDao.getTeacher().getName());
+        setProfile();
 
         hideDrawerItem();
 
@@ -116,19 +121,59 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.getGroups(TeacherDao.getTeacher().getId());
+                presenter.getGroups(teacher.getId());
             }
         });
 
         if(NetworkUtil.isNetworkAvailable(this)) {
-            presenter.getGroups(TeacherDao.getTeacher().getId());
+            presenter.getGroups(teacher.getId());
         } else {
-            List<Groups> groups = GroupDao.getGroups(TeacherDao.getTeacher().getId());
+            List<Groups> groups = GroupDao.getGroups(teacher.getId());
             if(groups.size() == 0) {
                 noGroups.setVisibility(View.VISIBLE);
             } else {
                 noGroups.setVisibility(View.INVISIBLE);
                 adapter.replaceData(groups);
+            }
+        }
+    }
+
+    private void setProfile() {
+        View hView = navigationView.inflateHeaderView(R.layout.header);
+        final ImageView imageView = (ImageView) hView.findViewById(R.id.user_image);
+        TextView tv = (TextView) hView.findViewById(R.id.name);
+        tv.setText(teacher.getName());
+
+        if(PermissionUtil.getStoragePermissionStatus(this)) {
+            File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/Images");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            final File file = new File(dir, teacher.getImage());
+            if(file.exists()) {
+                imageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+            } else {
+                Picasso.with(this)
+                        .load("https://s3.ap-south-1.amazonaws.com/aang-solutions/" + teacher.getImage())
+                        .placeholder(R.drawable.splash_image)
+                        .into(imageView, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+                                try {
+                                    FileOutputStream fos = new FileOutputStream(file);
+                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                                    fos.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onError() {
+                                imageView.setImageResource(R.drawable.ic_account);
+                            }
+                        });
             }
         }
     }

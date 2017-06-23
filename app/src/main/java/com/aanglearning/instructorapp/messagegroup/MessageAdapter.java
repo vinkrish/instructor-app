@@ -53,7 +53,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             .beginConfig()
             .withBorder(4)
             .endConfig()
-            .round();
+            .roundRect(10);
 
     MessageAdapter(Context context, List<Message> messages) {
         this.mContext = context;
@@ -183,7 +183,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             });
 
             //sharedImage.setImageResource(R.drawable.books);
-            File dir = new File(Environment.getExternalStorageDirectory().getPath(), "ThyWardTeacher/Images");
+            File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/Images");
             if (!dir.exists()) {
                 dir.mkdirs();
             }

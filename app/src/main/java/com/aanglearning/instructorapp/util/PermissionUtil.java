@@ -27,4 +27,13 @@ public class PermissionUtil {
         }
     }
 
+    public static boolean getStoragePermissionStatus(Activity activity) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            return ContextCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED;
+        } else {
+            return true;
+        }
+    }
+
 }

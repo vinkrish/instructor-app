@@ -30,7 +30,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             .beginConfig()
             .withBorder(4)
             .endConfig()
-            .round();
+            .roundRect(10);
 
     interface OnItemClickListener {
         void onItemClick(Groups group);
