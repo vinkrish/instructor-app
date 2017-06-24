@@ -225,12 +225,20 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
         TextView sender = (TextView) dialog.findViewById(R.id.sender_name);
         TextView createdTime = (TextView) dialog.findViewById(R.id.created_date);
+        ImageView closeWindow = (ImageView) dialog.findViewById(R.id.close_window);
         TextView messageText = (TextView) dialog.findViewById(R.id.message);
 
         sender.setText(message.getSenderName());
         DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
         createdTime.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
         messageText.setText(message.getMessageBody());
+
+        closeWindow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
         dialog.show();
 
@@ -256,6 +264,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
         TextView sender = (TextView) dialog.findViewById(R.id.sender_name);
         TextView createdTime = (TextView) dialog.findViewById(R.id.created_date);
+        ImageView closeWindow = (ImageView) dialog.findViewById(R.id.close_window);
         TextView messageText = (TextView) dialog.findViewById(R.id.message);
 
         sender.setText(message.getSenderName());
@@ -264,10 +273,17 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         messageText.setText(message.getMessageBody());
 
         TouchImageView fullImage = (TouchImageView) dialog.findViewById(R.id.full_image);
-        File file = new File(Environment.getExternalStorageDirectory().getPath(), "ThyWardTeacher/Images/" + message.getImageUrl());
+        File file = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/Images/" + message.getImageUrl());
         if(file.exists()) {
             fullImage.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
         }
+
+        closeWindow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
         dialog.show();
 

@@ -1,5 +1,6 @@
 package com.aanglearning.instructorapp.dashboard;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +15,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -295,9 +297,24 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                         startActivity(new Intent(DashboardActivity.this, ChatsActivity.class));
                         break;
                     case R.id.logout_item:
-                        SharedPreferenceUtil.logout(DashboardActivity.this);
-                        startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
-                        finish();
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(DashboardActivity.this);
+                        //alertDialog.setTitle("Confirm");
+                        alertDialog.setMessage("Are you sure you want to logout?");
+                        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                SharedPreferenceUtil.logout(DashboardActivity.this);
+                                startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
+                                finish();
+                            }
+                        });
+                        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                        alertDialog.show();
                         break;
                     default:
                         break;
