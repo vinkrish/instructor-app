@@ -83,6 +83,12 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         notifyItemInserted(0);
     }
 
+    @UiThread
+    void insertDataSet(List<Message> messages) {
+        this.messages.addAll(0, messages);
+        notifyItemRangeInserted(0, messages.size());
+    }
+
     @Override
     public MessageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_TYPE_TEXT) {

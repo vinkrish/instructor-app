@@ -9,6 +9,8 @@ import com.aanglearning.instructorapp.model.Message;
 interface MessagePresenter {
     void saveMessage(Message message);
 
+    void getRecentMessages(long groupId, long messageId);
+
     void getMessages(long groupId);
 
     void getFollowupMessages(long groupId, long messageId);

@@ -43,8 +43,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-    public class ChatActivity extends AppCompatActivity implements
-        ChatView, Application.ActivityLifecycleCallbacks{
+    public class ChatActivity extends AppCompatActivity implements ChatView{
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
@@ -78,14 +77,22 @@ import butterknife.ButterKnife;
         }
         getSupportActionBar().setTitle(recipientName);
 
-        getApplication().registerActivityLifecycleCallbacks(this);
-
         presenter = new ChatPresenterImpl(this, new ChatInteractorImpl());
 
         setupRecyclerView();
 
         newMsg.addTextChangedListener(newMsgWatcher);
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         if(NetworkUtil.isNetworkAvailable(this)){
             presenter.getMessages("teacher", TeacherDao.getTeacher().getId(), "student", recipientId);
         } else {
@@ -97,12 +104,6 @@ import butterknife.ButterKnife;
                 adapter.setDataSet(messages);
             }
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -281,49 +282,4 @@ import butterknife.ButterKnife;
             }
         }
     };
-
-    public boolean isActivityVisible() {
-        return isActivityVisible;
-    }
-
-    @Override
-    public void onActivityCreated(Activity activity, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onActivityStarted(Activity activity) {
-
-    }
-
-    @Override
-    public void onActivityResumed(Activity activity) {
-        if (activity instanceof ChatActivity) {
-            isActivityVisible = true;
-        }
-    }
-
-    @Override
-    public void onActivityPaused(Activity activity) {
-        if (activity instanceof ChatActivity) {
-            isActivityVisible = false;
-        }
-    }
-
-    @Override
-    public void onActivityStopped(Activity activity) {
-        if (activity instanceof ChatActivity) {
-            isActivityVisible = false;
-        }
-    }
-
-    @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onActivityDestroyed(Activity activity) {
-
-    }
 }

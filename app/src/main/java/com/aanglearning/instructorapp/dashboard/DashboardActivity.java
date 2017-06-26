@@ -41,6 +41,7 @@ import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Service;
 import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.newgroup.NewGroupActivity;
+import com.aanglearning.instructorapp.sqlite.SqlDbHelper;
 import com.aanglearning.instructorapp.timetable.TimetableActivity;
 import com.aanglearning.instructorapp.util.DividerItemDecoration;
 import com.aanglearning.instructorapp.util.NetworkUtil;
@@ -304,6 +305,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 SharedPreferenceUtil.logout(DashboardActivity.this);
+                                SqlDbHelper.getInstance(DashboardActivity.this).deleteTables();
                                 startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
                                 finish();
                             }

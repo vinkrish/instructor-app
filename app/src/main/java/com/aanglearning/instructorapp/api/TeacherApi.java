@@ -67,6 +67,10 @@ public interface TeacherApi {
     @POST("message")
     Call<Message> saveMessage(@Body Message message);
 
+    @GET("message/group/{groupId}/messagesUp/{messageId}")
+    Call<ArrayList<Message>> getGroupMessagesAboveId(@Path("groupId") long groupId,
+                                                    @Path("messageId") long messageId);
+
     @GET("message/group/{groupId}")
     Call<ArrayList<Message>> getGroupMessages(@Path("groupId") long groupId);
 

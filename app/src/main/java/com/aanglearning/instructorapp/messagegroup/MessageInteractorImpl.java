@@ -40,6 +40,28 @@ class MessageInteractorImpl implements MessageInteractor {
     }
 
     @Override
+    public void getRecentMessages(long groupId, long messageId, final OnFinishedListener listener) {
+        TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
+
+        Call<ArrayList<Message>> msgList = api.getGroupMessagesAboveId(groupId, messageId);
+        msgList.enqueue(new Callback<ArrayList<Message>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Message>> call, Response<ArrayList<Message>> response) {
+                if(response.isSuccessful()) {
+                    listener.onRecentMessagesReceived(response.body());
+                } else {
+                    listener.onError(App.getInstance().getString(R.string.request_error));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Message>> call, Throwable t) {
+                listener.onError(App.getInstance().getString(R.string.network_error));
+            }
+        });
+    }
+
+    @Override
     public void getMessages(long groupId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
