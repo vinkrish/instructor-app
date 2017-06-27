@@ -1,9 +1,6 @@
 package com.aanglearning.instructorapp.chat;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -20,12 +17,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.MessageDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
-import com.aanglearning.instructorapp.messagegroup.ImageUploadActivity;
 import com.aanglearning.instructorapp.model.Message;
 import com.aanglearning.instructorapp.model.MessageEvent;
 import com.aanglearning.instructorapp.util.EndlessRecyclerViewScrollListener;
@@ -37,6 +32,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -57,9 +53,6 @@ import butterknife.ButterKnife;
     private ChatPresenter presenter;
     private ChatAdapter adapter;
     private EndlessRecyclerViewScrollListener scrollListener;
-    private static boolean isActivityVisible;
-
-    final static int REQ_CODE = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +75,14 @@ import butterknife.ButterKnife;
         setupRecyclerView();
 
         newMsg.addTextChangedListener(newMsgWatcher);
+
+        List<Message> messages = MessageDao.getMessages(TeacherDao.getTeacher().getId(), "teacher", recipientId, "student");
+        if(messages.size() == 0) {
+            noChats.setVisibility(View.VISIBLE);
+        } else {
+            noChats.setVisibility(View.INVISIBLE);
+            adapter.setDataSet(messages);
+        }
     }
 
     @Override
@@ -94,14 +95,11 @@ import butterknife.ButterKnife;
     public void onResume() {
         super.onResume();
         if(NetworkUtil.isNetworkAvailable(this)){
-            presenter.getMessages("teacher", TeacherDao.getTeacher().getId(), "student", recipientId);
-        } else {
-            List<Message> messages = MessageDao.getMessages(TeacherDao.getTeacher().getId(), "teacher", recipientId, "student");
-            if(messages.size() == 0) {
-                noChats.setVisibility(View.VISIBLE);
+            if(adapter.getItemCount() == 0) {
+                presenter.getMessages("teacher", TeacherDao.getTeacher().getId(), "student", recipientId);
             } else {
-                noChats.setVisibility(View.INVISIBLE);
-                adapter.setDataSet(messages);
+                presenter.getRecentMessages("teacher", TeacherDao.getTeacher().getId(), "student", recipientId,
+                        adapter.getDataSet().get(0).getId());
             }
         }
     }
@@ -193,12 +191,14 @@ import butterknife.ButterKnife;
         noChats.setVisibility(View.INVISIBLE);
         adapter.insertDataSet(message);
         recyclerView.smoothScrollToPosition(0);
+        backupChats(Arrays.asList(message));
     }
 
     @Override
     public void showRecentMessages(List<Message> messages) {
         adapter.insertDataSet(messages);
         recyclerView.smoothScrollToPosition(0);
+        backupChats(messages);
     }
     @Override
     public void showMessages(List<Message> messages) {
@@ -215,7 +215,7 @@ import butterknife.ButterKnife;
         new Thread(new Runnable() {
             @Override
             public void run() {
-                MessageDao.clearChatMessages(TeacherDao.getTeacher().getId(), "teacher", recipientId, "student");
+                //MessageDao.clearChatMessages(TeacherDao.getTeacher().getId(), "teacher", recipientId, "student");
                 MessageDao.insertChatMessages(messages);
             }
         }).start();

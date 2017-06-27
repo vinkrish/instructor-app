@@ -142,7 +142,7 @@ public class MessageDao {
     public static List<Message> getGroupMessages(long groupId) {
         List<Message> messages = new ArrayList<>();
         SQLiteDatabase sqliteDatabase = AppGlobal.getSqlDbHelper().getReadableDatabase();
-        String query = "select A.*, B.TeacherName from message A, teacher B where GroupId=" + groupId + " and A.SenderId=B.Id order by A.Id desc limit 100";
+        String query = "select * from message where GroupId=" + groupId + " order by Id desc limit 50";
         Cursor c = sqliteDatabase.rawQuery(query, null);
         c.moveToFirst();
         while (!c.isAfterLast()) {
@@ -165,10 +165,10 @@ public class MessageDao {
         return messages;
     }
 
-    public static List<Message> getGroupMessagesFromId(long gropId, long messageId) {
+    public static List<Message> getGroupMessagesFromId(long groupId, long messageId) {
         List<Message> messages = new ArrayList<>();
         SQLiteDatabase sqliteDatabase = AppGlobal.getSqlDbHelper().getReadableDatabase();
-        String query = "select A.*, B.TeacherName from message A, teacher B where GroupId=" + gropId + " and A.SenderId=B.Id and A.Id<" + messageId + " order by A.Id desc limit 100";
+        String query = "select * from message where GroupId=" + groupId + " and Id<" + messageId + " order by Id desc limit 50";
         Cursor c = sqliteDatabase.rawQuery(query, null);
         c.moveToFirst();
         while (!c.isAfterLast()) {
