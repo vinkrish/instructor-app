@@ -84,13 +84,17 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
         if(NetworkUtil.isNetworkAvailable(this)) {
             presenter.getChats(TeacherDao.getTeacher().getId());
         } else {
-            List<Chat> chats = ChatDao.getChats();
-            if(chats.size() == 0) {
-                noChats.setVisibility(View.VISIBLE);
-            } else {
-                noChats.setVisibility(View.INVISIBLE);
-                adapter.setDataSet(chats);
-            }
+            loadOfflineData();
+        }
+    }
+
+    private void loadOfflineData() {
+        List<Chat> chats = ChatDao.getChats();
+        if(chats.size() == 0) {
+            noChats.setVisibility(View.VISIBLE);
+        } else {
+            noChats.setVisibility(View.INVISIBLE);
+            adapter.setDataSet(chats);
         }
     }
 
@@ -116,8 +120,8 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
 
     @Override
     public void showError(String message) {
-        refreshLayout.setRefreshing(false);
         showSnackbar(message);
+        loadOfflineData();
     }
 
     @Override

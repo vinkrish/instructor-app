@@ -99,12 +99,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         if(NetworkUtil.isNetworkAvailable(this)) {
             presenter.getClassList(TeacherDao.getTeacher().getId());
         } else {
-            List<Clas> clasList = ClassDao.getClassList(TeacherDao.getTeacher().getSchoolId());
-            ArrayAdapter<Clas> adapter = new
-                    ArrayAdapter<>(this, android.R.layout.simple_spinner_item, clasList);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            classSpinner.setAdapter(adapter);
-            classSpinner.setOnItemSelectedListener(this);
+            showOfflineClass();
         }
 
         refreshLayout.setColorSchemeColors(
@@ -314,8 +309,24 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
 
     @Override
     public void showError(String message) {
-        refreshLayout.setRefreshing(false);
         showSnackbar(message);
+    }
+
+    @Override
+    public void showOffline(String tableName) {
+        switch (tableName){
+            case "class":
+                showOfflineClass();
+                break;
+            case "section":
+                showOfflineSection();
+                break;
+            case "homework":
+                showOfflineHomework();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -338,6 +349,15 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         }).start();
     }
 
+    private void showOfflineClass() {
+        List<Clas> clasList = ClassDao.getClassList(TeacherDao.getTeacher().getSchoolId());
+        ArrayAdapter<Clas> adapter = new
+                ArrayAdapter<>(this, android.R.layout.simple_spinner_item, clasList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        classSpinner.setAdapter(adapter);
+        classSpinner.setOnItemSelectedListener(this);
+    }
+
     @Override
     public void showSection(List<Section> sectionList) {
         ArrayAdapter<Section> adapter = new
@@ -356,6 +376,15 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
                 SectionDao.insert(sectionList);
             }
         }).start();
+    }
+
+    private void showOfflineSection() {
+        List<Section> sectionList = SectionDao.getSectionList(((Clas) classSpinner.getSelectedItem()).getId());
+        ArrayAdapter<Section> adapter = new
+                ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sectionList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sectionSpinner.setAdapter(adapter);
+        sectionSpinner.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -387,6 +416,15 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         }).start();
     }
 
+    private void showOfflineHomework() {
+        List<Homework> homeworkList = HomeworkDao.getHomework(((Section) sectionSpinner.getSelectedItem()).getId(), homeworkDate);
+        homeworks = new ArrayList<>();
+        for (Homework hw : homeworkList) {
+            if (hw.getId() != 0) homeworks.add(hw);
+        }
+        homeworkAdapter.setDataSet(homeworks, multiselect_list);
+        enterHomeworkTv.setVisibility(View.INVISIBLE);
+    }
 
     @Override
     public void homeworkSaved(Homework homework) {
@@ -407,13 +445,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         if(NetworkUtil.isNetworkAvailable(this)) {
             presenter.getHomework(((Section) sectionSpinner.getSelectedItem()).getId(), homeworkDate);
         } else {
-            List<Homework> homeworkList = HomeworkDao.getHomework(((Section) sectionSpinner.getSelectedItem()).getId(), homeworkDate);
-            homeworks = new ArrayList<>();
-            for (Homework hw : homeworkList) {
-                if (hw.getId() != 0) homeworks.add(hw);
-            }
-            homeworkAdapter.setDataSet(homeworks, multiselect_list);
-            enterHomeworkTv.setVisibility(View.INVISIBLE);
+            showOfflineHomework();
         }
     }
 
@@ -425,12 +457,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
                     presenter.getSectionList(((Clas) classSpinner.getSelectedItem()).getId(),
                             TeacherDao.getTeacher().getId());
                 } else {
-                    List<Section> sectionList = SectionDao.getSectionList(((Clas) classSpinner.getSelectedItem()).getId());
-                    ArrayAdapter<Section> adapter = new
-                            ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sectionList);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sectionSpinner.setAdapter(adapter);
-                    sectionSpinner.setOnItemSelectedListener(this);
+                    showOfflineSection();
                 }
                 break;
             case R.id.spinner_section:

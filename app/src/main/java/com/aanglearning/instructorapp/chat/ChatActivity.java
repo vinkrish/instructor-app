@@ -76,6 +76,10 @@ import butterknife.ButterKnife;
 
         newMsg.addTextChangedListener(newMsgWatcher);
 
+        loadOfflineData();
+    }
+
+    private void loadOfflineData() {
         List<Message> messages = MessageDao.getMessages(TeacherDao.getTeacher().getId(), "teacher", recipientId, "student");
         if(messages.size() == 0) {
             noChats.setVisibility(View.VISIBLE);

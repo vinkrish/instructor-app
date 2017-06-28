@@ -17,6 +17,8 @@ public interface HomeworkView {
 
     void showError(String message);
 
+    void showOffline(String tableName);
+
     void showClass(List<Clas> clasList);
 
     void showSection(List<Section> sectionList);

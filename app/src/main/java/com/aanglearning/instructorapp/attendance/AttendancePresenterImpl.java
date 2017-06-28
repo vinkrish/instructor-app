@@ -85,6 +85,13 @@ public class AttendancePresenterImpl implements AttendancePresenter,
     }
 
     @Override
+    public void loadOffline(String tableName) {
+        if (mView != null) {
+            mView.showOffline(tableName);
+        }
+    }
+
+    @Override
     public void onClassReceived(List<Clas> clasList) {
         if (mView != null) {
             mView.showClass(clasList);

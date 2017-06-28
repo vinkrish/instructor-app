@@ -11,9 +11,11 @@ import java.util.List;
  * Created by Vinay on 21-04-2017.
  */
 
-public interface HomeworkInteractor {
+interface HomeworkInteractor {
     interface OnFinishedListener {
         void onError(String message);
+
+        void loadOffline(String tableName);
 
         void onClassReceived(List<Clas> clasList);
 

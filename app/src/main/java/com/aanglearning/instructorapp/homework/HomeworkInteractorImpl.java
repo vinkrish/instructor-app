@@ -20,7 +20,7 @@ import retrofit2.Response;
  * Created by Vinay on 21-04-2017.
  */
 
-public class HomeworkInteractorImpl implements HomeworkInteractor {
+class HomeworkInteractorImpl implements HomeworkInteractor {
 
     @Override
     public void getClassList(long teacherId, final OnFinishedListener listener) {
@@ -34,11 +34,13 @@ public class HomeworkInteractorImpl implements HomeworkInteractor {
                     listener.onClassReceived(response.body());
                 } else {
                     listener.onError(App.getInstance().getString(R.string.request_error));
+                    listener.loadOffline("class");
                 }
             }
             @Override
             public void onFailure(Call<List<Clas>> call, Throwable t) {
                 listener.onError(App.getInstance().getString(R.string.network_error));
+                listener.loadOffline("class");
             }
         });
     }
@@ -55,11 +57,13 @@ public class HomeworkInteractorImpl implements HomeworkInteractor {
                     listener.onSectionReceived(response.body());
                 } else {
                     listener.onError(App.getInstance().getString(R.string.request_error));
+                    listener.loadOffline("section");
                 }
             }
             @Override
             public void onFailure(Call<List<Section>> call, Throwable t) {
                 listener.onError(App.getInstance().getString(R.string.network_error));
+                listener.loadOffline("section");
             }
         });
     }
@@ -76,12 +80,14 @@ public class HomeworkInteractorImpl implements HomeworkInteractor {
                     listener.onHomeworkReceived(response.body());
                 } else {
                     listener.onError(App.getInstance().getString(R.string.request_error));
+                    listener.loadOffline("homework");
                 }
             }
 
             @Override
             public void onFailure(Call<List<Homework>> call, Throwable t) {
                 listener.onError(App.getInstance().getString(R.string.network_error));
+                listener.loadOffline("homework");
             }
         });
     }

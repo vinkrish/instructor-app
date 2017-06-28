@@ -1,5 +1,6 @@
 package com.aanglearning.instructorapp.dashboard;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -72,6 +73,8 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     private GroupAdapter adapter;
     private Teacher teacher;
 
+    final static int REQ_CODE = 111;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,13 +134,17 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         if(NetworkUtil.isNetworkAvailable(this)) {
             presenter.getGroups(teacher.getId());
         } else {
-            List<Groups> groups = GroupDao.getGroups(teacher.getId());
-            if(groups.size() == 0) {
-                noGroups.setVisibility(View.VISIBLE);
-            } else {
-                noGroups.setVisibility(View.INVISIBLE);
-                adapter.replaceData(groups);
-            }
+            loadOfflineData();
+        }
+    }
+
+    private void loadOfflineData() {
+        List<Groups> groups = GroupDao.getGroups(teacher.getId());
+        if(groups.size() == 0) {
+            noGroups.setVisibility(View.VISIBLE);
+        } else {
+            noGroups.setVisibility(View.INVISIBLE);
+            adapter.replaceData(groups);
         }
     }
 
@@ -217,7 +224,8 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
 
     public void addGroup(View view) {
         if (NetworkUtil.isNetworkAvailable(this)) {
-            startActivity(new Intent(this, NewGroupActivity.class));
+            Intent intent = new Intent(this, NewGroupActivity.class);
+            startActivityForResult(intent, REQ_CODE);
         } else {
             showSnackbar("You are offline,check your internet.");
         }
@@ -239,8 +247,8 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
 
     @Override
     public void showError(String message) {
-        refreshLayout.setRefreshing(false);
         showSnackbar(message);
+        loadOfflineData();
     }
 
     @Override
@@ -337,4 +345,13 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
             startActivity(intent);
         }
     };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if(NetworkUtil.isNetworkAvailable(this)) {
+                presenter.getGroups(teacher.getId());
+            }
+        }
+    }
 }
