@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.aanglearning.instructorapp.App;
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.dao.MessageDao;
@@ -211,12 +212,6 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.onDestroy();
-    }
-
     private void showSnackbar(String message) {
         Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
@@ -255,6 +250,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     @Override
     public void showMessages(List<Message> messages) {
         adapter.setDataSet(messages);
+        recyclerView.smoothScrollToPosition(0);
         backupMessages(messages);
     }
 
@@ -358,5 +354,11 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
             sendMessage("text", "");
         }
         return false;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
     }
 }

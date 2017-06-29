@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.aanglearning.instructorapp.App;
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.MessageDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
@@ -99,6 +100,7 @@ import butterknife.ButterKnife;
     @Override
     public void onResume() {
         super.onResume();
+        App.activityResumed();
         if(NetworkUtil.isNetworkAvailable(this)){
             if(adapter.getItemCount() == 0) {
                 presenter.getMessages("teacher", TeacherDao.getTeacher().getId(), "student", recipientId);
@@ -107,6 +109,12 @@ import butterknife.ButterKnife;
                         adapter.getDataSet().get(0).getId());
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        App.activityPaused();
     }
 
     @Override

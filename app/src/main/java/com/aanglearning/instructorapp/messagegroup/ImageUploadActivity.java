@@ -304,7 +304,7 @@ public class ImageUploadActivity extends AppCompatActivity
             Bitmap selectedBitmap = BitmapFactory.decodeStream(inputStream, null, o2);
             inputStream.close();
 
-            imageName = System.currentTimeMillis() +"";
+            imageName = System.currentTimeMillis() +".jpg";
 
             // here i override the original image file
             File dir = new File(Environment.getExternalStorageDirectory().getPath(), "ThyWardTeacher/Images");
