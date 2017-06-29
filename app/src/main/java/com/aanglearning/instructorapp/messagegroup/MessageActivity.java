@@ -142,6 +142,9 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setItemViewCacheSize(10);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         adapter = new MessageAdapter(this, new ArrayList<Message>(0));
         recyclerView.setAdapter(adapter);

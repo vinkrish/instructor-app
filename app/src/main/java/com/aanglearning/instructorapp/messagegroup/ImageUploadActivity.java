@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -39,10 +40,13 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import id.zelory.compressor.Compressor;
 
 public class ImageUploadActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -96,7 +100,7 @@ public class ImageUploadActivity extends AppCompatActivity
         }
         if (NetworkUtil.isNetworkAvailable(this)){
             progressBar.setVisibility(View.VISIBLE);
-            beginUpload(imagePath);
+            beginUpload();
         } else showSnackbar("You are offline,check your internet");
     }
 
@@ -130,8 +134,9 @@ public class ImageUploadActivity extends AppCompatActivity
                 Handler handler = new Handler();
                 final Runnable r = new Runnable() {
                     public void run() {
-                        Bitmap myBitmap = BitmapFactory.decodeFile(imagePath);
-                        choseImage.setImageBitmap(myBitmap);
+                        choseImage.setImageBitmap(new Compressor(ImageUploadActivity.this).compressToBitmap(new File(imagePath)));
+                        //Bitmap myBitmap = BitmapFactory.decodeFile(imagePath);
+                        //choseImage.setImageBitmap(myBitmap);
                     }
                 };
                 handler.postDelayed(r, 100);
@@ -148,9 +153,8 @@ public class ImageUploadActivity extends AppCompatActivity
     /*
      * Begins to upload the file specified by the file path.
      */
-    private void beginUpload(String filePath) {
-        File compressedFile = saveBitmapToFile(new File(filePath));
-        //File file = new File(filePath);
+    private void beginUpload() {
+        File compressedFile = saveBitmapToFile();
         TransferObserver observer = transferUtility.upload(Constants.BUCKET_NAME, compressedFile.getName(),
                 compressedFile);
          observer.setTransferListener(new UploadListener());
@@ -274,40 +278,14 @@ public class ImageUploadActivity extends AppCompatActivity
         }
     }
 
-    public File saveBitmapToFile(File file){
+    public File saveBitmapToFile(){
         try {
-            // BitmapFactory options to downsize the image
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            o.inSampleSize = 6;
-            // factor of downsizing the image
-
-            FileInputStream inputStream = new FileInputStream(file);
-            //Bitmap selectedBitmap = null;
-            BitmapFactory.decodeStream(inputStream, null, o);
-            inputStream.close();
-
-            // The new size we want to scale to
-            final int REQUIRED_SIZE=75;
-
-            // Find the correct scale value. It should be the power of 2.
-            int scale = 1;
-            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
-                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
-                scale *= 2;
-            }
-
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            inputStream = new FileInputStream(file);
-
-            Bitmap selectedBitmap = BitmapFactory.decodeStream(inputStream, null, o2);
-            inputStream.close();
+            Bitmap selectedBitmap = ((BitmapDrawable)choseImage.getDrawable()).getBitmap();
 
             imageName = System.currentTimeMillis() +".jpg";
 
             // here i override the original image file
-            File dir = new File(Environment.getExternalStorageDirectory().getPath(), "ThyWardTeacher/Images");
+            File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/Images");
             if (!dir.exists()) {
                 dir.mkdirs();
             }
@@ -316,7 +294,7 @@ public class ImageUploadActivity extends AppCompatActivity
             newFile.createNewFile();
             FileOutputStream outputStream = new FileOutputStream(newFile);
 
-            selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 100 , outputStream);
+            selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 65, outputStream);
 
             return newFile;
         } catch (Exception e) {

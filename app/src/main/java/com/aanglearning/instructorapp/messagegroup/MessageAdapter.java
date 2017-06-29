@@ -195,6 +195,9 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             }
             final File file = new File(dir, message.getImageUrl());
             if(file.exists()) {
+                /*BitmapFactory.Options bitoption = new BitmapFactory.Options();
+                bitoption.inSampleSize = 4;
+                sharedImage.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath(), bitoption));*/
                 sharedImage.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
             } else {
                 Picasso.with(mContext)
