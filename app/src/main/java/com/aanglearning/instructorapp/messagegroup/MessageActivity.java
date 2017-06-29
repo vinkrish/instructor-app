@@ -42,6 +42,8 @@ import com.aanglearning.instructorapp.util.PermissionUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -237,12 +239,16 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
 
     @Override
     public void onMessageSaved(Message message) {
+        newMsg.setText("");
         adapter.insertDataSet(message);
+        recyclerView.smoothScrollToPosition(0);
+        backupMessages(Collections.singletonList(message));
     }
 
     @Override
     public void showRecentMessages(List<Message> messages) {
         adapter.insertDataSet(messages);
+        recyclerView.smoothScrollToPosition(0);
         backupMessages(messages);
     }
 

@@ -55,7 +55,7 @@
                 android:layout_marginTop="5dp"
                 android:maxLines="7"
                 android:layout_below="@id/sender_name"
-                android:lineSpacingExtra="3dp"
+                android:lineSpacingExtra="2dp"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/default_tv_color"
                 android:textSize="@dimen/text_xsmall" />

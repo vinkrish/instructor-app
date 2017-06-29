@@ -304,13 +304,15 @@ public class ImageUploadActivity extends AppCompatActivity
             Bitmap selectedBitmap = BitmapFactory.decodeStream(inputStream, null, o2);
             inputStream.close();
 
+            imageName = System.currentTimeMillis() +"";
+
             // here i override the original image file
             File dir = new File(Environment.getExternalStorageDirectory().getPath(), "ThyWardTeacher/Images");
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-            File newFile = new File(dir, file.getName());
-            imageName = file.getName();
+            File newFile = new File(dir, imageName);
+
             newFile.createNewFile();
             FileOutputStream outputStream = new FileOutputStream(newFile);
 

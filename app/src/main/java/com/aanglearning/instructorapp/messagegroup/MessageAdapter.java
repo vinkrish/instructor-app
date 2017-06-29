@@ -278,7 +278,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         createdTime.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
         messageText.setText(message.getMessageBody());
 
-        TouchImageView fullImage = (TouchImageView) dialog.findViewById(R.id.full_image);
+        ImageView fullImage = (ImageView) dialog.findViewById(R.id.full_image);
         File file = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/Images/" + message.getImageUrl());
         if(file.exists()) {
             fullImage.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
