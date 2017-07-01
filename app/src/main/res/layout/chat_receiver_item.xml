@@ -16,6 +16,7 @@
         android:background="@drawable/incoming_msg"
         android:maxWidth="280dp"
         android:paddingLeft="@dimen/spacing_normal"
-        android:text="I am a good boy but I do not know what I want." />
+        android:text="I am a good boy but I do not know what I want."
+        android:textColor="@color/primaryTextColor" />
 
 </RelativeLayout>
