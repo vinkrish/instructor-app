@@ -6,7 +6,7 @@ import com.aanglearning.instructorapp.model.TeacherCredentials;
  * Created by Vinay on 28-03-2017.
  */
 
-public interface LoginView {
+interface LoginView {
     void showProgress();
 
     void hideProgress();

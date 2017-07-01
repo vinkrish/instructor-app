@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 /**
  * Created by Vinay on 16-02-2017.
@@ -21,8 +22,8 @@ public interface AuthApi {
     Call<TeacherCredentials> login(@Body Credentials credentials);
 
     @Headers("content-type: application/json")
-    @POST("teacher/newPassword")
-    Call<CommonResponse> newPassword(@Body String updatedPassword);
+    @POST("sms/teacher/{username}")
+    Call<Void> forgotPassword(@Path("username") String username);
 
     @Headers("content-type: application/json")
     @POST("authorization/fcm")

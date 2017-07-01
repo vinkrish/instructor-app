@@ -6,6 +6,10 @@
     <string name="login_id">Login Id</string>
     <string name="password">Password</string>
     <string name="no_user">User doesn\'t exist</string>
+    <string name="username_error">Mobile number cannot be empty</string>
+    <string name="password_error">Password cannot be empty</string>
+    <string name="valid_mobile">Should be of 10 numbers</string>
+    <string name="valid_password">Should be atleast 6 characters long</string>
 
     <string name="network_error">A network error has occurred.</string>
     <string name="request_error">Connection timed out.</string>

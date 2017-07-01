@@ -26,10 +26,10 @@ class LoginPresenterImpl implements LoginPresenter, LoginInteractor.OnLoginFinis
     }
 
     @Override
-    public void pwdRecovery(String authToken, String newPassword) {
+    public void pwdRecovery(String username) {
         if(loginView != null) {
             loginView.showProgress();
-            interactor.recoverPwd(authToken, newPassword, this);
+            interactor.recoverPwd(username, this);
         }
     }
 

@@ -7,7 +7,7 @@ import com.aanglearning.instructorapp.model.TeacherCredentials;
  * Created by Vinay on 28-03-2017.
  */
 
-public interface LoginInteractor {
+interface LoginInteractor {
     interface OnLoginFinishedListener{
 
         void onSuccess(TeacherCredentials credentials);
@@ -21,5 +21,5 @@ public interface LoginInteractor {
 
     void login(Credentials credentials, OnLoginFinishedListener listener);
 
-    void recoverPwd(String authToken, String newPassword, OnLoginFinishedListener listener);
+    void recoverPwd(String username, OnLoginFinishedListener listener);
 }

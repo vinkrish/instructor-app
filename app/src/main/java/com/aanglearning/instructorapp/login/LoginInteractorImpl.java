@@ -18,6 +18,7 @@ import retrofit2.Response;
  */
 
 class LoginInteractorImpl implements LoginInteractor {
+
     @Override
     public void login(final Credentials credentials, final OnLoginFinishedListener listener) {
         AuthApi authApi = ApiClient.getClient().create(AuthApi.class);
@@ -42,19 +43,15 @@ class LoginInteractorImpl implements LoginInteractor {
     }
 
     @Override
-    public void recoverPwd(String authToken, String newPassword, final OnLoginFinishedListener listener) {
-        AuthApi authApi = ApiClient.getAuthorizedClient().create(AuthApi.class);
+    public void recoverPwd(String username, final OnLoginFinishedListener listener) {
+        AuthApi authApi = ApiClient.getClient().create(AuthApi.class);
 
-        Call<CommonResponse> sendNewPwd = authApi.newPassword(newPassword);
-        sendNewPwd.enqueue(new Callback<CommonResponse>() {
+        Call<Void> sendNewPwd = authApi.forgotPassword(username);
+        sendNewPwd.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<CommonResponse> call, Response<CommonResponse> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
-                    if(response.body().isSuccess()){
-                        listener.onPwdRecovered();
-                    } else {
-                        listener.onNoUser();
-                    }
+                    listener.onPwdRecovered();
                 } else {
                     //APIError error = ErrorUtils.parseError(response);
                     listener.onError(App.getInstance().getString(R.string.request_error));
@@ -62,7 +59,7 @@ class LoginInteractorImpl implements LoginInteractor {
             }
 
             @Override
-            public void onFailure(Call<CommonResponse> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
