@@ -125,6 +125,7 @@ public class TimetableActivity extends AppCompatActivity implements TimetableVie
     @Override
     public void showTimetable(List<TeacherTimetable> timetableList) {
         if(timetableList.size() == 0) {
+            TeacherTimetableDao.delete(TeacherDao.getTeacher().getId());
             noTimetable.setVisibility(View.VISIBLE);
         } else {
             noTimetable.setVisibility(View.INVISIBLE);

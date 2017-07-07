@@ -80,6 +80,17 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setSubtitle(R.string.tap_group);
+
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MessageActivity.this, UserGroupActivity.class);
+                intent.putExtra("groupId", group.getId());
+                intent.putExtra("groupName", group.getName());
+                startActivity(intent);
+            }
+        });
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -192,26 +203,6 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
             newMsg.setText("");
         } else {
             super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.message_group_overflow, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.disclaimer:
-                Intent intent = new Intent(this, UserGroupActivity.class);
-                intent.putExtra("groupId", group.getId());
-                intent.putExtra("groupName", group.getName());
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 

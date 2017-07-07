@@ -127,6 +127,7 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
     @Override
     public void setChats(List<Chat> chats) {
         if(chats.size() == 0) {
+            ChatDao.clear();
             noChats.setVisibility(View.VISIBLE);
         } else {
             noChats.setVisibility(View.INVISIBLE);

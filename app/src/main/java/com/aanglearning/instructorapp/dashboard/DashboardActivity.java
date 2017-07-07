@@ -254,6 +254,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     @Override
     public void setGroups(List<Groups> groups) {
         if(groups.size() == 0) {
+            GroupDao.clear();
             noGroups.setVisibility(View.VISIBLE);
         } else {
             noGroups.setVisibility(View.INVISIBLE);
