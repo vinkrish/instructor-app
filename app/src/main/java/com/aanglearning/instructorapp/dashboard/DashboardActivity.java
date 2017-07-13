@@ -155,7 +155,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         tv.setText(teacher.getName());
 
         if(PermissionUtil.getStoragePermissionStatus(this)) {
-            File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/Images");
+            File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/" + teacher.getSchoolId());
             if (!dir.exists()) {
                 dir.mkdirs();
             }
@@ -164,7 +164,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                 imageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
             } else {
                 Picasso.with(this)
-                        .load("https://s3.ap-south-1.amazonaws.com/aang-solutions/" + teacher.getImage())
+                        .load("https://s3.ap-south-1.amazonaws.com/shikshitha-images/" + teacher.getSchoolId() + "/" + teacher.getImage())
                         .placeholder(R.drawable.splash_image)
                         .into(imageView, new Callback() {
                             @Override

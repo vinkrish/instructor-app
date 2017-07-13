@@ -40,6 +40,7 @@ import com.aanglearning.instructorapp.util.EndlessRecyclerViewScrollListener;
 import com.aanglearning.instructorapp.util.FloatingActionButton;
 import com.aanglearning.instructorapp.util.NetworkUtil;
 import com.aanglearning.instructorapp.util.PermissionUtil;
+import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,7 +62,6 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     @BindView(R.id.new_msg) EditText newMsg;
     @BindView(R.id.enter_msg) ImageView enterMsg;
 
-    private static final String TAG = "MessageActivity";
     private MessagePresenter presenter;
     private Groups group;
     private MessageAdapter adapter;
@@ -157,7 +157,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
-        adapter = new MessageAdapter(this, new ArrayList<Message>(0));
+        adapter = new MessageAdapter(this, new ArrayList<Message>(0), SharedPreferenceUtil.getTeacher(this).getSchoolId());
         recyclerView.setAdapter(adapter);
 
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {

@@ -223,10 +223,10 @@ public class TimetableActivity extends AppCompatActivity implements TimetableVie
         }
 
         private void setComponentsId(){
-            this.tableA.setId(1);
-            this.horizontalScrollViewB.setId(2);
-            this.scrollViewC.setId(3);
-            this.scrollViewD.setId(4);
+            this.tableA.setId(R.id.tableA_id);
+            this.horizontalScrollViewB.setId(R.id.horizontalScrollViewB_id);
+            this.scrollViewC.setId(R.id.scrollViewC_id);
+            this.scrollViewD.setId(R.id.scrollViewD_id);
         }
 
         // set tags for some horizontal and vertical scroll view
