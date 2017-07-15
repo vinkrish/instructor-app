@@ -17,24 +17,20 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.aanglearning.instructorapp.App;
 import com.aanglearning.instructorapp.R;
-import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.dao.MessageDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Message;
+import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.usergroup.UserGroupActivity;
 import com.aanglearning.instructorapp.util.EndlessRecyclerViewScrollListener;
 import com.aanglearning.instructorapp.util.FloatingActionButton;
@@ -44,7 +40,6 @@ import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -228,6 +223,8 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
 
     @Override
     public void onMessageSaved(Message message) {
+        newMsgLayout.setVisibility(View.GONE);
+        fabButton.showFloatingActionButton();
         newMsg.setText("");
         adapter.insertDataSet(message);
         recyclerView.smoothScrollToPosition(0);
@@ -284,8 +281,9 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
         } else {
             if (NetworkUtil.isNetworkAvailable(this)) {
                 Message message = new Message();
-                message.setSenderId(TeacherDao.getTeacher().getId());
-                message.setSenderName(TeacherDao.getTeacher().getName());
+                Teacher teacher = TeacherDao.getTeacher();
+                message.setSenderId(teacher.getId());
+                message.setSenderName(teacher.getName());
                 message.setSenderRole("teacher");
                 message.setGroupId(group.getId());
                 message.setRecipientRole("group");

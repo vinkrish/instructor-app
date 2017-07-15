@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.DocumentsContract;
@@ -19,7 +19,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -31,6 +30,7 @@ import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.util.Constants;
 import com.aanglearning.instructorapp.util.NetworkUtil;
 import com.aanglearning.instructorapp.util.PermissionUtil;
+import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 import com.aanglearning.instructorapp.util.Util;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
@@ -38,11 +38,8 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -285,7 +282,8 @@ public class ImageUploadActivity extends AppCompatActivity
             imageName = System.currentTimeMillis() +".jpg";
 
             // here i override the original image file
-            File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/Images");
+            File dir = new File(Environment.getExternalStorageDirectory().getPath(),
+                    "Shikshitha/Teacher/" + SharedPreferenceUtil.getTeacher(this).getSchoolId());
             if (!dir.exists()) {
                 dir.mkdirs();
             }

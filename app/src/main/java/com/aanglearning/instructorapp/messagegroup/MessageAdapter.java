@@ -284,7 +284,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         messageText.setText(message.getMessageBody());
 
         ImageView fullImage = (ImageView) dialog.findViewById(R.id.full_image);
-        File file = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/Images/" + message.getImageUrl());
+        File file = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/"+ schoolId + "/" + message.getImageUrl());
         if(file.exists()) {
             fullImage.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
         }

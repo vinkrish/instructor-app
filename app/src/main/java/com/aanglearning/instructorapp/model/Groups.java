@@ -3,11 +3,14 @@ package com.aanglearning.instructorapp.model;
 public class Groups {
     private long id;
     private String name;
+    private boolean school;
     private long sectionId;
     private boolean section;
     private long classId;
     private boolean clas;
     private long createdBy;
+    private String creatorName;
+    private String creatorRole;
     private String createdDate;
     private boolean active;
 
@@ -51,6 +54,22 @@ public class Groups {
         this.createdBy = createdBy;
     }
 
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
+    public String getCreatorRole() {
+        return creatorRole;
+    }
+
+    public void setCreatorRole(String creatorRole) {
+        this.creatorRole = creatorRole;
+    }
+
     public String getCreatedDate() {
         return createdDate;
     }
@@ -73,6 +92,14 @@ public class Groups {
 
     public void setClas(boolean clas) {
         this.clas = clas;
+    }
+
+    public boolean isSchool() {
+        return school;
+    }
+
+    public void setSchool(boolean school) {
+        this.school = school;
     }
 
     public boolean isActive() {

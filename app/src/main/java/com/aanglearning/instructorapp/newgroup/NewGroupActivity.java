@@ -20,10 +20,10 @@ import android.widget.Spinner;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.TeacherDao;
-import com.aanglearning.instructorapp.dashboard.DashboardActivity;
 import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Section;
+import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.util.EditTextWatcher;
 import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
@@ -90,7 +90,9 @@ public class NewGroupActivity extends AppCompatActivity implements NewGroupView,
                 groups.setSection(true);
                 groups.setSectionId(((Section) sectionSpinner.getSelectedItem()).getId());
             }
-            groups.setCreatedBy(TeacherDao.getTeacher().getId());
+            Teacher teacher = TeacherDao.getTeacher();
+            groups.setCreatedBy(teacher.getId());
+            groups.setCreatorName(teacher.getName());
             LocalDate localDate = new LocalDate();
             groups.setCreatedDate(localDate.toString());
             groups.setActive(true);
