@@ -93,6 +93,7 @@ public class NewGroupActivity extends AppCompatActivity implements NewGroupView,
             Teacher teacher = TeacherDao.getTeacher();
             groups.setCreatedBy(teacher.getId());
             groups.setCreatorName(teacher.getName());
+            groups.setCreatorRole("admin");
             LocalDate localDate = new LocalDate();
             groups.setCreatedDate(localDate.toString());
             groups.setActive(true);
