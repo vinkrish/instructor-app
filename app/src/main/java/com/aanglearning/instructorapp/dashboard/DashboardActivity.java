@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.attendance.AttendanceActivity;
+import com.aanglearning.instructorapp.calendar.CalendarActivity;
 import com.aanglearning.instructorapp.chathome.ChatsActivity;
 import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.dao.ServiceDao;
@@ -303,6 +304,9 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                         break;
                     case R.id.timetable_item:
                         startActivity(new Intent(DashboardActivity.this, TimetableActivity.class));
+                        break;
+                    case R.id.event_item:
+                        startActivity(new Intent(DashboardActivity.this, CalendarActivity.class));
                         break;
                     case R.id.chat_item:
                         startActivity(new Intent(DashboardActivity.this, ChatsActivity.class));

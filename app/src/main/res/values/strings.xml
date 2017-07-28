@@ -76,4 +76,8 @@
     <string name="title_activity_new_chat">New Chat</string>
     <string name="title_activity_chats">Chat</string>
     <string name="title_activity_timetable">Timetable</string>
+    <string name="title_activity_events">Events</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

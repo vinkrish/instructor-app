@@ -132,4 +132,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         }
         return true;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
 }

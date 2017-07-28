@@ -22,6 +22,11 @@
             android:icon="@drawable/ic_timetable"
             android:title="@string/title_activity_timetable" />
         <item
+            android:id="@+id/event_item"
+            android:checked="false"
+            android:icon="@drawable/ic_event"
+            android:title="@string/title_activity_events" />
+        <item
             android:id="@+id/chat_item"
             android:checked="false"
             android:icon="@drawable/ic_chat_bubble"

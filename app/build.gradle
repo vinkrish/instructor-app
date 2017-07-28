@@ -7,8 +7,8 @@ android {
         applicationId "com.aanglearning.instructorapp"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 5
-        versionName "1.4"
+        versionCode 6
+        versionName "0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         aaptOptions.setProperty("cruncherEnabled", false)
     }
@@ -45,8 +45,11 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'id.zelory:compressor:2.0.0'
+    compile 'com.github.sundeepk:compact-calendar-view:2.0.2.2'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }
+
+
 
 apply plugin: 'com.google.gms.google-services'
