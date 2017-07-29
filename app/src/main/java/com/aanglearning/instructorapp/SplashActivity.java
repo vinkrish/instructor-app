@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.dashboard.DashboardActivity;
 import com.aanglearning.instructorapp.login.LoginActivity;
 import com.aanglearning.instructorapp.util.AppGlobal;
@@ -18,7 +19,11 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         AppGlobal.setSqlDbHelper(getApplicationContext());
 
-        if (SharedPreferenceUtil.getTeacher(this).getAuthToken().equals("")) {
+        if (TeacherDao.getTeacher().getId() == 0) {
+            SharedPreferenceUtil.logout(this);
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        } else if (SharedPreferenceUtil.getTeacher(this).getAuthToken().equals("")) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         } else {

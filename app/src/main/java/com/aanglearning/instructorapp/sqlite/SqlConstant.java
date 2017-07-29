@@ -6,7 +6,7 @@ package com.aanglearning.instructorapp.sqlite;
 interface SqlConstant {
 
     String DATABASE_NAME = "teacher.db";
-    int DATABASE_VERSION = 2;
+    int DATABASE_VERSION = 3;
 
     String CREATE_ATTENDANCE = "CREATE TABLE attendance (" +
             "  Id INTEGER PRIMARY KEY," +
@@ -238,5 +238,47 @@ interface SqlConstant {
             " Role TEXT, " +
             " GroupId INTEGER, " +
             " IsActive TEXT" +
+            ")";
+
+    String CREATE_EVENT = "CREATE TABLE event (" +
+            " Id INTEGER, " +
+            " EventTitle TEXT, " +
+            " EventDescription TEXT, " +
+            " StartDate TEXT, " +
+            " EndDate TEXT, " +
+            " StartTime INTEGER, " +
+            " EndTime INTEGER, " +
+            " NoOfDays INTEGER, " +
+            " IsContinuousDays TEXT, " +
+            " IsFullDayEvent TEXT, " +
+            " IsRecurring TEXT, " +
+            " CreatedBy TEXT, " +
+            " CreatedDate TEXT" +
+            ")";
+
+    String CREATE_RECURRING_PATTERN = "CREATE TABLE event_recurring_pattern (" +
+            " Id INTEGER, " +
+            " EventId INTEGER, " +
+            " RecurringType TEXT, " +
+            " SeparationCount INTEGER, " +
+            " MaxNumOfOccurrences INTEGER, " +
+            " DayOfWeek INTEGER, " +
+            " WeekOfMonth TEXT, " +
+            " DayOfMonth TEXT" +
+            ")";
+
+    String CREATE_EVENT_EXCEPTION = "CREATE TABLE event_exception (" +
+            " Id INTEGER, " +
+            " EventId INTEGER, " +
+            " IsRescheduled TEXT, " +
+            " IsCancelled TEXT, " +
+            " CreatedBy TEXT, " +
+            " CreatedDate TEXT" +
+            ")";
+
+    String CREATE_EVENT_DATES = "CREATE TABLE event_dates (" +
+            " Id INTEGER, " +
+            " EventId INTEGER, " +
+            " EventDate TEXT" +
             ")";
 }
