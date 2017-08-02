@@ -4,6 +4,7 @@ import com.aanglearning.instructorapp.attendance.AttendanceSet;
 import com.aanglearning.instructorapp.model.Attendance;
 import com.aanglearning.instructorapp.model.Chat;
 import com.aanglearning.instructorapp.model.Clas;
+import com.aanglearning.instructorapp.model.Evnt;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Homework;
 import com.aanglearning.instructorapp.model.Message;
@@ -155,4 +156,9 @@ public interface TeacherApi {
 
     @GET("app/timetable/teacher/{teacherId}")
     Call<List<TeacherTimetable>> getTimetable(@Path("teacherId") long teacherId);
+
+    //Event API
+
+    @GET("event/school/{schoolId}")
+    Call<List<Evnt>> getEvents(@Path("schoolId") long schoolId);
 }

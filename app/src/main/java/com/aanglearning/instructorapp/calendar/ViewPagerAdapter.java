@@ -5,20 +5,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 class ViewPagerAdapter extends FragmentStatePagerAdapter {
-    private CharSequence titles[];
-    private int numbOfTabs;
+    private CharSequence titles[]= {"Calendar","All Events"};
+    private Evnts evnts;
 
-    ViewPagerAdapter(FragmentManager fm, CharSequence titles[], int mNumbOfTabs) {
+    ViewPagerAdapter(FragmentManager fm, Evnts evnts) {
         super(fm);
-        this.titles = titles;
-        this.numbOfTabs = mNumbOfTabs;
+        this.evnts = evnts;
     }
 
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            CompactCalendarFragment calendarFragment = new CompactCalendarFragment();
-            return calendarFragment;
+            return CompactCalendarFragment.newInstance(evnts);
         } else {
             EventsFragment eventsFragment = new EventsFragment();
             return eventsFragment;
@@ -32,6 +30,6 @@ class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return numbOfTabs;
+        return 2;
     }
 }
