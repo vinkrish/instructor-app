@@ -9,49 +9,41 @@
     tools:context="com.aanglearning.instructorapp.chathome.ChatsActivity"
     tools:showIn="@layout/activity_chats">
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/myScrollingContent"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_tiny" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small" />
+        <LinearLayout
+            android:id="@+id/no_chats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="invisible">
 
-            <LinearLayout
-                android:id="@+id/no_chats"
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_storage" />
+
+            <TextView
+                android:id="@+id/noTasksMain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="vertical"
-                android:visibility="invisible">
+                android:layout_gravity="center"
+                android:text="@string/no_chats"
+                android:textColor="@color/default_tv_color" />
 
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/ic_storage" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/noTasksMain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/no_chats"
-                    android:textColor="@color/default_tv_color" />
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-    </android.support.v4.widget.NestedScrollView>
+    </RelativeLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>

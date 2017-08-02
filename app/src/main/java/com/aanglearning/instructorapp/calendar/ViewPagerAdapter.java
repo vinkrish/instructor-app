@@ -18,8 +18,7 @@ class ViewPagerAdapter extends FragmentStatePagerAdapter {
         if (position == 0) {
             return CompactCalendarFragment.newInstance(evnts);
         } else {
-            EventsFragment eventsFragment = new EventsFragment();
-            return eventsFragment;
+            return EventsFragment.newInstance(evnts);
         }
     }
 

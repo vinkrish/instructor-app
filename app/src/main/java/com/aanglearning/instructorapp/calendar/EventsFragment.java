@@ -2,32 +2,34 @@ package com.aanglearning.instructorapp.calendar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.aanglearning.instructorapp.R;
+import com.aanglearning.instructorapp.util.DividerItemDecoration;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class EventsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    @BindView(R.id.no_events)
+    LinearLayout noEvents;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Evnts evnts;
 
-
-    public EventsFragment() {
-        // Required empty public constructor
-    }
-
-    public static EventsFragment newInstance(String param1, String param2) {
+    public static EventsFragment newInstance(Evnts evnts) {
         EventsFragment fragment = new EventsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        if(evnts != null){
+            args.putSerializable("evnts", evnts);
+        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -36,16 +38,30 @@ public class EventsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            Bundle args = getArguments();
+            evnts = (Evnts) args.getSerializable("evnts");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_events, container, false);
+        View view = inflater.inflate(R.layout.fragment_events, container, false);
+        ButterKnife.bind(this, view);
+
+        if(evnts.getEvents().size() == 0) {
+            noEvents.setVisibility(View.VISIBLE);
+        } else {
+            noEvents.setVisibility(View.INVISIBLE);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
+
+            EventsAdapter adapter = new EventsAdapter(getActivity(), evnts.getEvents());
+            recyclerView.setAdapter(adapter);
+        }
+
+        return view;
     }
 
 }

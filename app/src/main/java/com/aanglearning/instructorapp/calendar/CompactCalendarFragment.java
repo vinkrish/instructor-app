@@ -8,6 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +23,14 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.aanglearning.instructorapp.R;
+import com.aanglearning.instructorapp.model.Chat;
 import com.aanglearning.instructorapp.model.Evnt;
 import com.aanglearning.instructorapp.model.TeacherTimetable;
+import com.aanglearning.instructorapp.util.DividerItemDecoration;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,17 +45,25 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class CompactCalendarFragment extends Fragment {
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
 
     private static final String TAG = "CompactCalendarFragment";
     private Calendar currentCalender = Calendar.getInstance(Locale.getDefault());
-    private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd-M-yyyy hh:mm:ss a", Locale.getDefault());
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
     private boolean shouldShow = false;
     private CompactCalendarView compactCalendarView;
     private ActionBar toolbar;
 
     private Evnts evnts;
+    private EventsAdapter adapter;
+
+    LinkedHashMap<String, List<Evnt>> evntsList = new LinkedHashMap<>();
 
     public static CompactCalendarFragment newInstance(Evnts evnts) {
         CompactCalendarFragment fragment = new CompactCalendarFragment();
@@ -72,15 +86,19 @@ public class CompactCalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.calendar_fragment,container,false);
 
-        final List<String> mutableBookings = new ArrayList<>();
+        ButterKnife.bind(this, v);
 
-        final ListView bookingsListView = (ListView) v.findViewById(R.id.bookings_listview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
+
+        adapter = new EventsAdapter(getActivity(), new ArrayList<Evnt>(0));
+        recyclerView.setAdapter(adapter);
+
         final ImageView showPreviousMonthBut = (ImageView) v.findViewById(R.id.prev_button);
         final ImageView showNextMonthBut = (ImageView) v.findViewById(R.id.next_button);
         final Button showCalendarWithAnimationBut = (Button) v.findViewById(R.id.show_with_animation_calendar);
 
-        final ArrayAdapter adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, mutableBookings);
-        bookingsListView.setAdapter(adapter);
         compactCalendarView = (CompactCalendarView) v.findViewById(R.id.compactcalendar_view);
 
         // below allows you to configure color for the current day in the month
@@ -88,10 +106,12 @@ public class CompactCalendarFragment extends Fragment {
         // below allows you to configure colors for the current day the user has selected
         // compactCalendarView.setCurrentSelectedDayBackgroundColor(getResources().getColor(R.color.dark_red));
         compactCalendarView.setUseThreeLetterAbbreviation(false);
-        compactCalendarView.shouldDrawIndicatorsBelowSelectedDays(true);
         compactCalendarView.setFirstDayOfWeek(Calendar.MONDAY);
 
         loadEvents();
+
+        adapter.setDataSet(evntsList.get(dateFormat.format(new Date())));
+
         compactCalendarView.invalidate();
 
         // below line will display Sunday as the first day of the week
@@ -115,22 +135,13 @@ public class CompactCalendarFragment extends Fragment {
             @Override
             public void onDayClick(Date dateClicked) {
                 toolbar.setTitle(dateFormatForMonth.format(dateClicked));
-                List<Event> bookingsFromMap = compactCalendarView.getEvents(dateClicked);
-                Log.d(TAG, "inside onclick " + dateFormatForDisplaying.format(dateClicked));
-                if (bookingsFromMap != null) {
-                    Log.d(TAG, bookingsFromMap.toString());
-                    mutableBookings.clear();
-                    for (Event booking : bookingsFromMap) {
-                        mutableBookings.add((String) booking.getData());
-                    }
-                    adapter.notifyDataSetChanged();
-                }
-
+                adapter.setDataSet(evntsList.get(dateFormat.format(dateClicked)));
             }
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 toolbar.setTitle(dateFormatForMonth.format(firstDayOfNewMonth));
+                adapter.setDataSet(evntsList.get(dateFormat.format(firstDayOfNewMonth)));
             }
         });
 
@@ -138,6 +149,7 @@ public class CompactCalendarFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 compactCalendarView.showPreviousMonth();
+                adapter.setDataSet(evntsList.get(dateFormat.format(compactCalendarView.getFirstDayOfCurrentMonth())));
             }
         });
 
@@ -145,6 +157,7 @@ public class CompactCalendarFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 compactCalendarView.showNextMonth();
+                adapter.setDataSet(evntsList.get(dateFormat.format(compactCalendarView.getFirstDayOfCurrentMonth())));
             }
         });
 
@@ -162,7 +175,7 @@ public class CompactCalendarFragment extends Fragment {
         });
 
         // uncomment below to show indicators above small indicator events
-        // compactCalendarView.shouldDrawIndicatorsBelowSelectedDays(true);
+         compactCalendarView.shouldDrawIndicatorsBelowSelectedDays(true);
 
         // uncomment below to open onCreate
         //openCalendarOnCreate(v);
@@ -238,7 +251,7 @@ public class CompactCalendarFragment extends Fragment {
         currentCalender.set(Calendar.MONTH, Calendar.AUGUST);
         List<String> dates = new ArrayList<>();
         for (Event e : compactCalendarView.getEventsForMonth(new Date())) {
-            dates.add(dateFormatForDisplaying.format(e.getTimeInMillis()));
+            //dates.add(dateFormatForDisplaying.format(e.getTimeInMillis()));
         }
         Log.d(TAG, "Events for Aug with simple date formatter: " + dates);
         Log.d(TAG, "Events for Aug month using default local and timezone: " + compactCalendarView.getEventsForMonth(currentCalender.getTime()));
@@ -250,8 +263,9 @@ public class CompactCalendarFragment extends Fragment {
         for(Evnt e: evntss) {
             dates.add(e.getStartDate());
         }
-        LinkedHashMap<String, List<Evnt>> evntsList = new LinkedHashMap<>();
+
         for(String date: dates) {
+            Log.d("date", date);
             List<Evnt> evntsLis = new ArrayList<>();
             for(Evnt e: evntss) {
                 if(e.getStartDate().equals(date)) {
