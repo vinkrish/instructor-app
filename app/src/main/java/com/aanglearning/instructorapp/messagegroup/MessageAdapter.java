@@ -19,8 +19,6 @@ import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.model.Message;
-import com.aanglearning.instructorapp.util.PermissionUtil;
-import com.aanglearning.instructorapp.util.TouchImageView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.squareup.picasso.Callback;
@@ -45,6 +43,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     private Context mContext;
     private List<Message> messages;
     private long schoolId;
+    private final OnItemClickListener listener;
 
     private static final int ITEM_TYPE_TEXT = 0;
     private static final int ITEM_TYPE_IMAGE = 1;
@@ -56,10 +55,15 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             .endConfig()
             .roundRect(10);
 
-    MessageAdapter(Context context, List<Message> messages, long schoolId) {
+    MessageAdapter(Context context, List<Message> messages, long schoolId, OnItemClickListener listener) {
         this.mContext = context;
         this.messages = messages;
         this.schoolId = schoolId;
+        this.listener = listener;
+    }
+
+    interface OnItemClickListener {
+        void onItemClick(Message message);
     }
 
     List<Message> getDataSet() {
@@ -107,9 +111,9 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         final int itemType = getItemViewType(position);
 
         if (itemType == ITEM_TYPE_TEXT) {
-            ((TextHolder)holder).bind(messages.get(position));
+            ((TextHolder) holder).bind(messages.get(position));
         } else if (itemType == ITEM_TYPE_IMAGE) {
-            ((ImageHolder)holder).bind(messages.get(position));
+            ((ImageHolder) holder).bind(messages.get(position));
         }
     }
 
@@ -134,10 +138,14 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     }
 
     class TextHolder extends ViewHolder {
-        @BindView(R.id.image_view) ImageView senderImage;
-        @BindView(R.id.sender_name) TextView senderName;
-        @BindView(R.id.created_date) TextView createdDate;
-        @BindView(R.id.message) TextView messageTV;
+        @BindView(R.id.image_view)
+        ImageView senderImage;
+        @BindView(R.id.sender_name)
+        TextView senderName;
+        @BindView(R.id.created_date)
+        TextView createdDate;
+        @BindView(R.id.message)
+        TextView messageTV;
 
         TextHolder(View view) {
             super(view);
@@ -146,16 +154,18 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
         void bind(final Message message) {
             int color = generator.getColor(message.getSenderName());
-            TextDrawable drawable = builder.build(message.getSenderName().substring(0,1), color);
+            TextDrawable drawable = builder.build(message.getSenderName().substring(0, 1), color);
             senderImage.setImageDrawable(drawable);
             senderName.setText(message.getSenderName());
             DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
             createdDate.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
             messageTV.setText(message.getMessageBody());
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    displayTextDialog(message);
+                    //displayTextDialog(message);
+                    listener.onItemClick(message);
                 }
             });
         }
@@ -163,11 +173,16 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     }
 
     class ImageHolder extends ViewHolder {
-        @BindView(R.id.image_view) ImageView senderImage;
-        @BindView(R.id.sender_name) TextView senderName;
-        @BindView(R.id.created_date) TextView createdDate;
-        @BindView(R.id.shared_image) ImageView sharedImage;
-        @BindView(R.id.message) TextView messageTV;
+        @BindView(R.id.image_view)
+        ImageView senderImage;
+        @BindView(R.id.sender_name)
+        TextView senderName;
+        @BindView(R.id.created_date)
+        TextView createdDate;
+        @BindView(R.id.shared_image)
+        ImageView sharedImage;
+        @BindView(R.id.message)
+        TextView messageTV;
 
         ImageHolder(View view) {
             super(view);
@@ -176,7 +191,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
         void bind(final Message message) {
             int color = generator.getColor(message.getSenderName());
-            TextDrawable drawable = builder.build(message.getSenderName().substring(0,1), color);
+            TextDrawable drawable = builder.build(message.getSenderName().substring(0, 1), color);
             senderImage.setImageDrawable(drawable);
             senderName.setText(message.getSenderName());
             DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
@@ -186,7 +201,8 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    displayImageDialog(message);
+                    //displayImageDialog(message);
+                    listener.onItemClick(message);
                 }
             });
 
@@ -196,7 +212,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
                 dir.mkdirs();
             }
             final File file = new File(dir, message.getImageUrl());
-            if(file.exists()) {
+            if (file.exists()) {
                 /*BitmapFactory.Options bitoption = new BitmapFactory.Options();
                 bitoption.inSampleSize = 4;
                 sharedImage.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath(), bitoption));*/
@@ -208,7 +224,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
                         .into(sharedImage, new Callback() {
                             @Override
                             public void onSuccess() {
-                                Bitmap bitmap = ((BitmapDrawable)sharedImage.getDrawable()).getBitmap();
+                                Bitmap bitmap = ((BitmapDrawable) sharedImage.getDrawable()).getBitmap();
                                 try {
                                     FileOutputStream fos = new FileOutputStream(file);
                                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
@@ -284,8 +300,8 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         messageText.setText(message.getMessageBody());
 
         ImageView fullImage = (ImageView) dialog.findViewById(R.id.full_image);
-        File file = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/"+ schoolId + "/" + message.getImageUrl());
-        if(file.exists()) {
+        File file = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/" + schoolId + "/" + message.getImageUrl());
+        if (file.exists()) {
             fullImage.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
         }
 

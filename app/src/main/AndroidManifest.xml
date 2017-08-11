@@ -156,12 +156,22 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".calendar.CalendarActivity"
+        <activity
+            android:name=".calendar.CalendarActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".dashboard.DashboardActivity" />
+        </activity>
+        <activity
+            android:name=".messagegroup.MessageViewActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/BlackActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".messagegroup.MessageActivity" />
         </activity>
     </application>
 
