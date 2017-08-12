@@ -7,8 +7,8 @@ android {
         applicationId "com.aanglearning.instructorapp"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 8
-        versionName "0.8"
+        versionCode 9
+        versionName "0.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         aaptOptions.setProperty("cruncherEnabled", false)
     }
@@ -46,9 +46,9 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'id.zelory:compressor:2.0.0'
     compile 'com.github.sundeepk:compact-calendar-view:2.0.2.2'
+    compile 'com.github.chrisbanes:PhotoView:2.0.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }
-
 
 apply plugin: 'com.google.gms.google-services'

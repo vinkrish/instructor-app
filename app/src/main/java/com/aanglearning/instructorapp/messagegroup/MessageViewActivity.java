@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.model.Message;
 import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
+import com.aanglearning.instructorapp.util.TouchImageView;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -25,7 +27,7 @@ public class MessageViewActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.shared_image)
-    ImageView sharedImage;
+    PhotoView sharedImage;
     @BindView(R.id.message)
     TextView messageTV;
 
