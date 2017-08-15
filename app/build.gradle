@@ -9,6 +9,7 @@ android {
         targetSdkVersion 25
         versionCode 10
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         aaptOptions.setProperty("cruncherEnabled", false)
     }

@@ -182,7 +182,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
 
                             @Override
                             public void onError() {
-                                imageView.setImageResource(R.drawable.ic_account);
+                                imageView.setImageResource(R.drawable.ic_account_black);
                             }
                         });
             }
