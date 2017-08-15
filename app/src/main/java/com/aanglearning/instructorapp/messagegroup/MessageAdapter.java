@@ -19,8 +19,12 @@ import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.model.Message;
+import com.aanglearning.instructorapp.util.YoutubeDeveloperKey;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubeThumbnailLoader;
+import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -30,7 +34,11 @@ import org.joda.time.format.DateTimeFormat;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,9 +52,14 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     private List<Message> messages;
     private long schoolId;
     private final OnItemClickListener listener;
+    private final ThumbnailListener thumbnailListener;
 
     private static final int ITEM_TYPE_TEXT = 0;
     private static final int ITEM_TYPE_IMAGE = 1;
+    private static final int ITEM_TYPE_VIDEO = 2;
+    private static final int ITEM_TYPE_BOTH = 3;
+
+    private final Map<YouTubeThumbnailView, YouTubeThumbnailLoader> thumbnailViewToLoaderMap;
 
     ColorGenerator generator = ColorGenerator.MATERIAL;
     TextDrawable.IBuilder builder = TextDrawable.builder()
@@ -60,6 +73,14 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         this.messages = messages;
         this.schoolId = schoolId;
         this.listener = listener;
+        thumbnailListener = new ThumbnailListener();
+        thumbnailViewToLoaderMap = new HashMap<>();
+    }
+
+    void releaseLoaders() {
+        for (YouTubeThumbnailLoader loader : thumbnailViewToLoaderMap.values()) {
+            loader.release();
+        }
     }
 
     interface OnItemClickListener {
@@ -100,9 +121,15 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         if (viewType == ITEM_TYPE_TEXT) {
             View textView = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_text_item, parent, false);
             return new TextHolder(textView);
-        } else {
+        } else if (viewType == ITEM_TYPE_IMAGE){
             View imgView = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_image_item, parent, false);
             return new ImageHolder(imgView);
+        } else if (viewType == ITEM_TYPE_VIDEO){
+            View imgView = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_video_item, parent, false);
+            return new VideoHolder(imgView);
+        } else {
+            View imgView = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_video_image_item, parent, false);
+            return new VideoImageHolder(imgView);
         }
     }
 
@@ -114,6 +141,10 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             ((TextHolder) holder).bind(messages.get(position));
         } else if (itemType == ITEM_TYPE_IMAGE) {
             ((ImageHolder) holder).bind(messages.get(position));
+        } else if (itemType == ITEM_TYPE_VIDEO) {
+            ((VideoHolder) holder).bind(messages.get(position));
+        } else if (itemType == ITEM_TYPE_BOTH) {
+            ((VideoImageHolder) holder).bind(messages.get(position));
         }
     }
 
@@ -121,8 +152,12 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     public int getItemViewType(int position) {
         if (messages.get(position).getMessageType().equals("text")) {
             return ITEM_TYPE_TEXT;
-        } else {
+        } else if (messages.get(position).getMessageType().equals("image")){
             return ITEM_TYPE_IMAGE;
+        } else if (messages.get(position).getMessageType().equals("video")){
+            return ITEM_TYPE_VIDEO;
+        } else {
+            return ITEM_TYPE_BOTH;
         }
     }
 
@@ -164,7 +199,6 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //displayTextDialog(message);
                     listener.onItemClick(message);
                 }
             });
@@ -242,6 +276,172 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             }
         }
 
+    }
+
+    class VideoHolder extends ViewHolder {
+        @BindView(R.id.image_view)
+        ImageView senderImage;
+        @BindView(R.id.sender_name)
+        TextView senderName;
+        @BindView(R.id.created_date)
+        TextView createdDate;
+        @BindView(R.id.message)
+        TextView messageTV;
+        @BindView(R.id.thumbnail)
+        YouTubeThumbnailView thumbnail;
+
+        VideoHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
+        void bind(final Message message) {
+            String videoId = "";
+            int color = generator.getColor(message.getSenderName());
+            TextDrawable drawable = builder.build(message.getSenderName().substring(0, 1), color);
+            senderImage.setImageDrawable(drawable);
+            senderName.setText(message.getSenderName());
+            DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
+            createdDate.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
+            messageTV.setText(message.getMessageBody());
+            if(message.getVideoUrl() != null && !message.getVideoUrl().equals("")) {
+                String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
+
+                Pattern compiledPattern = Pattern.compile(pattern);
+                Matcher matcher = compiledPattern.matcher(message.getVideoUrl());
+
+                if(matcher.find()){
+                    videoId = matcher.group();
+                }
+
+                thumbnail.setTag(videoId);
+                thumbnail.initialize(YoutubeDeveloperKey.DEVELOPER_KEY, thumbnailListener);
+            }
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(message);
+                }
+            });
+        }
+
+    }
+
+    class VideoImageHolder extends ViewHolder {
+        @BindView(R.id.image_view)
+        ImageView senderImage;
+        @BindView(R.id.sender_name)
+        TextView senderName;
+        @BindView(R.id.created_date)
+        TextView createdDate;
+        @BindView(R.id.thumbnail)
+        YouTubeThumbnailView thumbnail;
+        @BindView(R.id.shared_image)
+        ImageView sharedImage;
+        @BindView(R.id.message)
+        TextView messageTV;
+
+        VideoImageHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
+        void bind(final Message message) {
+            String videoId = "";
+            int color = generator.getColor(message.getSenderName());
+            TextDrawable drawable = builder.build(message.getSenderName().substring(0, 1), color);
+            senderImage.setImageDrawable(drawable);
+            senderName.setText(message.getSenderName());
+            DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
+            createdDate.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
+            messageTV.setText(message.getMessageBody());
+
+            if(message.getVideoUrl() != null && !message.getVideoUrl().equals("")) {
+                String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
+
+                Pattern compiledPattern = Pattern.compile(pattern);
+                Matcher matcher = compiledPattern.matcher(message.getVideoUrl());
+
+                if(matcher.find()){
+                    videoId = matcher.group();
+                }
+
+                thumbnail.setTag(videoId);
+                thumbnail.initialize(YoutubeDeveloperKey.DEVELOPER_KEY, thumbnailListener);
+            }
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //displayImageDialog(message);
+                    listener.onItemClick(message);
+                }
+            });
+
+            //sharedImage.setImageResource(R.drawable.books);
+            File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/" + schoolId);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            final File file = new File(dir, message.getImageUrl());
+            if (file.exists()) {
+                sharedImage.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+            } else {
+                Picasso.with(mContext)
+                        .load("https://s3.ap-south-1.amazonaws.com/shikshitha-images/" + schoolId + "/" + message.getImageUrl())
+                        .placeholder(R.drawable.splash_image)
+                        .into(sharedImage, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                Bitmap bitmap = ((BitmapDrawable) sharedImage.getDrawable()).getBitmap();
+                                try {
+                                    FileOutputStream fos = new FileOutputStream(file);
+                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                                    fos.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onError() {
+
+                            }
+                        });
+            }
+        }
+
+    }
+
+    private final class ThumbnailListener implements
+            YouTubeThumbnailView.OnInitializedListener,
+            YouTubeThumbnailLoader.OnThumbnailLoadedListener {
+
+        @Override
+        public void onInitializationSuccess(
+                YouTubeThumbnailView view, YouTubeThumbnailLoader loader) {
+            loader.setOnThumbnailLoadedListener(this);
+            thumbnailViewToLoaderMap.put(view, loader);
+            view.setImageResource(R.drawable.loading_thumbnail);
+            String videoId = (String) view.getTag();
+            loader.setVideo(videoId);
+        }
+
+        @Override
+        public void onInitializationFailure(
+                YouTubeThumbnailView view, YouTubeInitializationResult loader) {
+            view.setImageResource(R.drawable.no_thumbnail);
+        }
+
+        @Override
+        public void onThumbnailLoaded(YouTubeThumbnailView view, String videoId) {
+        }
+
+        @Override
+        public void onThumbnailError(YouTubeThumbnailView view, YouTubeThumbnailLoader.ErrorReason errorReason) {
+            view.setImageResource(R.drawable.no_thumbnail);
+        }
     }
 
     private Dialog displayTextDialog(final Message message) {
