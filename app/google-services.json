@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "768751623257",
+    "firebase_url": "https://shikshitha-teacher.firebaseio.com",
+    "project_id": "shikshitha-teacher",
+    "storage_bucket": "shikshitha-teacher.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768751623257:android:21bb6c84d83ac077",
+        "android_client_info": {
+          "package_name": "com.aanglearning.instructorapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768751623257-t768er2934c9uor4bm5h60ofjmg58njb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6icYtMW_awGiaiGpNyxgJ3RL7pwSvtbk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
