@@ -1,6 +1,8 @@
 package com.aanglearning.instructorapp.model;
 
-public class Groups {
+import java.io.Serializable;
+
+public class Groups implements Serializable {
     private long id;
     private String name;
     private boolean school;

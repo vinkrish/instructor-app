@@ -80,9 +80,7 @@ public class UserGroupActivity extends AppCompatActivity implements
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            group = new Groups();
-            group.setId(extras.getLong("groupId"));
-            group.setName(extras.getString("groupName"));
+            group = (Groups) extras.getSerializable("group");
             groupName.setText(group.getName());
         }
 

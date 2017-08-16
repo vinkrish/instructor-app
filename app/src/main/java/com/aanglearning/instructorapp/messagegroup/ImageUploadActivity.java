@@ -3,6 +3,7 @@ package com.aanglearning.instructorapp.messagegroup;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -22,10 +23,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aanglearning.instructorapp.R;
@@ -49,11 +52,18 @@ import id.zelory.compressor.Compressor;
 
 public class ImageUploadActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
-    @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.image_view) ImageView choseImage;
-    @BindView(R.id.progress_layout) FrameLayout progressLayout;
-    @BindView(R.id.progress_bar) ProgressBar progressBar;
-    @BindView(R.id.new_msg) EditText newMsg;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.image_view)
+    ImageView choseImage;
+    @BindView(R.id.progress_layout)
+    FrameLayout progressLayout;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+    @BindView(R.id.youtube_url)
+    TextView youtubeURL;
+    @BindView(R.id.new_msg)
+    EditText newMsg;
 
     private static final String TAG = "ImageUploadActivity";
     private static final int WRITE_STORAGE_PERMISSION = 666;
@@ -81,7 +91,7 @@ public class ImageUploadActivity extends AppCompatActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             //Log.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
             //resume tasks needing this permission
             imagePicker();
@@ -94,12 +104,36 @@ public class ImageUploadActivity extends AppCompatActivity
         Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
     }
 
-    public void newImageSendListener (View view) {
+    public void pasteYoutubeUrl(View view) {
+        CharSequence pasteString = "";
+        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboard.getPrimaryClip() != null) {
+            android.content.ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
+            pasteString = item.getText();
+        }
+
+        if (pasteString != null) {
+            if (URLUtil.isValidUrl(pasteString.toString())) {
+                youtubeURL.setVisibility(View.VISIBLE);
+                youtubeURL.setText(pasteString);
+            } else {
+                youtubeURL.setText("");
+                youtubeURL.setVisibility(View.GONE);
+                showSnackbar("URL is not valid");
+            }
+        } else {
+            youtubeURL.setText("");
+            youtubeURL.setVisibility(View.GONE);
+            showSnackbar("copy YouTube url before pasting");
+        }
+    }
+
+    public void newImageSendListener(View view) {
         if (imagePath == null) {
             showSnackbar("Please choose image");
             return;
         }
-        if (NetworkUtil.isNetworkAvailable(this)){
+        if (NetworkUtil.isNetworkAvailable(this)) {
             progressLayout.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.VISIBLE);
             //choseImage.setColorFilter(ContextCompat.getColor(this, R.color.default_white), android.graphics.PorterDuff.Mode.MULTIPLY);
@@ -107,8 +141,8 @@ public class ImageUploadActivity extends AppCompatActivity
         } else showSnackbar("You are offline,check your internet");
     }
 
-    public void chooseImage (View view) {
-        if(PermissionUtil.isStoragePermissionGranted(this, WRITE_STORAGE_PERMISSION)) {
+    public void chooseImage(View view) {
+        if (PermissionUtil.isStoragePermissionGranted(this, WRITE_STORAGE_PERMISSION)) {
             imagePicker();
         }
     }
@@ -160,7 +194,7 @@ public class ImageUploadActivity extends AppCompatActivity
         File compressedFile = saveBitmapToFile();
         TransferObserver observer = transferUtility.upload(Constants.BUCKET_NAME, compressedFile.getName(),
                 compressedFile);
-         observer.setTransferListener(new UploadListener());
+        observer.setTransferListener(new UploadListener());
     }
 
     /*
@@ -194,7 +228,7 @@ public class ImageUploadActivity extends AppCompatActivity
                     uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
                 }
                 selection = "_id=?";
-                selectionArgs = new String[] {
+                selectionArgs = new String[]{
                         split[1]
                 };
             }
@@ -266,13 +300,20 @@ public class ImageUploadActivity extends AppCompatActivity
         @Override
         public void onStateChanged(int id, TransferState newState) {
             Log.d(TAG, "onStateChanged: " + id + ", " + newState);
-            if(newState.toString().equals("COMPLETED")) {
+            if (newState.toString().equals("COMPLETED")) {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("text", newMsg.getText().toString().trim());
+                if(youtubeURL.getText().equals("")) {
+                    resultIntent.putExtra("type", "image");
+                    resultIntent.putExtra("url", "");
+                } else {
+                    resultIntent.putExtra("type", "both");
+                    resultIntent.putExtra("url", youtubeURL.getText().toString());
+                }
                 resultIntent.putExtra("imgName", imageName);
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
-            } else if(newState.toString().equals("FAILED")) {
+            } else if (newState.toString().equals("FAILED")) {
                 Intent resultIntent = new Intent();
                 setResult(Activity.RESULT_CANCELED, resultIntent);
                 finish();
@@ -280,11 +321,11 @@ public class ImageUploadActivity extends AppCompatActivity
         }
     }
 
-    public File saveBitmapToFile(){
+    public File saveBitmapToFile() {
         try {
-            Bitmap selectedBitmap = ((BitmapDrawable)choseImage.getDrawable()).getBitmap();
+            Bitmap selectedBitmap = ((BitmapDrawable) choseImage.getDrawable()).getBitmap();
 
-            imageName = System.currentTimeMillis() +".jpg";
+            imageName = System.currentTimeMillis() + ".jpg";
 
             // here i override the original image file
             File dir = new File(Environment.getExternalStorageDirectory().getPath(),

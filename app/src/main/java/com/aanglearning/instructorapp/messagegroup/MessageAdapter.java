@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.model.Message;
+import com.aanglearning.instructorapp.util.YouTubeHelper;
 import com.aanglearning.instructorapp.util.YoutubeDeveloperKey;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -230,7 +231,12 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             senderName.setText(message.getSenderName());
             DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
             createdDate.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
-            messageTV.setText(message.getMessageBody());
+
+            if(message.getMessageBody().equals("")) {
+                messageTV.setVisibility(View.GONE);
+            } else {
+                messageTV.setText(message.getMessageBody());
+            }
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -303,16 +309,16 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             senderName.setText(message.getSenderName());
             DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
             createdDate.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
-            messageTV.setText(message.getMessageBody());
+
+            if(message.getMessageBody().equals("")) {
+                messageTV.setVisibility(View.GONE);
+            } else {
+                messageTV.setText(message.getMessageBody());
+            }
+
             if(message.getVideoUrl() != null && !message.getVideoUrl().equals("")) {
-                String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
-
-                Pattern compiledPattern = Pattern.compile(pattern);
-                Matcher matcher = compiledPattern.matcher(message.getVideoUrl());
-
-                if(matcher.find()){
-                    videoId = matcher.group();
-                }
+                YouTubeHelper youTubeHelper = new YouTubeHelper();
+                videoId = youTubeHelper.extractVideoIdFromUrl(message.getVideoUrl());
 
                 thumbnail.setTag(videoId);
                 thumbnail.initialize(YoutubeDeveloperKey.DEVELOPER_KEY, thumbnailListener);
@@ -355,17 +361,16 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             senderName.setText(message.getSenderName());
             DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
             createdDate.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
-            messageTV.setText(message.getMessageBody());
+
+            if(message.getMessageBody().equals("")) {
+                messageTV.setVisibility(View.GONE);
+            } else {
+                messageTV.setText(message.getMessageBody());
+            }
 
             if(message.getVideoUrl() != null && !message.getVideoUrl().equals("")) {
-                String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
-
-                Pattern compiledPattern = Pattern.compile(pattern);
-                Matcher matcher = compiledPattern.matcher(message.getVideoUrl());
-
-                if(matcher.find()){
-                    videoId = matcher.group();
-                }
+                YouTubeHelper youTubeHelper = new YouTubeHelper();
+                videoId = youTubeHelper.extractVideoIdFromUrl(message.getVideoUrl());
 
                 thumbnail.setTag(videoId);
                 thumbnail.initialize(YoutubeDeveloperKey.DEVELOPER_KEY, thumbnailListener);
