@@ -264,6 +264,7 @@ import butterknife.ButterKnife;
                 message.setGroupId(0);
                 message.setMessageType(messageType);
                 message.setImageUrl(imgUrl);
+                message.setVideoUrl("");
                 message.setMessageBody(newMsg.getText().toString());
                 message.setCreatedAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(new Date()));
                 presenter.saveMessage(message);
