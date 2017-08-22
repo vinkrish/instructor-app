@@ -13,8 +13,12 @@ interface GroupInteractor {
     interface OnFinishedListener {
         void onError(String message);
 
+        void onGroupReceived(Groups group);
+
         void onGroupsReceived(List<Groups> groupsList);
     }
+
+    void getGroup(long groupId, GroupInteractor.OnFinishedListener listener);
 
     void getGroups(long userId, GroupInteractor.OnFinishedListener listener);
 

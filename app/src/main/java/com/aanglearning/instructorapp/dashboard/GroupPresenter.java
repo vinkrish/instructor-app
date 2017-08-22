@@ -7,6 +7,8 @@ import com.aanglearning.instructorapp.model.Authorization;
  */
 
 interface GroupPresenter {
+    void getGroup(long groupId);
+
     void getGroups(long teacherId);
 
     void updateFcmToken(Authorization authorization);

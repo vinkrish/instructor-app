@@ -50,6 +50,30 @@ public class GroupDao {
         return 1;
     }
 
+    public static Groups getGroup(long groupId) {
+        Groups group = new Groups();
+        SQLiteDatabase sqliteDatabase = AppGlobal.getSqlDbHelper().getReadableDatabase();
+        Cursor c = sqliteDatabase.rawQuery("select * from groups where Id = " + groupId, null);
+        c.moveToFirst();
+        while (!c.isAfterLast()) {
+            group.setId(c.getLong(c.getColumnIndex("Id")));
+            group.setName(c.getString(c.getColumnIndex("Name")));
+            group.setSchool(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsSchool"))));
+            group.setSectionId(c.getLong(c.getColumnIndex("SectionId")));
+            group.setSection(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsSection"))));
+            group.setClassId(c.getLong(c.getColumnIndex("ClassId")));
+            group.setClas(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsClass"))));
+            group.setCreatedBy(c.getLong(c.getColumnIndex("CreatedBy")));
+            group.setCreatorName(c.getString(c.getColumnIndex("CreatorName")));
+            group.setCreatorRole(c.getString(c.getColumnIndex("CreatorRole")));
+            group.setCreatedDate(c.getString(c.getColumnIndex("CreatedDate")));
+            group.setActive(Boolean.parseBoolean(c.getString(c.getColumnIndex("IsActive"))));
+            c.moveToNext();
+        }
+        c.close();
+        return group;
+    }
+
     public static List<Groups> getGroups(long teacherId) {
         List<Groups> groups = new ArrayList<>();
         SQLiteDatabase sqliteDatabase = AppGlobal.getSqlDbHelper().getReadableDatabase();

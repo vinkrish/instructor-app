@@ -21,6 +21,28 @@ import retrofit2.Response;
 
 class GroupInteractorImpl implements GroupInteractor {
     @Override
+    public void getGroup(long groupId, final OnFinishedListener listener) {
+        TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
+
+        Call<Groups> classList = api.getGroup(groupId);
+        classList.enqueue(new Callback<Groups>() {
+            @Override
+            public void onResponse(Call<Groups> call, Response<Groups> response) {
+                if(response.isSuccessful()) {
+                    listener.onGroupReceived(response.body());
+                } else {
+                    listener.onError(App.getInstance().getString(R.string.request_error));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Groups> call, Throwable t) {
+                listener.onError(App.getInstance().getString(R.string.network_error));
+            }
+        });
+    }
+
+    @Override
     public void getGroups(long userId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 

@@ -74,6 +74,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     private GroupPresenter presenter;
     private GroupAdapter adapter;
     private Teacher teacher;
+    private boolean isNotified;
 
     final static int REQ_CODE = 111;
 
@@ -90,6 +91,13 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         toolbar.setTitle(teacher.getName());
         toolbar.setSubtitle("Teacher");
         setSupportActionBar(toolbar);
+        long groupId = 0;
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            isNotified = true;
+            groupId = extras.getLong("group_id", 0);
+        }
 
         presenter = new GroupPresenterImpl(this, new GroupInteractorImpl());
 
@@ -134,7 +142,16 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         });
 
         if(NetworkUtil.isNetworkAvailable(this)) {
-            presenter.getGroups(teacher.getId());
+            if(isNotified) {
+                Groups group = GroupDao.getGroup(groupId);
+                if(group.getId() == 0) {
+                    presenter.getGroup(groupId);
+                } else {
+                    setGroup(group);
+                }
+            } else {
+                presenter.getGroups(teacher.getId());
+            }
         } else {
             loadOfflineData();
         }
@@ -243,7 +260,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     }
 
     @Override
-    public void hideProgess() {
+    public void hideProgress() {
         refreshLayout.setRefreshing(false);
     }
 
@@ -251,6 +268,18 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     public void showError(String message) {
         showSnackbar(message);
         loadOfflineData();
+    }
+
+    @Override
+    public void setGroup(Groups group) {
+        Intent intent = new Intent(DashboardActivity.this, MessageActivity.class);
+        Bundle args = new Bundle();
+        if(group != null){
+            args.putSerializable("group", group);
+        }
+        intent.putExtras(args);
+        startActivity(intent);
+        finish();
     }
 
     @Override

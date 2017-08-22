@@ -56,6 +56,9 @@ public interface TeacherApi {
 
     //Groups and MessageGroup API
 
+    @GET("groups/{groupId}")
+    Call<Groups> getGroup(@Path("groupId") long groupId);
+
     @POST("groups")
     Call<Groups> saveGroup(@Body Groups groups);
 

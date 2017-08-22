@@ -35,9 +35,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
 
-            if(App.isActivityVisible()) {
+            if (App.isActivityVisible() && ChatActivity.isActivityVisible()) {
                 EventBus.getDefault().post(new MessageEvent(remoteMessage.getData().get("message"),
                         Long.valueOf(remoteMessage.getData().get("sender_id"))));
+            } else if (remoteMessage.getData().get("is_group").equals("true")) {
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(getApplicationContext())
+                                .setSmallIcon(R.drawable.ic_stat_notify)
+                                .setContentTitle(remoteMessage.getData().get("group_name"))
+                                .setContentText("You have new message in this group!")
+                                .setDefaults(Notification.DEFAULT_SOUND)
+                                .setStyle(new NotificationCompat.BigTextStyle().bigText(remoteMessage.getData().get("message")));
+
+                mBuilder.setAutoCancel(true);
+
+                Intent resultIntent = new Intent(getApplicationContext(), DashboardActivity.class);
+                resultIntent.putExtra("group_id", Long.valueOf(remoteMessage.getData().get("group_id")));
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+                //stackBuilder.addParentStack(DashboardActivity.class);
+                stackBuilder.addNextIntent(resultIntent);
+                PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(789, PendingIntent.FLAG_UPDATE_CURRENT);
+                mBuilder.setContentIntent(resultPendingIntent);
+                NotificationManager mNotificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(0, mBuilder.build());
             } else {
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(getApplicationContext())
@@ -61,11 +82,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.notify(0, mBuilder.build());
             }
-
         }
 
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
+
+    // Also if you intend on generating your own notifications as a result of a received FCM
+    // message, here is where that should be initiated. See sendNotification method below.
 
 }

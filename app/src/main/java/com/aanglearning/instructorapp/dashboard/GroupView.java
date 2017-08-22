@@ -11,9 +11,11 @@ import java.util.List;
 interface GroupView {
     void showProgress();
 
-    void hideProgess();
+    void hideProgress();
 
     void showError(String message);
+
+    void setGroup(Groups group);
 
     void setGroups(List<Groups> groups);
 }

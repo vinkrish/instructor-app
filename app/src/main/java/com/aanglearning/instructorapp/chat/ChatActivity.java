@@ -33,7 +33,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -41,20 +40,29 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-    public class ChatActivity extends AppCompatActivity implements ChatView{
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.recycler_view) RecyclerView recyclerView;
-    @BindView(R.id.no_chats) LinearLayout noChats;
-    @BindView(R.id.new_msg) EditText newMsg;
-    @BindView(R.id.enter_msg) ImageView enterMsg;
-    @BindView(R.id.progress_bar) ProgressBar progressBar;
+public class ChatActivity extends AppCompatActivity implements ChatView {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    @BindView(R.id.no_chats)
+    LinearLayout noChats;
+    @BindView(R.id.new_msg)
+    EditText newMsg;
+    @BindView(R.id.enter_msg)
+    ImageView enterMsg;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
 
     private long recipientId;
     private String recipientName;
     private ChatPresenter presenter;
     private ChatAdapter adapter;
     private EndlessRecyclerViewScrollListener scrollListener;
+
+    private static boolean isActivityVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +91,7 @@ import butterknife.ButterKnife;
 
     private void loadOfflineData() {
         List<Message> messages = MessageDao.getMessages(TeacherDao.getTeacher().getId(), "teacher", recipientId, "student");
-        if(messages.size() == 0) {
+        if (messages.size() == 0) {
             noChats.setVisibility(View.VISIBLE);
         } else {
             noChats.setVisibility(View.INVISIBLE);
@@ -101,8 +109,9 @@ import butterknife.ButterKnife;
     public void onResume() {
         super.onResume();
         App.activityResumed();
-        if(NetworkUtil.isNetworkAvailable(this)){
-            if(adapter.getItemCount() == 0) {
+        isActivityVisible = true;
+        if (NetworkUtil.isNetworkAvailable(this)) {
+            if (adapter.getItemCount() == 0) {
                 presenter.getMessages("teacher", TeacherDao.getTeacher().getId(), "student", recipientId);
             } else {
                 presenter.getRecentMessages("teacher", TeacherDao.getTeacher().getId(), "student", recipientId,
@@ -115,6 +124,7 @@ import butterknife.ButterKnife;
     protected void onPause() {
         super.onPause();
         App.activityPaused();
+        isActivityVisible = false;
     }
 
     @Override
@@ -142,13 +152,13 @@ import butterknife.ButterKnife;
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if(NetworkUtil.isNetworkAvailable(ChatActivity.this)) {
+                if (NetworkUtil.isNetworkAvailable(ChatActivity.this)) {
                     presenter.getFollowupMessages("teacher", TeacherDao.getTeacher().getId(), "student", recipientId,
-                            adapter.getDataSet().get(adapter.getDataSet().size()-1).getId());
+                            adapter.getDataSet().get(adapter.getDataSet().size() - 1).getId());
                 } else {
                     List<Message> messages = MessageDao.getMessagesFromId(TeacherDao.getTeacher().getId(), "teacher",
                             recipientId, "student",
-                            adapter.getDataSet().get(adapter.getDataSet().size()-1).getId());
+                            adapter.getDataSet().get(adapter.getDataSet().size() - 1).getId());
                     adapter.updateDataSet(messages);
                 }
             }
@@ -174,7 +184,7 @@ import butterknife.ButterKnife;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
-        if(NetworkUtil.isNetworkAvailable(this) && event.senderId == recipientId){
+        if (NetworkUtil.isNetworkAvailable(this) && event.senderId == recipientId) {
             presenter.getRecentMessages("teacher", TeacherDao.getTeacher().getId(), "student", recipientId,
                     adapter.getDataSet().get(0).getId());
         }
@@ -213,9 +223,10 @@ import butterknife.ButterKnife;
         recyclerView.smoothScrollToPosition(0);
         backupChats(messages);
     }
+
     @Override
     public void showMessages(List<Message> messages) {
-        if(messages.size() == 0) {
+        if (messages.size() == 0) {
             noChats.setVisibility(View.VISIBLE);
         } else {
             noChats.setVisibility(View.INVISIBLE);
@@ -240,7 +251,7 @@ import butterknife.ButterKnife;
         backupChats(messages);
     }
 
-    public void newMsgSendListener (View view) {
+    public void newMsgSendListener(View view) {
         sendMessage("text", "");
         newMsg.setText("");
     }
@@ -248,10 +259,10 @@ import butterknife.ButterKnife;
     private void sendMessage(String messageType, String imgUrl) {
         View v = this.getCurrentFocus();
         if (v != null) {
-            InputMethodManager imm = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
-        if(newMsg.getText().toString().trim().isEmpty()) {
+        if (newMsg.getText().toString().trim().isEmpty()) {
             showSnackbar("Please enter message");
         } else {
             if (NetworkUtil.isNetworkAvailable(this)) {
@@ -289,11 +300,16 @@ import butterknife.ButterKnife;
 
         @Override
         public void afterTextChanged(Editable editable) {
-            if(editable.length()==0){
+            if (editable.length() == 0) {
                 enterMsg.setImageResource(R.drawable.ic_chat_send);
-            }else{
+            } else {
                 enterMsg.setImageResource(R.drawable.ic_chat_send_active);
             }
         }
     };
+
+    public static boolean isActivityVisible() {
+        return isActivityVisible;
+    }
+
 }
