@@ -57,6 +57,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -271,7 +273,13 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     }
 
     @Override
+    public void backupGroup(Groups group) {
+        GroupDao.insertMany(Collections.singletonList(group));
+    }
+
+    @Override
     public void setGroup(Groups group) {
+        loadOfflineData();
         Intent intent = new Intent(DashboardActivity.this, MessageActivity.class);
         Bundle args = new Bundle();
         if(group != null){
@@ -279,7 +287,6 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         }
         intent.putExtras(args);
         startActivity(intent);
-        finish();
     }
 
     @Override
@@ -294,7 +301,6 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
             backupGroups(groups);
         }
         refreshLayout.setRefreshing(false);
-        updateFcmToken();
     }
 
     private void backupGroups(final List<Groups> groups) {
@@ -305,17 +311,6 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                 GroupDao.insertMany(groups);
             }
         }).start();
-    }
-
-    private void updateFcmToken() {
-        if(!SharedPreferenceUtil.isFcmTokenSaved(DashboardActivity.this)) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    presenter.updateFcmToken(SharedPreferenceUtil.getAuthorization(DashboardActivity.this));
-                }
-            }).start();
-        }
     }
 
     private void setupDrawerContent(NavigationView navigationView) {

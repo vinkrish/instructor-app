@@ -64,23 +64,4 @@ class GroupInteractorImpl implements GroupInteractor {
         });
     }
 
-    @Override
-    public void updateFcmToken(Authorization authorization) {
-        AuthApi api = ApiClient.getAuthorizedClient().create(AuthApi.class);
-
-        Call<Void> classList = api.updateFcmToken(authorization);
-        classList.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()) {
-                    SharedPreferenceUtil.fcmTokenSaved(App.getInstance());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-
-            }
-        });
-    }
 }

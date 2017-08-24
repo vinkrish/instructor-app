@@ -83,7 +83,7 @@ class MessageInteractorImpl implements MessageInteractor {
         });
     }
 
-    @Override
+    /*@Override
     public void getFollowupMessages(long groupId, long messageId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
@@ -103,5 +103,5 @@ class MessageInteractorImpl implements MessageInteractor {
                 listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
-    }
+    }*/
 }

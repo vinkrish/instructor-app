@@ -20,6 +20,7 @@ import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.dashboard.DashboardActivity;
 import com.aanglearning.instructorapp.model.Credentials;
 import com.aanglearning.instructorapp.model.TeacherCredentials;
+import com.aanglearning.instructorapp.service.FCMIntentService;
 import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
 import butterknife.BindView;
@@ -109,7 +110,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         TeacherDao.insert(teacherCredentials.getTeacher());
         ServiceDao.clear();
         ServiceDao.insert(teacherCredentials.getService());
+        teacherCredentials.setMobileNo(loginId.getText().toString());
         SharedPreferenceUtil.saveTeacher(this, teacherCredentials);
+        startService(new Intent(this, FCMIntentService.class));
     }
 
     @Override

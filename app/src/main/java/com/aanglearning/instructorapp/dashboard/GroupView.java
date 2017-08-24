@@ -15,6 +15,8 @@ interface GroupView {
 
     void showError(String message);
 
+    void backupGroup(Groups group);
+
     void setGroup(Groups group);
 
     void setGroups(List<Groups> groups);

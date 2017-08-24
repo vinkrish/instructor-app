@@ -21,6 +21,4 @@ interface GroupInteractor {
     void getGroup(long groupId, GroupInteractor.OnFinishedListener listener);
 
     void getGroups(long userId, GroupInteractor.OnFinishedListener listener);
-
-    void updateFcmToken(Authorization authorization);
 }

@@ -21,5 +21,5 @@ interface MessageView {
 
     void showMessages(List<Message> messages);
 
-    void showFollowupMessages(List<Message> messages);
+    //void showFollowupMessages(List<Message> messages);
 }

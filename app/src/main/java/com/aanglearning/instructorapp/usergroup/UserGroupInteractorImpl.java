@@ -18,7 +18,7 @@ import retrofit2.Response;
  * Created by Vinay on 01-04-2017.
  */
 
-public class UserGroupInteractorImpl implements UserGroupInteractor {
+class UserGroupInteractorImpl implements UserGroupInteractor {
 
     @Override
     public void getUserGroup(long groupId, final OnFinishedListener listener) {

@@ -15,6 +15,7 @@ public class Groups implements Serializable {
     private String creatorRole;
     private String createdDate;
     private boolean active;
+    private long schoolId;
 
     public long getId() {
         return id;
@@ -112,4 +113,11 @@ public class Groups implements Serializable {
         this.active = active;
     }
 
+    public long getSchoolId() {
+        return schoolId;
+    }
+
+    public void setSchoolId(long schoolId) {
+        this.schoolId = schoolId;
+    }
 }
