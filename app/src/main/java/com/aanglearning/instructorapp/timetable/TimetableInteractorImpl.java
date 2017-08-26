@@ -22,8 +22,8 @@ class TimetableInteractorImpl implements TimetableInteractor {
     public void getTimetable(long teacherId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<List<TeacherTimetable>> attendanceList = api.getTimetable(teacherId);
-        attendanceList.enqueue(new Callback<List<TeacherTimetable>>() {
+        Call<List<TeacherTimetable>> queue = api.getTimetable(teacherId);
+        queue.enqueue(new Callback<List<TeacherTimetable>>() {
             @Override
             public void onResponse(Call<List<TeacherTimetable>> call, Response<List<TeacherTimetable>> response) {
                 if(response.isSuccessful()) {

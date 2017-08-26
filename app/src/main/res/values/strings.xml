@@ -23,6 +23,7 @@
     <string name="no_groups">You are not part of any group</string>
     <string name="groups">Groups</string>
     <string name="new_group">Create new group</string>
+    <string name="msg_recipient">Message Recipients</string>
 
     <string name="group_name">Group Name</string>
     <string name="group_info">Group Info</string>
@@ -34,6 +35,9 @@
     <string name="for_class">This group is for class</string>
     <string name="save">Save</string>
     <string name="video">Video</string>
+    <string name="read_by">Read by</string>
+    <string name="delivered_to">Delivered to</string>
+    <string name="dash">-</string>
 
     <string name="edit">Edit</string>
     <string name="members">Members</string>
@@ -86,7 +90,5 @@
     <string name="title_activity_chats">Chat</string>
     <string name="title_activity_timetable">Timetable</string>
     <string name="title_activity_events">Events</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_message_recipient">Message Info</string>
 </resources>

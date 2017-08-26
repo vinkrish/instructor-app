@@ -21,11 +21,11 @@ interface MessageInteractor {
         //void onFollowupMessagesReceived(List<Message> messages);
     }
 
-    void saveMessage(Message message, MessageInteractor.OnFinishedListener listener);
+    void saveMessage(Message message, OnFinishedListener listener);
 
-    void getRecentMessages(long groupId, long messageId, MessageInteractor.OnFinishedListener listener);
+    void getRecentMessages(long groupId, long messageId, OnFinishedListener listener);
 
-    void getMessages(long groupId, MessageInteractor.OnFinishedListener listener);
+    void getMessages(long groupId, OnFinishedListener listener);
 
     //void getFollowupMessages(long groupId, long messageId, MessageInteractor.OnFinishedListener listener);
 }

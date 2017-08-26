@@ -8,6 +8,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Environment;
 import android.support.annotation.UiThread;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,8 +53,8 @@ import butterknife.ButterKnife;
 class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     private Context mContext;
     private List<Message> messages;
+    private Message selected_message;
     private long schoolId;
-    private final OnItemClickListener listener;
     private final ThumbnailListener thumbnailListener;
 
     private static final int ITEM_TYPE_TEXT = 0;
@@ -69,11 +71,10 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             .endConfig()
             .roundRect(10);
 
-    MessageAdapter(Context context, List<Message> messages, long schoolId, OnItemClickListener listener) {
+    MessageAdapter(Context context, List<Message> messages, long schoolId) {
         this.mContext = context;
         this.messages = messages;
         this.schoolId = schoolId;
-        this.listener = listener;
         thumbnailListener = new ThumbnailListener();
         thumbnailViewToLoaderMap = new HashMap<>();
     }
@@ -84,17 +85,14 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         }
     }
 
-    interface OnItemClickListener {
-        void onItemClick(Message message);
-    }
-
     List<Message> getDataSet() {
         return messages;
     }
 
     @UiThread
-    void setDataSet(List<Message> messages) {
+    void setDataSet(List<Message> messages, Message selected_message) {
         this.messages = messages;
+        this.selected_message = selected_message;
         notifyDataSetChanged();
     }
 
@@ -115,6 +113,12 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     void insertDataSet(List<Message> messages) {
         this.messages.addAll(0, messages);
         notifyItemRangeInserted(0, messages.size());
+    }
+
+    @UiThread
+    void selectedItemChanged(int newPosition, Message selected_message) {
+        this.selected_message = selected_message;
+        notifyItemChanged(newPosition);
     }
 
     @Override
@@ -182,6 +186,8 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         TextView createdDate;
         @BindView(R.id.message)
         TextView messageTV;
+        @BindView(R.id.card_view)
+        CardView cardView;
 
         TextHolder(View view) {
             super(view);
@@ -197,12 +203,11 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             createdDate.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
             messageTV.setText(message.getMessageBody());
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(message);
-                }
-            });
+            if (message.getId() == selected_message.getId()) {
+                cardView.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.list_item_selected_state));
+            } else {
+                cardView.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.default_white));
+            }
         }
 
     }
@@ -218,6 +223,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         ImageView sharedImage;
         @BindView(R.id.message)
         TextView messageTV;
+        @BindView(R.id.card_view) CardView cardView;
 
         ImageHolder(View view) {
             super(view);
@@ -238,13 +244,11 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
                 messageTV.setText(message.getMessageBody());
             }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //displayImageDialog(message);
-                    listener.onItemClick(message);
-                }
-            });
+            if (message.getId() == selected_message.getId()) {
+                cardView.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.list_item_selected_state));
+            } else {
+                cardView.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.default_white));
+            }
 
             //sharedImage.setImageResource(R.drawable.books);
             File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/" + schoolId);
@@ -295,6 +299,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         TextView messageTV;
         @BindView(R.id.thumbnail)
         YouTubeThumbnailView thumbnail;
+        @BindView(R.id.card_view) CardView cardView;
 
         VideoHolder(View view) {
             super(view);
@@ -316,6 +321,12 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
                 messageTV.setText(message.getMessageBody());
             }
 
+            if (message.getId() == selected_message.getId()) {
+                cardView.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.list_item_selected_state));
+            } else {
+                cardView.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.default_white));
+            }
+
             if(message.getVideoUrl() != null && !message.getVideoUrl().equals("")) {
                 YouTubeHelper youTubeHelper = new YouTubeHelper();
                 videoId = youTubeHelper.extractVideoIdFromUrl(message.getVideoUrl());
@@ -324,12 +335,6 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
                 thumbnail.initialize(YoutubeDeveloperKey.DEVELOPER_KEY, thumbnailListener);
             }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(message);
-                }
-            });
         }
 
     }
@@ -347,6 +352,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         ImageView sharedImage;
         @BindView(R.id.message)
         TextView messageTV;
+        @BindView(R.id.card_view) CardView cardView;
 
         VideoImageHolder(View view) {
             super(view);
@@ -368,6 +374,12 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
                 messageTV.setText(message.getMessageBody());
             }
 
+            if (message.getId() == selected_message.getId()) {
+                cardView.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.list_item_selected_state));
+            } else {
+                cardView.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.default_white));
+            }
+
             if(message.getVideoUrl() != null && !message.getVideoUrl().equals("")) {
                 YouTubeHelper youTubeHelper = new YouTubeHelper();
                 videoId = youTubeHelper.extractVideoIdFromUrl(message.getVideoUrl());
@@ -375,14 +387,6 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
                 thumbnail.setTag(videoId);
                 thumbnail.initialize(YoutubeDeveloperKey.DEVELOPER_KEY, thumbnailListener);
             }
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //displayImageDialog(message);
-                    listener.onItemClick(message);
-                }
-            });
 
             //sharedImage.setImageResource(R.drawable.books);
             File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/" + schoolId);
@@ -447,89 +451,6 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         public void onThumbnailError(YouTubeThumbnailView view, YouTubeThumbnailLoader.ErrorReason errorReason) {
             view.setImageResource(R.drawable.no_thumbnail);
         }
-    }
-
-    private Dialog displayTextDialog(final Message message) {
-        final Dialog dialog = new Dialog(mContext, R.style.DialogFadeAnim);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_text_item);
-
-        TextView sender = (TextView) dialog.findViewById(R.id.sender_name);
-        TextView createdTime = (TextView) dialog.findViewById(R.id.created_date);
-        ImageView closeWindow = (ImageView) dialog.findViewById(R.id.close_window);
-        TextView messageText = (TextView) dialog.findViewById(R.id.message);
-
-        sender.setText(message.getSenderName());
-        DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
-        createdTime.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
-        messageText.setText(message.getMessageBody());
-
-        closeWindow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-
-        //Grab the window of the dialog, and change the width and height
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        Window window = dialog.getWindow();
-        lp.copyFrom(window.getAttributes());
-
-        //This makes the dialog take up the full width and height
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-        window.setAttributes(lp);
-
-        return dialog;
-    }
-
-    private Dialog displayImageDialog(final Message message) {
-        final Dialog dialog = new Dialog(mContext, R.style.DialogFadeAnim);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_image_item);
-
-        TextView sender = (TextView) dialog.findViewById(R.id.sender_name);
-        TextView createdTime = (TextView) dialog.findViewById(R.id.created_date);
-        ImageView closeWindow = (ImageView) dialog.findViewById(R.id.close_window);
-        TextView messageText = (TextView) dialog.findViewById(R.id.message);
-
-        sender.setText(message.getSenderName());
-        DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S").parseDateTime(message.getCreatedAt());
-        createdTime.setText(DateTimeFormat.forPattern("dd-MMM, HH:mm").print(dateTime));
-        messageText.setText(message.getMessageBody());
-
-        ImageView fullImage = (ImageView) dialog.findViewById(R.id.full_image);
-        File file = new File(Environment.getExternalStorageDirectory().getPath(), "Shikshitha/Teacher/" + schoolId + "/" + message.getImageUrl());
-        if (file.exists()) {
-            fullImage.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
-        }
-
-        closeWindow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-
-        //Grab the window of the dialog, and change the width and height
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        Window window = dialog.getWindow();
-        lp.copyFrom(window.getAttributes());
-
-        //This makes the dialog take up the full width and height
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-        window.setAttributes(lp);
-
-        return dialog;
     }
 
 }

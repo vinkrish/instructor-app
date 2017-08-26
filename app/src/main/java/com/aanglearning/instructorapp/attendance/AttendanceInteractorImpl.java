@@ -25,8 +25,8 @@ class AttendanceInteractorImpl implements AttendanceInteractor {
     public void getClassList(long teacherId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<List<Clas>> classList = api.getSectionTeacherClasses(teacherId);
-        classList.enqueue(new Callback<List<Clas>>() {
+        Call<List<Clas>> queue = api.getSectionTeacherClasses(teacherId);
+        queue.enqueue(new Callback<List<Clas>>() {
             @Override
             public void onResponse(Call<List<Clas>> call, Response<List<Clas>> response) {
                 if(response.isSuccessful()) {
@@ -48,8 +48,8 @@ class AttendanceInteractorImpl implements AttendanceInteractor {
     public void getSectionList(long classId, final long teacherId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<List<Section>> classList = api.getSectionTeacherSections(classId, teacherId);
-        classList.enqueue(new Callback<List<Section>>() {
+        Call<List<Section>> queue = api.getSectionTeacherSections(classId, teacherId);
+        queue.enqueue(new Callback<List<Section>>() {
             @Override
             public void onResponse(Call<List<Section>> call, Response<List<Section>> response) {
                 if(response.isSuccessful()) {
@@ -71,8 +71,8 @@ class AttendanceInteractorImpl implements AttendanceInteractor {
     public void getTimetable(long sectionId, String dayOfWeek, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<List<Timetable>> classList = api.getTimetable(sectionId, dayOfWeek);
-        classList.enqueue(new Callback<List<Timetable>>() {
+        Call<List<Timetable>> queue = api.getTimetable(sectionId, dayOfWeek);
+        queue.enqueue(new Callback<List<Timetable>>() {
             @Override
             public void onResponse(Call<List<Timetable>> call, Response<List<Timetable>> response) {
                 if(response.isSuccessful()) {
@@ -94,8 +94,8 @@ class AttendanceInteractorImpl implements AttendanceInteractor {
     public void getAttendance(long sectionId, String date, int session, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<AttendanceSet> classList = api.getAttendanceSet(sectionId, date, session);
-        classList.enqueue(new Callback<AttendanceSet>() {
+        Call<AttendanceSet> queue = api.getAttendanceSet(sectionId, date, session);
+        queue.enqueue(new Callback<AttendanceSet>() {
             @Override
             public void onResponse(Call<AttendanceSet> call, Response<AttendanceSet> response) {
                 if(response.isSuccessful()) {
@@ -117,8 +117,8 @@ class AttendanceInteractorImpl implements AttendanceInteractor {
     public void saveAttendance(ArrayList<Attendance> attendances, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<Void> saveAtt = api.saveAttendance(attendances);
-        saveAtt.enqueue(new Callback<Void>() {
+        Call<Void> queue = api.saveAttendance(attendances);
+        queue.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
@@ -138,8 +138,8 @@ class AttendanceInteractorImpl implements AttendanceInteractor {
     public void deleteAttendance(ArrayList<Attendance> attendances, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<Void> deleteAtt = api.deleteAttendance(attendances);
-        deleteAtt.enqueue(new Callback<Void>() {
+        Call<Void> queue = api.deleteAttendance(attendances);
+        queue.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {

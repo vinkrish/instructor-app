@@ -8,6 +8,7 @@ import com.aanglearning.instructorapp.model.Evnt;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Homework;
 import com.aanglearning.instructorapp.model.Message;
+import com.aanglearning.instructorapp.model.MessageRecipient;
 import com.aanglearning.instructorapp.model.Section;
 import com.aanglearning.instructorapp.model.Student;
 import com.aanglearning.instructorapp.model.TeacherTimetable;
@@ -81,6 +82,10 @@ public interface TeacherApi {
     @GET("message/group/{groupId}/message/{messageId}")
     Call<ArrayList<Message>> getGroupMessagesFromId(@Path("groupId") long groupId,
                                                     @Path("messageId") long messageId);
+
+    @GET("messagerecipient/{groupId}/{groupMessageId}")
+    Call<ArrayList<MessageRecipient>> getMessageRecipients(@Path("groupId") long groupId,
+                                                      @Path("groupMessageId") long groupMessageId);
 
     //UserGroup API
 

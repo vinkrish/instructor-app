@@ -214,6 +214,10 @@ public class UserGroupActivity extends AppCompatActivity implements
         }
     }
 
+    private void showSnackbar(String message) {
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
     @Override
     public void showProgress() {
         refreshLayout.setRefreshing(true);
@@ -281,8 +285,10 @@ public class UserGroupActivity extends AppCompatActivity implements
 
             if (multiselect_list.size() > 0)
                 mActionMode.setTitle("" + multiselect_list.size());
-            else
+            else {
                 mActionMode.setTitle("");
+                mActionMode.finish();
+            }
             refreshAdapter();
         }
     }
@@ -300,10 +306,6 @@ public class UserGroupActivity extends AppCompatActivity implements
     @Override
     public void userGroupDeleted() {
         recreate();
-    }
-
-    private void showSnackbar(String message) {
-        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {

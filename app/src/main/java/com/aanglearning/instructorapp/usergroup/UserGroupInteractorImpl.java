@@ -24,8 +24,8 @@ class UserGroupInteractorImpl implements UserGroupInteractor {
     public void getUserGroup(long groupId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<GroupUsers> classList = api.getUserGroup(groupId);
-        classList.enqueue(new Callback<GroupUsers>() {
+        Call<GroupUsers> queue = api.getUserGroup(groupId);
+        queue.enqueue(new Callback<GroupUsers>() {
             @Override
             public void onResponse(Call<GroupUsers> call, Response<GroupUsers> response) {
                 if(response.isSuccessful()) {
@@ -46,8 +46,8 @@ class UserGroupInteractorImpl implements UserGroupInteractor {
     public void saveUserGroup(ArrayList<UserGroup> userGroups, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<Void> classList = api.saveUserGroupList(userGroups);
-        classList.enqueue(new Callback<Void>() {
+        Call<Void> queue = api.saveUserGroupList(userGroups);
+        queue.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
@@ -68,8 +68,8 @@ class UserGroupInteractorImpl implements UserGroupInteractor {
     public void deleteUsers(ArrayList<UserGroup> userGroups, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<Void> deleteUserGroupUsers = api.deleteUserGroupUsers(userGroups);
-        deleteUserGroupUsers.enqueue(new Callback<Void>() {
+        Call<Void> queue = api.deleteUserGroupUsers(userGroups);
+        queue.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {

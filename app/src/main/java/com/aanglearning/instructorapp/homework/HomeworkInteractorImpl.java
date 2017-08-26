@@ -26,8 +26,8 @@ class HomeworkInteractorImpl implements HomeworkInteractor {
     public void getClassList(long teacherId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<List<Clas>> classList = api.getSectionTeacherClasses(teacherId);
-        classList.enqueue(new Callback<List<Clas>>() {
+        Call<List<Clas>> queue = api.getSectionTeacherClasses(teacherId);
+        queue.enqueue(new Callback<List<Clas>>() {
             @Override
             public void onResponse(Call<List<Clas>> call, Response<List<Clas>> response) {
                 if(response.isSuccessful()) {
@@ -49,8 +49,8 @@ class HomeworkInteractorImpl implements HomeworkInteractor {
     public void getSectionList(long classId, long teacherId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<List<Section>> classList = api.getSectionTeacherSections(classId, teacherId);
-        classList.enqueue(new Callback<List<Section>>() {
+        Call<List<Section>> queue = api.getSectionTeacherSections(classId, teacherId);
+        queue.enqueue(new Callback<List<Section>>() {
             @Override
             public void onResponse(Call<List<Section>> call, Response<List<Section>> response) {
                 if(response.isSuccessful()) {
@@ -72,8 +72,8 @@ class HomeworkInteractorImpl implements HomeworkInteractor {
     public void getHomework(long sectionId, String date, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<List<Homework>> classList = api.getHomework(sectionId, date);
-        classList.enqueue(new Callback<List<Homework>>() {
+        Call<List<Homework>> queue = api.getHomework(sectionId, date);
+        queue.enqueue(new Callback<List<Homework>>() {
             @Override
             public void onResponse(Call<List<Homework>> call, Response<List<Homework>> response) {
                 if(response.isSuccessful()) {
@@ -96,8 +96,8 @@ class HomeworkInteractorImpl implements HomeworkInteractor {
     public void saveHomework(Homework homework, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<Homework> classList = api.saveHomework(homework);
-        classList.enqueue(new Callback<Homework>() {
+        Call<Homework> queue = api.saveHomework(homework);
+        queue.enqueue(new Callback<Homework>() {
             @Override
             public void onResponse(Call<Homework> call, Response<Homework> response) {
                 if(response.isSuccessful()) {
@@ -118,8 +118,8 @@ class HomeworkInteractorImpl implements HomeworkInteractor {
     public void updateHomework(Homework homework, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<Void> classList = api.updateHomework(homework);
-        classList.enqueue(new Callback<Void>() {
+        Call<Void> queue = api.updateHomework(homework);
+        queue.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
@@ -140,8 +140,8 @@ class HomeworkInteractorImpl implements HomeworkInteractor {
     public void deleteHomework(ArrayList<Homework> homeworks, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<Void> deleteHW = api.deleteHomework(homeworks);
-        deleteHW.enqueue(new Callback<Void>() {
+        Call<Void> queue = api.deleteHomework(homeworks);
+        queue.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {

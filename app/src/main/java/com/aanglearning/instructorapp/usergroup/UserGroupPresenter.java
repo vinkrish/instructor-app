@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by Vinay on 01-04-2017.
  */
 
-public interface UserGroupPresenter {
+interface UserGroupPresenter {
     void getUserGroup(long groupId);
 
     void saveUserGroup(ArrayList<UserGroup> userGroups);
