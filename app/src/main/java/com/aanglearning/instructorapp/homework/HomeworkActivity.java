@@ -188,7 +188,8 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         homeworkAdapter = new HomeworkAdapter(this, new ArrayList<Homework>(0), new ArrayList<Homework>(0));
         homeworkRecycler.setAdapter(homeworkAdapter);
 
-        homeworkRecycler.addOnItemTouchListener(new RecyclerItemClickListener(this, homeworkRecycler, new RecyclerItemClickListener.OnItemClickListener() {
+        homeworkRecycler.addOnItemTouchListener(new RecyclerItemClickListener(this, homeworkRecycler,
+                new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 if (isMultiSelect) multi_select(position);
