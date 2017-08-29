@@ -22,8 +22,8 @@ public class FCMIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         AuthApi api = ApiClient.getAuthorizedClient().create(AuthApi.class);
 
-        Call<Void> classList = api.updateFcmToken(SharedPreferenceUtil.getAuthorization(getApplicationContext()));
-        classList.enqueue(new Callback<Void>() {
+        Call<Void> queue = api.updateFcmToken(SharedPreferenceUtil.getAuthorization(getApplicationContext()));
+        queue.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {

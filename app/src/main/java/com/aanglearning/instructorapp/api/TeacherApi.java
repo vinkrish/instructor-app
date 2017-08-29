@@ -1,6 +1,7 @@
 package com.aanglearning.instructorapp.api;
 
 import com.aanglearning.instructorapp.attendance.AttendanceSet;
+import com.aanglearning.instructorapp.model.AppVersion;
 import com.aanglearning.instructorapp.model.Attendance;
 import com.aanglearning.instructorapp.model.Chat;
 import com.aanglearning.instructorapp.model.Clas;
@@ -31,6 +32,10 @@ import retrofit2.http.Path;
  */
 
 public interface TeacherApi {
+
+    @GET("appversion/{versionId}/{appName}")
+    Call<AppVersion> getAppVersion(@Path("versionId") int versionId,
+                                   @Path("appName") String appName);
 
     @GET("class/school/{schoolId}")
     Call<List<Clas>> getClassList(@Path("schoolId") long schoolId);

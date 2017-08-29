@@ -7,8 +7,8 @@ android {
         applicationId "com.aanglearning.instructorapp"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 18
-        versionName "1.8"
+        versionCode 19
+        versionName "1.9"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         aaptOptions.setProperty("cruncherEnabled", false)
