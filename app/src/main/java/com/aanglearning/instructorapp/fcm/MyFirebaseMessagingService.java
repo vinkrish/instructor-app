@@ -16,6 +16,7 @@ import com.aanglearning.instructorapp.chathome.ChatsActivity;
 import com.aanglearning.instructorapp.dashboard.DashboardActivity;
 import com.aanglearning.instructorapp.model.MessageEvent;
 import com.aanglearning.instructorapp.util.AppGlobal;
+import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -33,12 +34,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-
-            if (App.isActivityVisible() && ChatActivity.isActivityVisible()) {
-                EventBus.getDefault().post(new MessageEvent(remoteMessage.getData().get("message"),
-                        Long.valueOf(remoteMessage.getData().get("sender_id"))));
-            } else if (remoteMessage.getData().get("is_group").equals("true")) {
+        if (remoteMessage.getData().size() > 0 &&
+                !SharedPreferenceUtil.getTeacher(getApplicationContext()).getAuthToken().equals("")) {
+             if (remoteMessage.getData().get("type").equals("group_message")) {
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(getApplicationContext())
                                 .setSmallIcon(R.drawable.ic_stat_notify)
@@ -59,7 +57,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 NotificationManager mNotificationManager =
                         (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.notify(0, mBuilder.build());
-            } else {
+            }else if (App.isActivityVisible() && ChatActivity.isActivityVisible()) {
+                 EventBus.getDefault().post(new MessageEvent(remoteMessage.getData().get("message"),
+                         Long.valueOf(remoteMessage.getData().get("sender_id"))));
+             } else {
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(getApplicationContext())
                                 .setSmallIcon(R.drawable.ic_stat_notify)
