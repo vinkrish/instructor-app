@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -36,6 +38,7 @@ import com.aanglearning.instructorapp.model.Student;
 import com.aanglearning.instructorapp.model.StudentSet;
 import com.aanglearning.instructorapp.model.Timetable;
 import com.aanglearning.instructorapp.util.AlertDialogHelper;
+import com.aanglearning.instructorapp.util.Conversion;
 import com.aanglearning.instructorapp.util.DatePickerFragment;
 import com.aanglearning.instructorapp.util.DateUtil;
 import com.aanglearning.instructorapp.util.DividerItemDecoration;
@@ -64,6 +67,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
     @BindView(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
     @BindView(R.id.spinner_class) Spinner classSpinner;
     @BindView(R.id.spinner_section) Spinner sectionSpinner;
+    @BindView(R.id.section_layout) LinearLayout sectionLayout;
     @BindView(R.id.date_tv) TextView dateView;
     @BindView(R.id.session_spinner) Spinner sessionSpinner;
     @BindView(R.id.session_layout) LinearLayout sessionLayout;
@@ -301,11 +305,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
 
     @Override
     public void showSection(List<Section> sectionList) {
-        ArrayAdapter<Section> adapter = new
-                ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sectionList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sectionSpinner.setAdapter(adapter);
-        sectionSpinner.setOnItemSelectedListener(this);
+        setSectionAdapter(sectionList);
         backupSection(sectionList);
     }
 
@@ -321,11 +321,26 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
 
     private void showOfflineSection() {
         List<Section> sectionList = SectionDao.getSectionList(((Clas) classSpinner.getSelectedItem()).getId());
+        setSectionAdapter(sectionList);
+    }
+
+    private void setSectionAdapter(List<Section> sectionList) {
         ArrayAdapter<Section> adapter = new
                 ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sectionList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sectionSpinner.setAdapter(adapter);
         sectionSpinner.setOnItemSelectedListener(this);
+        if(sectionList.size() == 1 && sectionList.get(0).getSectionName().equals("none")) {
+            sectionLayout.setVisibility(View.INVISIBLE);
+            sectionLayout.setLayoutParams(new LinearLayout.LayoutParams(0,0));
+        } else {
+            sectionLayout.setVisibility(View.VISIBLE);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            int px = Conversion.dpToPx(10, getApplicationContext());
+            sectionLayout.setPadding(px, px, px, px);
+            sectionLayout.setLayoutParams(params);
+        }
     }
 
     private void showSession() {

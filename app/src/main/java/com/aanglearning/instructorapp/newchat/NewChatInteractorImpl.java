@@ -21,10 +21,10 @@ import retrofit2.Response;
 
 class NewChatInteractorImpl implements NewChatInteractor {
     @Override
-    public void getClassList(long teacherId, final OnFinishedListener listener) {
+    public void getClassList(long schoolId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<List<Clas>> queue = api.getSubjectTeacherClasses(teacherId);
+        Call<List<Clas>> queue = api.getClassList(schoolId);
         queue.enqueue(new Callback<List<Clas>>() {
             @Override
             public void onResponse(Call<List<Clas>> call, Response<List<Clas>> response) {
@@ -46,7 +46,7 @@ class NewChatInteractorImpl implements NewChatInteractor {
     public void getSectionList(long classId, long teacherId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<List<Section>> queue = api.getSubjectTeacherSections(classId, teacherId);
+        Call<List<Section>> queue = api.getSectionList(classId);
         queue.enqueue(new Callback<List<Section>>() {
             @Override
             public void onResponse(Call<List<Section>> call, Response<List<Section>> response) {
