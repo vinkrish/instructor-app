@@ -5,7 +5,7 @@ package com.aanglearning.instructorapp.calendar;
  */
 
 interface EventPresenter {
-    void getEvents(long schoolId);
+    void getEvents(long schoolId, long teacherId);
 
     void onDestroy();
 }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.aanglearning.instructorapp.R;
+import com.aanglearning.instructorapp.dao.EventDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.model.Evnt;
 import com.aanglearning.instructorapp.model.Teacher;
@@ -44,10 +45,15 @@ public class CalendarActivity extends AppCompatActivity implements EventView{
         setUpViewPager();
 
         if(NetworkUtil.isNetworkAvailable(this)) {
-            presenter.getEvents(teacher.getSchoolId());
+            presenter.getEvents(teacher.getSchoolId(), teacher.getId());
         } else {
-            //loadOfflineData();
+            loadOfflineData();
         }
+    }
+
+    private void loadOfflineData() {
+        List<Evnt> evntList = EventDao.getEventList();
+        setEvents(evntList);
     }
 
     private void setUpViewPager() {
@@ -91,6 +97,17 @@ public class CalendarActivity extends AppCompatActivity implements EventView{
         evnts.setEvents(events);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), evnts);
         viewPager.setAdapter(adapter);
+        backupEvents(events);
+    }
+
+    private void backupEvents(final List<Evnt> evntList) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                EventDao.clear();
+                EventDao.insert(evntList);
+            }
+        }).start();
     }
 
     private void showSnackbar(String message) {

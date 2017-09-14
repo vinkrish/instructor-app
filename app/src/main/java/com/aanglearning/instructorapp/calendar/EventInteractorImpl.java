@@ -18,10 +18,10 @@ import retrofit2.Response;
 
 public class EventInteractorImpl implements EventInteractor {
     @Override
-    public void getEvents(long schoolId, final OnFinishedListener listener) {
+    public void getEvents(long schoolId, long teacherId, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
-        Call<List<Evnt>> queue = api.getEvents(schoolId);
+        Call<List<Evnt>> queue = api.getEvents(schoolId, teacherId);
         queue.enqueue(new Callback<List<Evnt>>() {
             @Override
             public void onResponse(Call<List<Evnt>> call, Response<List<Evnt>> response) {

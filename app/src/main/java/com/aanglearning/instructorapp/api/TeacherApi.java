@@ -172,6 +172,7 @@ public interface TeacherApi {
 
     //Event API
 
-    @GET("event/school/{schoolId}")
-    Call<List<Evnt>> getEvents(@Path("schoolId") long schoolId);
+    @GET("event/school/{schoolId}/teacher/{teacherId}")
+    Call<List<Evnt>> getEvents(@Path("schoolId") long schoolId,
+                               @Path("teacherId") long teacherId);
 }

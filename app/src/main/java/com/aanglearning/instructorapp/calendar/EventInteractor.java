@@ -15,5 +15,5 @@ interface EventInteractor {
         void onEventsReceived(List<Evnt> eventsList);
     }
 
-    void getEvents(long schoolId, EventInteractor.OnFinishedListener listener);
+    void getEvents(long schoolId, long teacherId, EventInteractor.OnFinishedListener listener);
 }
