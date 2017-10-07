@@ -46,7 +46,7 @@ class TeacherMemberAdapter extends RecyclerView.Adapter<TeacherMemberAdapter.Vie
     public void onBindViewHolder(TeacherMemberAdapter.ViewHolder holder, int position) {
         final TeacherSet teacherSet = items.get(position);
         holder.name.setText(teacherSet.getName());
-        holder.isSelected.setSelected(teacherSet.isSelected());
+        holder.isSelected.setChecked(teacherSet.isSelected());
         holder.isSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

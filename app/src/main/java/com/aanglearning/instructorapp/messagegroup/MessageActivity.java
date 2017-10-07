@@ -102,26 +102,28 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setSubtitle(R.string.tap_group);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             group = (Groups) extras.getSerializable("group");
         }
 
-        toolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MessageActivity.this, UserGroupActivity.class);
-                Bundle args = new Bundle();
-                if (group != null) {
-                    args.putSerializable("group", group);
-                }
-                intent.putExtras(args);
-                startActivity(intent);
-            }
-        });
         getSupportActionBar().setTitle(group.getName());
+        if (!group.isSchool()) {
+            getSupportActionBar().setSubtitle(R.string.tap_group);
+            toolbar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MessageActivity.this, UserGroupActivity.class);
+                    Bundle args = new Bundle();
+                    if (group != null) {
+                        args.putSerializable("group", group);
+                    }
+                    intent.putExtras(args);
+                    startActivity(intent);
+                }
+            });
+        }
 
         presenter = new MessagePresenterImpl(this, new MessageInteractorImpl());
 
