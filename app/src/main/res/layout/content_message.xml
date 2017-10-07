@@ -60,7 +60,6 @@
                 android:id="@+id/new_msg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:layout_toLeftOf="@+id/enter_msg"
                 android:layout_toRightOf="@+id/youtube_button"
                 android:hint="@string/type_your_message"
@@ -76,10 +75,9 @@
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/app_name"
                 android:onClick="newMsgSendListener"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
+                android:paddingLeft="@dimen/spacing_small"
+                android:paddingRight="@dimen/spacing_small"
                 app:srcCompat="@drawable/ic_send_black" />
-
 
             <TextView
                 android:id="@+id/youtube_url"
