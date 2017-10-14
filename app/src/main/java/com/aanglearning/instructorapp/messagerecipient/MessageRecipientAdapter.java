@@ -45,6 +45,17 @@ class MessageRecipientAdapter extends RecyclerView.Adapter<MessageRecipientAdapt
         notifyDataSetChanged();
     }
 
+    @UiThread
+    void updateDataSet(List<MessageRecipient> messageRecipients) {
+        int pos = items.size();
+        this.items.addAll(messageRecipients);
+        notifyItemRangeInserted(pos, items.size() - 1);
+    }
+
+    List<MessageRecipient> getDataSet() {
+        return items;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_recipient_item, parent, false);

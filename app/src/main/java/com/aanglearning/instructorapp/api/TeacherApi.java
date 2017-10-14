@@ -92,6 +92,15 @@ public interface TeacherApi {
     Call<ArrayList<MessageRecipient>> getMessageRecipients(@Path("groupId") long groupId,
                                                       @Path("groupMessageId") long groupMessageId);
 
+    @GET("messagerecipient/school/{groupId}/{groupMessageId}")
+    Call<ArrayList<MessageRecipient>> getSchoolRecipients(@Path("groupId") long groupId,
+                                                          @Path("groupMessageId") long groupMessageId);
+
+    @GET("messagerecipient/school/{groupId}/{groupMessageId}/{id}")
+    Call<ArrayList<MessageRecipient>> getSchoolRecipientsFromId(@Path("groupId") long groupId,
+                                                                @Path("groupMessageId") long groupMessageId,
+                                                                @Path("id") long id);
+
     //UserGroup API
 
     @GET("usergroup/groupusers/groups/{groupId}")
