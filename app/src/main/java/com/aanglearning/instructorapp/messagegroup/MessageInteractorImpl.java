@@ -4,6 +4,7 @@ import com.aanglearning.instructorapp.App;
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.api.ApiClient;
 import com.aanglearning.instructorapp.api.TeacherApi;
+import com.aanglearning.instructorapp.model.DeletedMessage;
 import com.aanglearning.instructorapp.model.Message;
 
 import java.util.ArrayList;
@@ -78,6 +79,72 @@ class MessageInteractorImpl implements MessageInteractor {
 
             @Override
             public void onFailure(Call<ArrayList<Message>> call, Throwable t) {
+                listener.onError(App.getInstance().getString(R.string.network_error));
+            }
+        });
+    }
+
+    @Override
+    public void deleteMessage(DeletedMessage deletedMessage, final OnFinishedListener listener) {
+        TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
+
+        Call<DeletedMessage> queue = api.deleteMessage(deletedMessage);
+        queue.enqueue(new Callback<DeletedMessage>() {
+            @Override
+            public void onResponse(Call<DeletedMessage> call, Response<DeletedMessage> response) {
+                if(response.isSuccessful()) {
+                    listener.onMessageDeleted(response.body());
+                } else {
+                    listener.onError(App.getInstance().getString(R.string.request_error));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DeletedMessage> call, Throwable t) {
+                listener.onError(App.getInstance().getString(R.string.network_error));
+            }
+        });
+    }
+
+    @Override
+    public void getRecentDeletedMessages(long groupId, long id, final OnFinishedListener listener) {
+        TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
+
+        Call<ArrayList<DeletedMessage>> queue = api.getDeletedMessagesAboveId(groupId, id);
+        queue.enqueue(new Callback<ArrayList<DeletedMessage>>() {
+            @Override
+            public void onResponse(Call<ArrayList<DeletedMessage>> call, Response<ArrayList<DeletedMessage>> response) {
+                if(response.isSuccessful()) {
+                    listener.onDeletedMessagesReceived(response.body());
+                } else {
+                    listener.onError(App.getInstance().getString(R.string.request_error));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<DeletedMessage>> call, Throwable t) {
+                listener.onError(App.getInstance().getString(R.string.network_error));
+            }
+        });
+    }
+
+    @Override
+    public void getDeletedMessages(long groupId, final OnFinishedListener listener) {
+        TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
+
+        Call<ArrayList<DeletedMessage>> queue = api.getDeletedMessages(groupId);
+        queue.enqueue(new Callback<ArrayList<DeletedMessage>>() {
+            @Override
+            public void onResponse(Call<ArrayList<DeletedMessage>> call, Response<ArrayList<DeletedMessage>> response) {
+                if(response.isSuccessful()) {
+                    listener.onDeletedMessagesReceived(response.body());
+                } else {
+                    listener.onError(App.getInstance().getString(R.string.request_error));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<DeletedMessage>> call, Throwable t) {
                 listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });

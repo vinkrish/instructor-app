@@ -5,6 +5,7 @@ import com.aanglearning.instructorapp.model.AppVersion;
 import com.aanglearning.instructorapp.model.Attendance;
 import com.aanglearning.instructorapp.model.Chat;
 import com.aanglearning.instructorapp.model.Clas;
+import com.aanglearning.instructorapp.model.DeletedMessage;
 import com.aanglearning.instructorapp.model.Evnt;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Homework;
@@ -87,6 +88,17 @@ public interface TeacherApi {
     @GET("message/group/{groupId}/message/{messageId}")
     Call<ArrayList<Message>> getGroupMessagesFromId(@Path("groupId") long groupId,
                                                     @Path("messageId") long messageId);
+
+
+    @POST("deletedmessage")
+    Call<DeletedMessage> deleteMessage(@Body DeletedMessage deletedMessage);
+
+    @GET("deletedmessage/{id}/group/{groupId}")
+    Call<ArrayList<DeletedMessage>> getDeletedMessagesAboveId(@Path("groupId") long groupId,
+                                                              @Path("id") long id);
+
+    @GET("deletedmessage/group/{groupId}")
+    Call<ArrayList<DeletedMessage>> getDeletedMessages(@Path("groupId") long groupId);
 
     @GET("messagerecipient/{groupId}/{groupMessageId}")
     Call<ArrayList<MessageRecipient>> getMessageRecipients(@Path("groupId") long groupId,

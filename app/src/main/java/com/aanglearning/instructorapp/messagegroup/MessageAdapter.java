@@ -122,6 +122,12 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         notifyItemChanged(newPosition);
     }
 
+    @UiThread
+    void deleteDataSet(int pos) {
+        this.messages.remove(pos);
+        notifyItemRemoved(pos);
+    }
+
     @Override
     public MessageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_TYPE_TEXT) {

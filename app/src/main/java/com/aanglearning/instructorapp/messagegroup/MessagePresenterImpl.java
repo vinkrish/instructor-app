@@ -1,5 +1,7 @@
 package com.aanglearning.instructorapp.messagegroup;
 
+import com.aanglearning.instructorapp.dao.DeletedMessageDao;
+import com.aanglearning.instructorapp.model.DeletedMessage;
 import com.aanglearning.instructorapp.model.Message;
 
 import java.util.List;
@@ -38,6 +40,28 @@ class MessagePresenterImpl implements MessagePresenter, MessageInteractor.OnFini
         if(mView != null) {
             mView.showProgress();
             mInteractor.getMessages(groupId, this);
+        }
+    }
+
+    @Override
+    public void deleteMessage(DeletedMessage deletedMessage) {
+        if(mView != null) {
+            mView.showProgress();
+            mInteractor.deleteMessage(deletedMessage, this);
+        }
+    }
+
+    @Override
+    public void getRecentDeletedMessages(long groupId, long id) {
+        if(mView != null) {
+            mInteractor.getRecentDeletedMessages(groupId, id, this);
+        }
+    }
+
+    @Override
+    public void getDeletedMessages(long groupId) {
+        if(mView != null) {
+            mInteractor.getDeletedMessages(groupId, this);
         }
     }
 
@@ -83,6 +107,21 @@ class MessagePresenterImpl implements MessagePresenter, MessageInteractor.OnFini
         if(mView != null) {
             mView.showMessages(messages);
             mView.hideProgress();
+        }
+    }
+
+    @Override
+    public void onMessageDeleted(DeletedMessage deletedMessage) {
+        if(mView != null) {
+            mView.onMessageDeleted(deletedMessage);
+            mView.hideProgress();
+        }
+    }
+
+    @Override
+    public void onDeletedMessagesReceived(List<DeletedMessage> messages) {
+        if(mView != null) {
+            DeletedMessageDao.insertDeletedMessages(messages);
         }
     }
 
