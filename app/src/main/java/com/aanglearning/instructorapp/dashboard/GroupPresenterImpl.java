@@ -27,6 +27,13 @@ class GroupPresenterImpl implements GroupPresenter, GroupInteractor.OnFinishedLi
     }
 
     @Override
+    public void getGroupsAboveId(long teacherId, long id) {
+        if (mView != null) {
+            mInteractor.getGroupsAboveId(teacherId, id, this);
+        }
+    }
+
+    @Override
     public void getGroups(long userId) {
         if (mView != null) {
             mView.showProgress();
@@ -53,6 +60,13 @@ class GroupPresenterImpl implements GroupPresenter, GroupInteractor.OnFinishedLi
             mView.backupGroup(group);
             mView.hideProgress();
             mView.setGroup(group);
+        }
+    }
+
+    @Override
+    public void onRecentGroupsReceived(List<Groups> groupsList) {
+        if (mView != null) {
+            mView.setRecentGroups(groupsList);
         }
     }
 

@@ -15,10 +15,14 @@ interface GroupInteractor {
 
         void onGroupReceived(Groups group);
 
+        void onRecentGroupsReceived(List<Groups> groupsList);
+
         void onGroupsReceived(List<Groups> groupsList);
     }
 
     void getGroup(long groupId, GroupInteractor.OnFinishedListener listener);
+
+    void getGroupsAboveId(long userId, long id, GroupInteractor.OnFinishedListener listener);
 
     void getGroups(long userId, GroupInteractor.OnFinishedListener listener);
 }

@@ -209,7 +209,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
                     presenter.getFollowupMessages(group.getId(), adapter.getDataSet().get(adapter.getDataSet().size() - 1).getId());
                 } */
                 List<Message> messages = MessageDao.getGroupMessagesFromId(group.getId(),
-                        adapter.getDataSet().get(adapter.getDataSet().size() - 1).getId());
+                        adapter.getDataSet().get(adapter.getItemCount() - 1).getId());
                 if(messages.size() > 0) {
                     adapter.updateDataSet(messages);
                 }

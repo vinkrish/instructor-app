@@ -142,9 +142,15 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.getGroups(teacher.getId());
+                if(adapter.getDataSet().size() == 0) {
+                    presenter.getGroups(teacher.getId());
+                } else {
+                    presenter.getGroupsAboveId(teacher.getId(), adapter.getDataSet().get(adapter.getItemCount() - 1).getId());
+                }
             }
         });
+
+        loadOfflineData();
 
         if(NetworkUtil.isNetworkAvailable(this)) {
             if(isNotified) {
@@ -155,10 +161,12 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                     setGroup(group);
                 }
             } else {
-                presenter.getGroups(teacher.getId());
+                if(adapter.getDataSet().size() == 0) {
+                    presenter.getGroups(teacher.getId());
+                } else {
+                    presenter.getGroupsAboveId(teacher.getId(), adapter.getDataSet().get(adapter.getItemCount() - 1).getId());
+                }
             }
-        } else {
-            loadOfflineData();
         }
     }
 
@@ -272,7 +280,6 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     @Override
     public void showError(String message) {
         showSnackbar(message);
-        loadOfflineData();
     }
 
     @Override
@@ -282,6 +289,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
 
     @Override
     public void setGroup(Groups group) {
+        backupGroup(group);
         loadOfflineData();
         Intent intent = new Intent(DashboardActivity.this, MessageActivity.class);
         Bundle args = new Bundle();
@@ -293,24 +301,27 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     }
 
     @Override
+    public void setRecentGroups(List<Groups> groups) {
+        adapter.updateDataSet(groups);
+        backupGroups(groups);
+    }
+
+    @Override
     public void setGroups(List<Groups> groups) {
         if(groups.size() == 0) {
             recyclerView.invalidate();
-            GroupDao.clear();
             noGroups.setVisibility(View.VISIBLE);
         } else {
             noGroups.setVisibility(View.INVISIBLE);
             adapter.replaceData(groups);
             backupGroups(groups);
         }
-        refreshLayout.setRefreshing(false);
     }
 
     private void backupGroups(final List<Groups> groups) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                GroupDao.clear();
                 GroupDao.insertMany(groups);
             }
         }).start();

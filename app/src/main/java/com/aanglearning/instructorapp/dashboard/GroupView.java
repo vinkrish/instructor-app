@@ -19,5 +19,7 @@ interface GroupView {
 
     void setGroup(Groups group);
 
+    void setRecentGroups(List<Groups> groups);
+
     void setGroups(List<Groups> groups);
 }

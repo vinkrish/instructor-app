@@ -9,6 +9,8 @@ import com.aanglearning.instructorapp.model.Authorization;
 interface GroupPresenter {
     void getGroup(long groupId);
 
+    void getGroupsAboveId(long teacherId, long id);
+
     void getGroups(long teacherId);
 
     void onDestroy();
