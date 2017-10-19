@@ -88,7 +88,10 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework);
         ButterKnife.bind(this);
+        init();
+    }
 
+    private void init() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -96,7 +99,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
 
         alertDialogHelper = new AlertDialogHelper(this);
 
-        initRecyclerView();
+        setupRecyclerView();
 
         setDefaultDate();
 
@@ -118,18 +121,6 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
                 presenter.getClassList(TeacherDao.getTeacher().getId());
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //homeworks = new ArrayList<>();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.onDestroy();
     }
 
     private void setDefaultDate() {
@@ -184,7 +175,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         }
     };
 
-    private void initRecyclerView() {
+    private void setupRecyclerView() {
         homeworkRecycler.setLayoutManager(new LinearLayoutManager(this));
         homeworkRecycler.setNestedScrollingEnabled(false);
         homeworkRecycler.setItemAnimator(new DefaultItemAnimator());
@@ -520,9 +511,9 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         public void onItemClick(final Homework homework) {
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeworkActivity.this);
             View view = getLayoutInflater().inflate(R.layout.homework_dialog, null);
-            TextView subjectName = (TextView) view.findViewById(R.id.hw_subject);
+            TextView subjectName = view.findViewById(R.id.hw_subject);
             subjectName.setText(homework.getSubjectName());
-            final EditText homeworkText = (EditText) view.findViewById(R.id.hw_et);
+            final EditText homeworkText = view.findViewById(R.id.hw_et);
             builder.setView(view);
 
             builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -547,4 +538,10 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
             dialog.show();*/
         }
     };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
 }

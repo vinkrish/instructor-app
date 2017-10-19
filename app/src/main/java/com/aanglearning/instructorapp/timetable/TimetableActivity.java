@@ -39,14 +39,10 @@ import butterknife.ButterKnife;
 
 public class TimetableActivity extends AppCompatActivity implements TimetableView {
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.coordinatorLayout)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-    @BindView(R.id.tableLayout)
-    FrameLayout tableLayout;
-    @BindView(R.id.noTimetable)
-    LinearLayout noTimetable;
+    @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindView(R.id.tableLayout) FrameLayout tableLayout;
+    @BindView(R.id.noTimetable) LinearLayout noTimetable;
 
     private TimetablePresenter presenter;
 
@@ -90,16 +86,6 @@ public class TimetableActivity extends AppCompatActivity implements TimetableVie
             }
             tableLayout.addView(new TableMainLayout(this));
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.onDestroy();
-    }
-
-    public void loadData(MenuItem item) {
-        presenter.getTimetable(TeacherDao.getTeacher().getId());
     }
 
     private void showSnackbar(String message) {
@@ -500,5 +486,11 @@ public class TimetableActivity extends AppCompatActivity implements TimetableVie
                 }
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
     }
 }

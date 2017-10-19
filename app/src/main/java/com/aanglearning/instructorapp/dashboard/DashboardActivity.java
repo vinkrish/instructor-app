@@ -80,6 +80,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     private GroupAdapter adapter;
     private Teacher teacher;
     private boolean isNotified;
+    private long groupId;
 
     final static int REQ_CODE = 111;
 
@@ -88,7 +89,10 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         ButterKnife.bind(this);
+        init();
+    }
 
+    private void init() {
         setupDrawerContent(navigationView);
 
         teacher = TeacherDao.getTeacher();
@@ -96,7 +100,6 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         toolbar.setTitle(teacher.getName());
         toolbar.setSubtitle("Teacher");
         setSupportActionBar(toolbar);
-        long groupId = 0;
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -105,14 +108,6 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         }
 
         presenter = new GroupPresenterImpl(this, new GroupInteractorImpl());
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(this));
-
-        adapter = new GroupAdapter(new ArrayList<Groups>(0), mItemListener);
-        recyclerView.setAdapter(adapter);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new
                 ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name) {
@@ -133,22 +128,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
 
         hideDrawerItem();
 
-        refreshLayout.setColorSchemeColors(
-                ContextCompat.getColor(this, R.color.colorPrimary),
-                ContextCompat.getColor(this, R.color.colorAccent),
-                ContextCompat.getColor(this, R.color.colorPrimaryDark)
-        );
-
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if(adapter.getDataSet().size() == 0) {
-                    presenter.getGroups(teacher.getId());
-                } else {
-                    presenter.getGroupsAboveId(teacher.getId(), adapter.getDataSet().get(adapter.getItemCount() - 1).getId());
-                }
-            }
-        });
+        setupRecyclerView();
 
         loadOfflineData();
 
@@ -170,6 +150,33 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         }
     }
 
+    private void setupRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this));
+
+        adapter = new GroupAdapter(new ArrayList<Groups>(0), mItemListener);
+        recyclerView.setAdapter(adapter);
+
+        refreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(this, R.color.colorPrimary),
+                ContextCompat.getColor(this, R.color.colorAccent),
+                ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        );
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(adapter.getDataSet().size() == 0) {
+                    presenter.getGroups(teacher.getId());
+                } else {
+                    presenter.getGroupsAboveId(teacher.getId(), adapter.getDataSet().get(adapter.getItemCount() - 1).getId());
+                }
+            }
+        });
+    }
+
     private void loadOfflineData() {
         List<Groups> groups = GroupDao.getGroups(teacher.getId());
         if(groups.size() == 0) {
@@ -182,8 +189,8 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
 
     private void setProfile() {
         View hView = navigationView.inflateHeaderView(R.layout.header);
-        final ImageView imageView = (ImageView) hView.findViewById(R.id.user_image);
-        TextView tv = (TextView) hView.findViewById(R.id.name);
+        final ImageView imageView = hView.findViewById(R.id.user_image);
+        TextView tv = hView.findViewById(R.id.name);
         tv.setText(teacher.getName());
 
         if(PermissionUtil.getStoragePermissionStatus(this)) {
@@ -217,21 +224,6 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                             }
                         });
             }
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (isNavDrawerOpen()) {
-            closeNavDrawer();
-        } else {
-            super.onBackPressed();
         }
     }
 
@@ -407,24 +399,18 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         }
     }
 
-    private void dbBackup() {
-        File sd = Environment.getExternalStorageDirectory();
-        File data = Environment.getDataDirectory();
-        FileChannel source = null;
-        FileChannel destination = null;
-        String currentDBPath = "/data/" + "com.aanglearning.instructorapp" + "/databases/teacher.db";
-        String backupDBPath = "teacher";
-        File currentDB = new File(data, currentDBPath);
-        File backupDB = new File(sd, backupDBPath);
-        try {
-            source = new FileInputStream(currentDB).getChannel();
-            destination = new FileOutputStream(backupDB).getChannel();
-            destination.transferFrom(source, 0, source.size());
-            source.close();
-            destination.close();
-            Toast.makeText(this, "DB Exported!", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isNavDrawerOpen()) {
+            closeNavDrawer();
+        } else {
+            super.onBackPressed();
         }
     }
 }

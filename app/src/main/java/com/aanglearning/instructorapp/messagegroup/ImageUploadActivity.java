@@ -19,7 +19,6 @@ import android.provider.MediaStore;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -52,18 +51,12 @@ import id.zelory.compressor.Compressor;
 
 public class ImageUploadActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
-    @BindView(R.id.coordinatorLayout)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.image_view)
-    ImageView choseImage;
-    @BindView(R.id.progress_layout)
-    FrameLayout progressLayout;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-    @BindView(R.id.youtube_url)
-    TextView youtubeURL;
-    @BindView(R.id.new_msg)
-    EditText newMsg;
+    @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.image_view) ImageView choseImage;
+    @BindView(R.id.progress_layout) FrameLayout progressLayout;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindView(R.id.youtube_url) TextView youtubeURL;
+    @BindView(R.id.new_msg) EditText newMsg;
 
     private static final String TAG = "ImageUploadActivity";
     private static final int WRITE_STORAGE_PERMISSION = 666;
@@ -76,7 +69,6 @@ public class ImageUploadActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_upload);
         ButterKnife.bind(this);
-
         transferUtility = Util.getTransferUtility(this);
     }
 
@@ -338,7 +330,7 @@ public class ImageUploadActivity extends AppCompatActivity
             newFile.createNewFile();
             FileOutputStream outputStream = new FileOutputStream(newFile);
 
-            selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 65, outputStream);
+            selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 30, outputStream);
 
             return newFile;
         } catch (Exception e) {
