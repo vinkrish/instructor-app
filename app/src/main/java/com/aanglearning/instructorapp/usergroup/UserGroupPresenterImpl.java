@@ -1,5 +1,6 @@
 package com.aanglearning.instructorapp.usergroup;
 
+import com.aanglearning.instructorapp.model.DeletedGroup;
 import com.aanglearning.instructorapp.model.UserGroup;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  * Created by Vinay on 01-04-2017.
  */
 
-public class UserGroupPresenterImpl implements UserGroupPresenter,
+class UserGroupPresenterImpl implements UserGroupPresenter,
         UserGroupInteractor.OnFinishedListener {
 
     private UserGroupView mView;
@@ -40,6 +41,14 @@ public class UserGroupPresenterImpl implements UserGroupPresenter,
         if (mView != null) {
             mView.showProgress();
             mInteractor.deleteUsers(userGroups, this);
+        }
+    }
+
+    @Override
+    public void deleteGroup(DeletedGroup deletedGroup) {
+        if (mView != null) {
+            mView.showProgress();
+            mInteractor.deleteGroup(deletedGroup, this);
         }
     }
 
@@ -77,6 +86,14 @@ public class UserGroupPresenterImpl implements UserGroupPresenter,
         if(mView != null) {
             mView.hideProgress();
             mView.userGroupDeleted();
+        }
+    }
+
+    @Override
+    public void onGroupDeleted(DeletedGroup deletedGroup) {
+        if(mView != null) {
+            mView.hideProgress();
+            mView.groupDeleted(deletedGroup);
         }
     }
 

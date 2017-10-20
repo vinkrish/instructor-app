@@ -20,7 +20,9 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.aanglearning.instructorapp.R;
+import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.dao.TeacherDao;
+import com.aanglearning.instructorapp.dashboard.DashboardActivity;
 import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Section;
@@ -31,6 +33,7 @@ import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
 import org.joda.time.LocalDate;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -150,8 +153,10 @@ public class NewGroupActivity extends AppCompatActivity implements NewGroupView,
 
     @Override
     public void groupSaved(Groups groups) {
-        Intent intent = new Intent();
-        setResult(Activity.RESULT_OK, intent);
+        GroupDao.insertMany(Collections.singletonList(groups));
+        Intent intent = new Intent(this, DashboardActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
         finish();
     }
 
@@ -181,5 +186,11 @@ public class NewGroupActivity extends AppCompatActivity implements NewGroupView,
         } else {
             sectionLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
     }
 }

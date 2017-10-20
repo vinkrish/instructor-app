@@ -1,7 +1,5 @@
 package com.aanglearning.instructorapp.dashboard;
 
-import com.aanglearning.instructorapp.model.Authorization;
-
 /**
  * Created by Vinay on 02-04-2017.
  */
@@ -12,6 +10,10 @@ interface GroupPresenter {
     void getGroupsAboveId(long teacherId, long id);
 
     void getGroups(long teacherId);
+
+    void getRecentDeletedGroups(long schoolId, long id);
+
+    void getDeletedGroups(long schoolId);
 
     void onDestroy();
 }

@@ -3,11 +3,9 @@ package com.aanglearning.instructorapp.dashboard;
 import com.aanglearning.instructorapp.App;
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.api.ApiClient;
-import com.aanglearning.instructorapp.api.AuthApi;
 import com.aanglearning.instructorapp.api.TeacherApi;
-import com.aanglearning.instructorapp.model.Authorization;
+import com.aanglearning.instructorapp.model.DeletedGroup;
 import com.aanglearning.instructorapp.model.Groups;
-import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
 import java.util.List;
 
@@ -81,6 +79,50 @@ class GroupInteractorImpl implements GroupInteractor {
 
             @Override
             public void onFailure(Call<List<Groups>> call, Throwable t) {
+                listener.onError(App.getInstance().getString(R.string.network_error));
+            }
+        });
+    }
+
+    @Override
+    public void getRecentDeletedGroups(long schoolId, long id, final OnFinishedListener listener) {
+        TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
+
+        Call<List<DeletedGroup>> queue = api.getDeletedGroupsAboveId(schoolId, id);
+        queue.enqueue(new Callback<List<DeletedGroup>>() {
+            @Override
+            public void onResponse(Call<List<DeletedGroup>> call, Response<List<DeletedGroup>> response) {
+                if(response.isSuccessful()) {
+                    listener.onDeletedGroupsReceived(response.body());
+                } else {
+                    listener.onError(App.getInstance().getString(R.string.request_error));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<DeletedGroup>> call, Throwable t) {
+                listener.onError(App.getInstance().getString(R.string.network_error));
+            }
+        });
+    }
+
+    @Override
+    public void getDeletedGroups(long schoolId, final OnFinishedListener listener) {
+        TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
+
+        Call<List<DeletedGroup>> queue = api.getDeletedGroups(schoolId);
+        queue.enqueue(new Callback<List<DeletedGroup>>() {
+            @Override
+            public void onResponse(Call<List<DeletedGroup>> call, Response<List<DeletedGroup>> response) {
+                if(response.isSuccessful()) {
+                    listener.onDeletedGroupsReceived(response.body());
+                } else {
+                    listener.onError(App.getInstance().getString(R.string.request_error));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<DeletedGroup>> call, Throwable t) {
                 listener.onError(App.getInstance().getString(R.string.network_error));
             }
         });
