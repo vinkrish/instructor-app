@@ -19,5 +19,7 @@ interface UserGroupView {
 
     void userGroupDeleted();
 
-    void groupDeleted(DeletedGroup deletedGroup);
+    void groupDeleted();
+
+    void onDeletedGroupSync();
 }

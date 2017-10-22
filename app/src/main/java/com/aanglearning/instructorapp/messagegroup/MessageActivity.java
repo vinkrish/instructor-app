@@ -143,8 +143,12 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     private void getBackupMessages() {
         List<Message> messages = MessageDao.getGroupMessages(group.getId());
         adapter.setDataSet(messages, selectedMessage);
+        syncMessages();
+    }
+
+    private void syncMessages() {
         if (NetworkUtil.isNetworkAvailable(this)) {
-            if (messages.size() == 0) {
+            if (adapter.getItemCount() == 0) {
                 presenter.getMessages(group.getId());
             } else {
                 presenter.getRecentMessages(group.getId(), adapter.getDataSet().get(0).getId());
@@ -283,15 +287,13 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
         youtubeURL.setText("");
         youtubeURL.setVisibility(View.GONE);
         noMessage.setVisibility(View.GONE);
-        adapter.insertDataSet(message);
-        recyclerView.smoothScrollToPosition(0);
-        backupMessages(Collections.singletonList(message));
+        syncMessages();
     }
 
     @Override
     public void onMessageDeleted(DeletedMessage deletedMessage) {
         adapter.deleteDataSet(selectedMessagePosition);
-        DeletedMessageDao.insertDeletedMessages(Collections.singletonList(deletedMessage));
+        syncDeletedMessages();
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.aanglearning.instructorapp.usergroup;
 
 import com.aanglearning.instructorapp.model.DeletedGroup;
-import com.aanglearning.instructorapp.model.Student;
-import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.model.UserGroup;
 
 import java.util.ArrayList;
@@ -24,6 +22,8 @@ interface UserGroupInteractor {
         void onUsersDeleted();
 
         void onGroupDeleted(DeletedGroup deletedGroup);
+
+        void onDeletedGroupsReceived(List<DeletedGroup> deletedGroups);
     }
 
     void getUserGroup(long groupId, UserGroupInteractor.OnFinishedListener listener);
@@ -33,4 +33,8 @@ interface UserGroupInteractor {
     void deleteUsers(ArrayList<UserGroup> userGroups, UserGroupInteractor.OnFinishedListener listener);
 
     void deleteGroup(DeletedGroup deletedGroup, UserGroupInteractor.OnFinishedListener listener);
+
+    void getRecentDeletedGroups(long schoolId, long id, UserGroupInteractor.OnFinishedListener listener);
+
+    void getDeletedGroups(long schoolId, UserGroupInteractor.OnFinishedListener listener);
 }

@@ -109,4 +109,48 @@ class UserGroupInteractorImpl implements UserGroupInteractor {
         });
     }
 
+    @Override
+    public void getRecentDeletedGroups(long schoolId, long id, final OnFinishedListener listener) {
+        TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
+
+        Call<List<DeletedGroup>> queue = api.getDeletedGroupsAboveId(schoolId, id);
+        queue.enqueue(new Callback<List<DeletedGroup>>() {
+            @Override
+            public void onResponse(Call<List<DeletedGroup>> call, Response<List<DeletedGroup>> response) {
+                if(response.isSuccessful()) {
+                    listener.onDeletedGroupsReceived(response.body());
+                } else {
+                    listener.onError(App.getInstance().getString(R.string.request_error));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<DeletedGroup>> call, Throwable t) {
+                listener.onError(App.getInstance().getString(R.string.network_error));
+            }
+        });
+    }
+
+    @Override
+    public void getDeletedGroups(long schoolId, final OnFinishedListener listener) {
+        TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
+
+        Call<List<DeletedGroup>> queue = api.getDeletedGroups(schoolId);
+        queue.enqueue(new Callback<List<DeletedGroup>>() {
+            @Override
+            public void onResponse(Call<List<DeletedGroup>> call, Response<List<DeletedGroup>> response) {
+                if(response.isSuccessful()) {
+                    listener.onDeletedGroupsReceived(response.body());
+                } else {
+                    listener.onError(App.getInstance().getString(R.string.request_error));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<DeletedGroup>> call, Throwable t) {
+                listener.onError(App.getInstance().getString(R.string.network_error));
+            }
+        });
+    }
+
 }

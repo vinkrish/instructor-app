@@ -153,10 +153,8 @@ public class NewGroupActivity extends AppCompatActivity implements NewGroupView,
 
     @Override
     public void groupSaved(Groups groups) {
-        GroupDao.insertMany(Collections.singletonList(groups));
-        Intent intent = new Intent(this, DashboardActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        Intent intent = new Intent();
+        setResult(Activity.RESULT_OK, intent);
         finish();
     }
 

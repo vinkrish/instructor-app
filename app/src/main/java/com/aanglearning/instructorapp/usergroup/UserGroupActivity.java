@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.DeletedGroupDao;
@@ -251,26 +252,31 @@ public class UserGroupActivity extends AppCompatActivity implements
             menu.findItem(R.id.action_save).setVisible(true);
             noMembers.setVisibility(View.GONE);
             adapter.setDataSet(userGroups, multiselect_list);
-            if(group.getCreatedBy() == teacher.getId()) {
-                deleteBtn.setVisibility(View.VISIBLE);
-            }
-        }
-        ArrayList<StudentSet> studentSets = new ArrayList<>();
-        for(Student s: groupUsers.getStudents()) {
-            studentSets.add(new StudentSet(s.getId(), s.getRollNo(), s.getName()));
-        }
-        studentAdapter.setDataSet(studentSets);
-        if(studentSets.size() == 0) {
-            addStudentsLayout.setVisibility(View.GONE);
         }
 
-        ArrayList<TeacherSet> teacherSets = new ArrayList<>();
-        for(Teacher t: groupUsers.getTeachers()) {
-            teacherSets.add(new TeacherSet(t.getId(), t.getName()));
+        if(groupUsers.getStudents() != null) {
+            ArrayList<StudentSet> studentSets = new ArrayList<>();
+            for(Student s: groupUsers.getStudents()) {
+                studentSets.add(new StudentSet(s.getId(), s.getRollNo(), s.getName()));
+            }
+            studentAdapter.setDataSet(studentSets);
+            if(studentSets.size() == 0) {
+                addStudentsLayout.setVisibility(View.GONE);
+            }
         }
-        teacherAdapter.setDataSet(teacherSets);
-        if(teacherSets.size() == 0) {
-            addTeacherLayout.setVisibility(View.GONE);
+
+        if(groupUsers.getTeachers() != null) {
+            ArrayList<TeacherSet> teacherSets = new ArrayList<>();
+            for(Teacher t: groupUsers.getTeachers()) {
+                teacherSets.add(new TeacherSet(t.getId(), t.getName()));
+            }
+            teacherAdapter.setDataSet(teacherSets);
+            if(teacherSets.size() == 0) {
+                addTeacherLayout.setVisibility(View.GONE);
+            }
+        }
+        if(group.getCreatedBy() == teacher.getId()) {
+            deleteBtn.setVisibility(View.VISIBLE);
         }
         refreshLayout.setRefreshing(false);
         backupUserGroup(userGroups);
@@ -319,8 +325,17 @@ public class UserGroupActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void groupDeleted(DeletedGroup deletedGroup) {
-        DeletedGroupDao.insertDeletedGroups(Collections.singletonList(deletedGroup));
+    public void groupDeleted() {
+        DeletedGroup deletedGroup = DeletedGroupDao.getNewestDeletedGroup();
+        if(deletedGroup.getId() == 0) {
+            presenter.getDeletedGroups(teacher.getSchoolId());
+        } else {
+            presenter.getRecentDeletedGroups(teacher.getSchoolId(), deletedGroup.getId());
+        }
+    }
+
+    @Override
+    public void onDeletedGroupSync() {
         Intent intent = new Intent(this, DashboardActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

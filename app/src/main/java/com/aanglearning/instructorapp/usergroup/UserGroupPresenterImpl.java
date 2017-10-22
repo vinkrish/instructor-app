@@ -1,9 +1,11 @@
 package com.aanglearning.instructorapp.usergroup;
 
+import com.aanglearning.instructorapp.dao.DeletedGroupDao;
 import com.aanglearning.instructorapp.model.DeletedGroup;
 import com.aanglearning.instructorapp.model.UserGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vinay on 01-04-2017.
@@ -53,6 +55,22 @@ class UserGroupPresenterImpl implements UserGroupPresenter,
     }
 
     @Override
+    public void getRecentDeletedGroups(long schoolId, long id) {
+        if (mView != null) {
+            mView.showProgress();
+            mInteractor.getRecentDeletedGroups(schoolId, id, this);
+        }
+    }
+
+    @Override
+    public void getDeletedGroups(long schoolId) {
+        if (mView != null) {
+            mView.showProgress();
+            mInteractor.getDeletedGroups(schoolId, this);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         mView = null;
     }
@@ -93,7 +111,16 @@ class UserGroupPresenterImpl implements UserGroupPresenter,
     public void onGroupDeleted(DeletedGroup deletedGroup) {
         if(mView != null) {
             mView.hideProgress();
-            mView.groupDeleted(deletedGroup);
+            mView.groupDeleted();
+        }
+    }
+
+    @Override
+    public void onDeletedGroupsReceived(List<DeletedGroup> deletedGroups) {
+        if(mView != null) {
+            DeletedGroupDao.insertDeletedGroups(deletedGroups);
+            mView.hideProgress();
+            mView.onDeletedGroupSync();
         }
     }
 
