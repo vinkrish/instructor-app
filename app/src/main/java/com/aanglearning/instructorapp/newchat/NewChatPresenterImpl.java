@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Vinay on 28-04-2017.
  */
 
-public class NewChatPresenterImpl implements NewChatPresenter, NewChatInteractor.OnFinishedListener {
+class NewChatPresenterImpl implements NewChatPresenter, NewChatInteractor.OnFinishedListener {
 
     private NewChatView mView;
     private NewChatInteractor mInteractor;

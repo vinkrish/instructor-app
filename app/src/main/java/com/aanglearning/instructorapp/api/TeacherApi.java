@@ -24,6 +24,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -142,7 +143,7 @@ public interface TeacherApi {
     @GET("chat/teacher/{id}")
     Call<List<Chat>> getChats(@Path("id") long id);
 
-    @GET("chat/{chatId}")
+    @DELETE("chat/{chatId}")
     Call<Void> deleteChat(@Path("chatId") long chatId);
 
     @GET("message/{senderRole}/{senderId}/{recipientRole}/{recipientId}/messagesUp/{messageId}")
