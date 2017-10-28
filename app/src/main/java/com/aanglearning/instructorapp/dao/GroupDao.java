@@ -103,13 +103,4 @@ public class GroupDao {
         return groups;
     }
 
-    public static int clear() {
-        SQLiteDatabase sqliteDb = AppGlobal.getSqlDbHelper().getWritableDatabase();
-        try {
-            sqliteDb.execSQL("delete from groups");
-        } catch(SQLException e) {
-            return 0;
-        }
-        return 1;
-    }
 }
