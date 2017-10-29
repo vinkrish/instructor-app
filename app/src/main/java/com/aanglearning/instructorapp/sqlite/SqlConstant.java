@@ -239,6 +239,7 @@ interface SqlConstant {
     String CREATE_ALBUM = "CREATE TABLE album (" +
             " Id INTEGER, " +
             " Name TEXT, " +
+            " CoverPic TEXT, " +
             " CreatedBy INTEGER, " +
             " CreatorName TEXT, " +
             " CreatorRole TEXT, " +
@@ -249,7 +250,7 @@ interface SqlConstant {
     String CREATE_ALBUM_IMAGE = "CREATE TABLE album_image (" +
             " Id INTEGER, " +
             " Name TEXT, " +
-            " AlbumId INTEGER. " +
+            " AlbumId INTEGER, " +
             " CreatedBy INTEGER, " +
             " CreatorName TEXT, " +
             " CreatorRole TEXT, " +
@@ -259,7 +260,8 @@ interface SqlConstant {
     String CREATE_SUB_ALBUM = "CREATE TABLE sub_album (" +
             " Id INTEGER, " +
             " Name TEXT, " +
-            " AlbumId INTEGER. " +
+            " CoverPic TEXT, " +
+            " AlbumId INTEGER, " +
             " CreatedBy INTEGER, " +
             " CreatorName TEXT, " +
             " CreatorRole TEXT, " +
@@ -269,7 +271,7 @@ interface SqlConstant {
     String CREATE_SUBALBUM_IMAGE = "CREATE TABLE subalbum_image (" +
             " Id INTEGER, " +
             " Name TEXT, " +
-            " SubAlbumId INTEGER. " +
+            " SubAlbumId INTEGER, " +
             " CreatedBy INTEGER, " +
             " CreatorName TEXT, " +
             " CreatorRole TEXT, " +
