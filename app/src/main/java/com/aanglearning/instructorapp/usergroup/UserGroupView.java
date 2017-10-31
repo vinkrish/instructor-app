@@ -1,7 +1,5 @@
 package com.aanglearning.instructorapp.usergroup;
 
-import com.aanglearning.instructorapp.model.DeletedGroup;
-
 /**
  * Created by Vinay on 01-04-2017.
  */

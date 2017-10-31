@@ -92,10 +92,10 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_event_item);
 
-        TextView eventTitle = (TextView) dialog.findViewById(R.id.event_title);
-        TextView startDate = (TextView) dialog.findViewById(R.id.start_date);
-        ImageView closeWindow = (ImageView) dialog.findViewById(R.id.close_window);
-        TextView description = (TextView) dialog.findViewById(R.id.description);
+        TextView eventTitle =  dialog.findViewById(R.id.event_title);
+        TextView startDate =  dialog.findViewById(R.id.start_date);
+        ImageView closeWindow = dialog.findViewById(R.id.close_window);
+        TextView description =  dialog.findViewById(R.id.description);
 
         eventTitle.setText(evnt.getEventTitle());
         startDate.setText(DateUtil.getDisplayFormattedDate(evnt.getStartDate()));

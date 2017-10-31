@@ -68,6 +68,13 @@
     <string name="select_image">Click here to choose image</string>
     <string name="send">Send</string>
 
+    <string name="_new">New</string>
+    <string name="gallery">Gallery</string>
+    <string name="new_album">New Album</string>
+    <string name="album_name">Album Name</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_album">No Albums!</string>
+
     <!-- Attendance View & Homework View-->
     <string name="attendance">Attendance</string>
     <string name="session">Session :</string>

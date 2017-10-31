@@ -74,9 +74,8 @@ class GroupPresenterImpl implements GroupPresenter, GroupInteractor.OnFinishedLi
     @Override
     public void onGroupReceived(Groups group) {
         if (mView != null) {
-            mView.backupGroup(group);
-            mView.setGroup(group);
             mView.hideProgress();
+            mView.setGroup(group);
         }
     }
 
