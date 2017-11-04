@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.attendance.AttendanceActivity;
@@ -56,8 +57,10 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -202,14 +205,14 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
             } else {
                 Picasso.with(this)
                         .load("https://s3.ap-south-1.amazonaws.com/shikshitha-images/" + teacher.getSchoolId() + "/" + teacher.getImage())
-                        .placeholder(R.drawable.splash_image)
+                        .placeholder(R.drawable.ic_account_black)
                         .into(imageView, new Callback() {
                             @Override
                             public void onSuccess() {
                                 Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
                                 try {
                                     FileOutputStream fos = new FileOutputStream(file);
-                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
                                     fos.close();
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -397,6 +400,27 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
             }
         });
         alertDialog.show();
+    }
+
+    private void dbBackup() {
+        File sd = Environment.getExternalStorageDirectory();
+        File data = Environment.getDataDirectory();
+        FileChannel source = null;
+        FileChannel destination = null;
+        String currentDBPath = "/data/" + "com.aanglearning.instructorapp" + "/databases/teacher.db";
+        String backupDBPath = "teacher";
+        File currentDB = new File(data, currentDBPath);
+        File backupDB = new File(sd, backupDBPath);
+        try {
+            source = new FileInputStream(currentDB).getChannel();
+            destination = new FileOutputStream(backupDB).getChannel();
+            destination.transferFrom(source, 0, source.size());
+            source.close();
+            destination.close();
+            Toast.makeText(this, "DB Exported!", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     GroupAdapter.OnItemClickListener mItemListener = new GroupAdapter.OnItemClickListener() {

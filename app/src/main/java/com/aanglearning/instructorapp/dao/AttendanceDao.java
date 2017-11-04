@@ -72,20 +72,6 @@ public class AttendanceDao {
         return attendanceList;
     }
 
-    public static String getLastAttendanceDate(long sectionId) {
-        String date = "";
-        SQLiteDatabase sqliteDatabase = AppGlobal.getSqlDbHelper().getReadableDatabase();
-        Cursor c = sqliteDatabase.rawQuery("SELECT DateAttendance FROM attendance WHERE SectionId = " +
-                sectionId + " ORDER BY DateAttendance DESC LIMIT 1", null);
-        c.moveToFirst();
-        while (!c.isAfterLast()) {
-            date = c.getString(c.getColumnIndex("DateAttendance"));
-            c.moveToNext();
-        }
-        c.close();
-        return date;
-    }
-
     public static int delete(long sectionId, String date, int session) {
         SQLiteDatabase sqliteDb = AppGlobal.getSqlDbHelper().getWritableDatabase();
         try {

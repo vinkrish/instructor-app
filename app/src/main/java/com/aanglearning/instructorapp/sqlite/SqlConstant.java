@@ -291,6 +291,7 @@ interface SqlConstant {
             " SenderId INTEGER, " +
             " AlbumId INTEGER, " +
             " AlbumImageId INTEGER, " +
+            " Name TEXT, " +
             " DeletedAt INTEGER " +
             ")";
 
@@ -307,6 +308,15 @@ interface SqlConstant {
             " SenderId INTEGER, " +
             " SubAlbumId INTEGER, " +
             " SubAlbumImageId INTEGER, " +
+            " Name TEXT, " +
             " DeletedAt INTEGER " +
+            ")";
+
+    String CREATE_IMAGE_STATUS = "CREATE TABLE image_status (" +
+            " Id INTEGER PRIMARY KEY, " +
+            " Name TEXT, " +
+            " AlbumId INTEGER, " +
+            " SubAlbumId INTEGER, " +
+            " Sync INTEGER " +
             ")";
 }

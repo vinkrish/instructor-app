@@ -64,20 +64,6 @@ public class HomeworkDao {
         return homeworkList;
     }
 
-    public static String getLastHomeworkDate(long sectionId) {
-        String date = "";
-        SQLiteDatabase sqliteDatabase = AppGlobal.getSqlDbHelper().getReadableDatabase();
-        Cursor c = sqliteDatabase.rawQuery("SELECT HomeworkDate FROM homework WHERE SectionId = " +
-                sectionId + " ORDER BY HomeworkDate DESC LIMIT 1", null);
-        c.moveToFirst();
-        while (!c.isAfterLast()) {
-            date = c.getString(c.getColumnIndex("HomeworkDate"));
-            c.moveToNext();
-        }
-        c.close();
-        return date;
-    }
-
     public static int delete(long sectionId, String homeworkDate) {
         SQLiteDatabase sqliteDb = AppGlobal.getSqlDbHelper().getWritableDatabase();
         try {

@@ -98,7 +98,6 @@ class GalleryPresenterImpl implements GalleryPresenter, GalleryInteractor.OnFini
     public void onRecentAlbumsReceived(List<Album> albumList) {
         if (mView != null) {
             mView.setRecentAlbums(albumList);
-            mView.hideProgress();
         }
     }
 
