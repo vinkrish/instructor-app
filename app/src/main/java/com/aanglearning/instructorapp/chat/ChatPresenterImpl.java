@@ -21,7 +21,6 @@ class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFinishedL
     @Override
     public void saveMessage(Message message) {
         if(mView != null) {
-            mView.showProgress();
             mInteractor.saveMessage(message, this);
         }
     }
@@ -29,7 +28,6 @@ class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFinishedL
     @Override
     public void getRecentMessages(String senderRole, long senderId, String recipientRole, long recipeintId, long messageId) {
         if(mView != null) {
-            mView.showProgress();
             mInteractor.getRecentMessages(senderRole, senderId, recipientRole, recipeintId, messageId, this);
         }
     }
@@ -37,7 +35,6 @@ class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFinishedL
     @Override
     public void getMessages(String senderRole, long senderId, String recipientRole, long recipeintId) {
         if(mView != null) {
-            mView.showProgress();
             mInteractor.getMessages(senderRole, senderId, recipientRole, recipeintId, this);
         }
     }
@@ -45,7 +42,6 @@ class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFinishedL
     @Override
     public void getFollowupMessages(String senderRole, long senderId, String recipientRole, long recipeintId, long messageId) {
         if(mView != null) {
-            mView.showProgress();
             mInteractor.getFollowupMessages(senderRole, senderId, recipientRole, recipeintId, messageId, this);
         }
     }
@@ -67,7 +63,6 @@ class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFinishedL
     public void onMessageSaved(Message message) {
         if(mView != null) {
             mView.onMessageSaved(message);
-            mView.hideProgress();
         }
     }
 
@@ -75,7 +70,6 @@ class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFinishedL
     public void onRecentMessagesReceived(List<Message> messages) {
         if(mView != null) {
             mView.showRecentMessages(messages);
-            mView.hideProgress();
         }
     }
 
@@ -83,7 +77,6 @@ class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFinishedL
     public void onMessageReceived(List<Message> messages) {
         if(mView != null) {
             mView.showMessages(messages);
-            mView.hideProgress();
         }
     }
 
@@ -91,7 +84,6 @@ class ChatPresenterImpl implements ChatPresenter, ChatInteractorImpl.OnFinishedL
     public void onFollowupMessagesReceived(List<Message> messages) {
         if(mView != null) {
             mView.showFollowupMessages(messages);
-            mView.hideProgress();
         }
     }
 }

@@ -2,10 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="@dimen/spacing_small"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp">
+    android:layout_marginBottom="@dimen/spacing_extra_tiny"
+    android:layout_marginLeft="@dimen/spacing_extra_large"
+    android:layout_marginRight="@dimen/spacing_small">
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -19,10 +18,9 @@
             style="@style/chat_text_message_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="@dimen/spacing_normal"
             android:autoLink="web"
-            android:textColor="@color/primaryTextColor"
-            android:text="I am a good boy but I do not know what I want." />
+            android:paddingRight="@dimen/spacing_normal"
+            android:textColor="@color/primaryTextColor" />
 
     </FrameLayout>
 

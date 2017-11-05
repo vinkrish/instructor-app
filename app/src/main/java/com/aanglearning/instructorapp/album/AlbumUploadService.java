@@ -53,15 +53,12 @@ public class AlbumUploadService extends IntentService {
             this.imageName = name;
         }
 
-        // Simply updates the UI list when notified.
         @Override
         public void onError(int id, Exception e) {
-            //updateList();
         }
 
         @Override
         public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-            //updateList();
         }
 
         @Override
