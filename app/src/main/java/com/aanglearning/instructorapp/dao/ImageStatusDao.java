@@ -6,10 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import com.aanglearning.instructorapp.model.AlbumImage;
-import com.aanglearning.instructorapp.model.DeletedAlbum;
 import com.aanglearning.instructorapp.model.DeletedAlbumImage;
 import com.aanglearning.instructorapp.model.ImageStatus;
-import com.aanglearning.instructorapp.model.SubAlbumImage;
 import com.aanglearning.instructorapp.util.AppGlobal;
 
 import java.util.ArrayList;
@@ -62,26 +60,6 @@ public class ImageStatusDao {
         return 1;
     }
 
-    public static int updateSubAlbumImages(List<SubAlbumImage> subAlbumImages) {
-        String sql = "update image_status set Sync = 1 where SubAlbumId = ? ";
-        SQLiteDatabase db = AppGlobal.getSqlDbHelper().getWritableDatabase();
-        db.beginTransactionNonExclusive();
-        SQLiteStatement stmt = db.compileStatement(sql);
-        try {
-            for(SubAlbumImage subAlbumImage: subAlbumImages) {
-                stmt.bindLong(1, subAlbumImage.getSubAlbumId());
-                stmt.executeUpdateDelete();
-                stmt.clearBindings();
-            }
-        } catch (Exception e) {
-            db.endTransaction();
-            return 0;
-        }
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        return 1;
-    }
-
     public static ArrayList<ImageStatus> getAlbumImages(long albumId) {
         ArrayList<ImageStatus> albumImages = new ArrayList<>();
         SQLiteDatabase sqliteDatabase = AppGlobal.getSqlDbHelper().getReadableDatabase();
@@ -100,24 +78,6 @@ public class ImageStatusDao {
         return albumImages;
     }
 
-    public static ArrayList<ImageStatus> getSubAlbumImages(long subAlbumId) {
-        ArrayList<ImageStatus> albumImages = new ArrayList<>();
-        SQLiteDatabase sqliteDatabase = AppGlobal.getSqlDbHelper().getReadableDatabase();
-        Cursor c = sqliteDatabase.rawQuery("select * from image_status where SubAlbumId = " + subAlbumId, null);
-        c.moveToFirst();
-        while (!c.isAfterLast()) {
-            ImageStatus imageStatus = new ImageStatus();
-            imageStatus.setId(c.getLong(c.getColumnIndex("Id")));
-            imageStatus.setName(c.getString(c.getColumnIndex("Name")));
-            imageStatus.setSubAlbumId(c.getLong(c.getColumnIndex("SubAlbumId")));
-            imageStatus.setSync(Boolean.parseBoolean(c.getString(c.getColumnIndex("Sync"))));
-            albumImages.add(imageStatus);
-            c.moveToNext();
-        }
-        c.close();
-        return albumImages;
-    }
-
     public static ArrayList<ImageStatus> getLatestAlbumImages(long albumId) {
         ArrayList<ImageStatus> albumImages = new ArrayList<>();
         SQLiteDatabase sqliteDatabase = AppGlobal.getSqlDbHelper().getReadableDatabase();
@@ -128,24 +88,6 @@ public class ImageStatusDao {
             imageStatus.setId(c.getLong(c.getColumnIndex("Id")));
             imageStatus.setName(c.getString(c.getColumnIndex("Name")));
             imageStatus.setAlbumId(c.getLong(c.getColumnIndex("AlbumId")));
-            imageStatus.setSync(Boolean.parseBoolean(c.getString(c.getColumnIndex("Sync"))));
-            albumImages.add(imageStatus);
-            c.moveToNext();
-        }
-        c.close();
-        return albumImages;
-    }
-
-    public static ArrayList<ImageStatus> getLatestSubAlbumImages(long subAlbumId) {
-        ArrayList<ImageStatus> albumImages = new ArrayList<>();
-        SQLiteDatabase sqliteDatabase = AppGlobal.getSqlDbHelper().getReadableDatabase();
-        Cursor c = sqliteDatabase.rawQuery("select * from image_status where Sync = 0 and SubAlbumId = " + subAlbumId, null);
-        c.moveToFirst();
-        while (!c.isAfterLast()) {
-            ImageStatus imageStatus = new ImageStatus();
-            imageStatus.setId(c.getLong(c.getColumnIndex("Id")));
-            imageStatus.setName(c.getString(c.getColumnIndex("Name")));
-            imageStatus.setSubAlbumId(c.getLong(c.getColumnIndex("SubAlbumId")));
             imageStatus.setSync(Boolean.parseBoolean(c.getString(c.getColumnIndex("Sync"))));
             albumImages.add(imageStatus);
             c.moveToNext();
