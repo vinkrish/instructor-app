@@ -10,8 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/chat_blue">
+        android:layout_alignParentRight="true">
 
         <TextView
             android:id="@id/message_text"
@@ -19,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autoLink="web"
+            android:background="@drawable/chat_blue"
             android:paddingRight="@dimen/spacing_normal"
             android:textColor="@color/primaryTextColor" />
 
