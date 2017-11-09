@@ -66,13 +66,25 @@
             android:layout_height="0.5px"
             android:background="@color/dividerColor" />
 
+        <ImageView
+            android:id="@+id/img_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/border"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/app_name"
+            android:onClick="uploadImage"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            app:srcCompat="@drawable/ic_image_black" />
+
         <EditText
             android:id="@+id/new_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/border"
-            android:layout_marginLeft="@dimen/spacing_small"
             android:layout_toLeftOf="@+id/enter_msg"
+            android:layout_toRightOf="@id/img_button"
             android:hint="@string/type_your_message"
             android:inputType="textCapSentences|textMultiLine"
             android:lineSpacingExtra="3dp"

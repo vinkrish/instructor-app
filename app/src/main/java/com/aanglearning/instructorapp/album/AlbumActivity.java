@@ -402,4 +402,10 @@ public class AlbumActivity extends AppCompatActivity implements AlbumView {
         adapter.setDataSet(localAlbumImages, multiselect_list);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
+
 }

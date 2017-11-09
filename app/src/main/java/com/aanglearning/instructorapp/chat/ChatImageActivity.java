@@ -1,7 +1,6 @@
-package com.aanglearning.instructorapp.messagegroup;
+package com.aanglearning.instructorapp.chat;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -16,14 +15,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.webkit.URLUtil;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
+import com.aanglearning.instructorapp.App;
 import com.aanglearning.instructorapp.R;
+import com.aanglearning.instructorapp.api.ApiClient;
+import com.aanglearning.instructorapp.api.TeacherApi;
+import com.aanglearning.instructorapp.dao.TeacherDao;
+import com.aanglearning.instructorapp.model.Message;
+import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.util.Constants;
 import com.aanglearning.instructorapp.util.NetworkUtil;
 import com.aanglearning.instructorapp.util.PermissionUtil;
@@ -38,38 +40,49 @@ import com.darsh.multipleimageselect.models.Image;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.zelory.compressor.Compressor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class ImageUploadActivity extends AppCompatActivity
-        implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class ChatImageActivity extends AppCompatActivity implements
+        ActivityCompat.OnRequestPermissionsResultCallback {
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.image_view) ImageView choseImage;
     @BindView(R.id.progress_layout) FrameLayout progressLayout;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
-    @BindView(R.id.youtube_url) TextView youtubeURL;
-    @BindView(R.id.new_msg) EditText newMsg;
 
-    private static final String TAG = "ImageUploadActivity";
-    private static final int WRITE_STORAGE_PERMISSION = 666;
+    private static final String TAG = "ChatImageActivity";
+    private static final int WRITE_STORAGE_PERMISSION = 999;
     private String imageName;
+    private long recipientId;
+    private Teacher teacher;
     private TransferUtility transferUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_upload);
+        setContentView(R.layout.activity_chat_image);
         ButterKnife.bind(this);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            recipientId = extras.getLong("recipientId", 0);
+        }
+
         transferUtility = Util.getTransferUtility(this);
+
+        teacher = TeacherDao.getTeacher();
     }
 
     @Override
     public void onBackPressed() {
-        //progressLayout.setVisibility(View.GONE);
-        //progressBar.setVisibility(View.GONE);
         setResult(Activity.RESULT_CANCELED, new Intent());
         finish();
     }
@@ -78,8 +91,6 @@ public class ImageUploadActivity extends AppCompatActivity
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            //Log.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
-            //resume tasks needing this permission
             imagePicker();
         } else {
             showSnackbar("Permission has been denied");
@@ -90,28 +101,16 @@ public class ImageUploadActivity extends AppCompatActivity
         Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
     }
 
-    public void pasteYoutubeUrl(View view) {
-        CharSequence pasteString = "";
-        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        if (clipboard.getPrimaryClip() != null) {
-            android.content.ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
-            pasteString = item.getText();
+    public void chooseImage(View view) {
+        if (PermissionUtil.isStoragePermissionGranted(this, WRITE_STORAGE_PERMISSION)) {
+            imagePicker();
         }
+    }
 
-        if (pasteString != null) {
-            if (URLUtil.isValidUrl(pasteString.toString())) {
-                youtubeURL.setVisibility(View.VISIBLE);
-                youtubeURL.setText(pasteString);
-            } else {
-                youtubeURL.setText("");
-                youtubeURL.setVisibility(View.GONE);
-                showSnackbar("URL is not valid");
-            }
-        } else {
-            youtubeURL.setText("");
-            youtubeURL.setVisibility(View.GONE);
-            showSnackbar("copy YouTube url before pasting");
-        }
+    private void imagePicker() {
+        Intent intent = new Intent(getApplicationContext(), AlbumSelectActivity.class);
+        intent.putExtra(com.darsh.multipleimageselect.helpers.Constants.INTENT_EXTRA_LIMIT, 1);
+        startActivityForResult(intent, com.darsh.multipleimageselect.helpers.Constants.REQUEST_CODE);
     }
 
     public void newImageSendListener(View view) {
@@ -137,29 +136,13 @@ public class ImageUploadActivity extends AppCompatActivity
         return hasImage;
     }
 
-    public void chooseImage(View view) {
-        if (PermissionUtil.isStoragePermissionGranted(this, WRITE_STORAGE_PERMISSION)) {
-            imagePicker();
-        }
-    }
-
-    private void imagePicker() {
-        Intent intent = new Intent(getApplicationContext(), AlbumSelectActivity.class);
-        intent.putExtra(com.darsh.multipleimageselect.helpers.Constants.INTENT_EXTRA_LIMIT, 1);
-        startActivityForResult(intent, com.darsh.multipleimageselect.helpers.Constants.REQUEST_CODE);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == com.darsh.multipleimageselect.helpers.Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             ArrayList<Image> images = data.getParcelableArrayListExtra(com.darsh.multipleimageselect.helpers.Constants.INTENT_EXTRA_IMAGES);
-            String[] urls = new String[images.size()];
-            for (int i = 0, l = images.size(); i < l; i++) {
-                urls[i] = images.get(i).path;
-                File imgFile = new  File(images.get(i).path);
-                if(imgFile.exists()){
-                    choseImage.setImageBitmap(new Compressor(ImageUploadActivity.this).compressToBitmap(new File(imgFile.getAbsolutePath())));
-                }
+            File imgFile = new  File(images.get(images.size()-1).path);
+            if(imgFile.exists()){
+                choseImage.setImageBitmap(new Compressor(ChatImageActivity.this).compressToBitmap(new File(imgFile.getAbsolutePath())));
             }
         }
     }
@@ -194,26 +177,53 @@ public class ImageUploadActivity extends AppCompatActivity
 
         @Override
         public void onStateChanged(int id, TransferState newState) {
-            Log.d(TAG, "onStateChanged: " + id + ", " + newState);
             if (newState.toString().equals("COMPLETED")) {
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("text", newMsg.getText().toString().trim());
-                if(youtubeURL.getText().equals("")) {
-                    resultIntent.putExtra("type", "image");
-                    resultIntent.putExtra("url", "");
-                } else {
-                    resultIntent.putExtra("type", "both");
-                    resultIntent.putExtra("url", youtubeURL.getText().toString());
-                }
-                resultIntent.putExtra("imgName", imageName);
-                setResult(Activity.RESULT_OK, resultIntent);
-                finish();
+                Message message = new Message();
+                message.setSenderId(teacher.getId());
+                message.setSenderName(teacher.getName());
+                message.setSenderRole("teacher");
+                message.setRecipientId(recipientId);
+                message.setRecipientRole("student");
+                message.setGroupId(0);
+                message.setMessageType("image");
+                message.setImageUrl(imageName);
+                message.setVideoUrl("");
+                message.setMessageBody("");
+                message.setCreatedAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(new Date()));
+                saveMessage(message);
             } else if (newState.toString().equals("FAILED")) {
                 Intent resultIntent = new Intent();
                 setResult(Activity.RESULT_CANCELED, resultIntent);
                 finish();
             }
         }
+    }
+
+    public void saveMessage(Message message) {
+        TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
+
+        Call<Message> queue = api.saveMessage(message);
+        queue.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                if(response.isSuccessful()) {
+                    Intent resultIntent = new Intent();
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
+                } else {
+                    Intent resultIntent = new Intent();
+                    setResult(Activity.RESULT_CANCELED, resultIntent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+                Intent resultIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED, resultIntent);
+                finish();
+            }
+        });
     }
 
     public File saveBitmapToFile() {
