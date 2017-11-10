@@ -160,11 +160,11 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (NetworkUtil.isNetworkAvailable(ChatActivity.this)) {
                     presenter.getFollowupMessages("teacher", teacher.getId(), "student", recipientId,
-                            adapter.getDataSet().get(adapter.getDataSet().size() - 1).getId());
+                            adapter.getDataSet().get(adapter.getItemCount() - 1).getId());
                 } else {
                     List<Message> messages = MessageDao.getMessagesFromId(teacher.getId(), "teacher",
                             recipientId, "student",
-                            adapter.getDataSet().get(adapter.getDataSet().size() - 1).getId());
+                            adapter.getDataSet().get(adapter.getItemCount() - 1).getId());
                     adapter.updateDataSet(messages);
                 }
             }
