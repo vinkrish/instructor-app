@@ -29,10 +29,10 @@
     <string name="group_name">Group Name</string>
     <string name="group_info">Group Info</string>
     <string name="tap_group">Tap here for group info</string>
-    <string name="select_class">Select Class</string>
-    <string name="select_section">Select Section</string>
-    <string name="select_student">Select Student</string>
-    <string name="select_period">Select Period</string>
+    <string name="select_class">Class</string>
+    <string name="select_section">Section</string>
+    <string name="select_student">Student</string>
+    <string name="select_period">Period</string>
     <string name="for_class">This group is for class</string>
     <string name="save">Save</string>
     <string name="video">Video</string>
@@ -91,6 +91,13 @@
     <string name="enter_homework">Enter homework for &#8230;</string>
     <string name="enter_hw">Enter homework</string>
 
+    <string name="no_exams">No Exams!</string>
+    <string name="no_score">No Score!</string>
+    <string name="no_act_score">No Activity Score!</string>
+    <string name="select_exam">Exam</string>
+    <string name="select_subject">Subject</string>
+    <string name="check_activity">Check Activity / Rubric</string>
+
     <string name="title_activity_group">New Group</string>
     <string name="title_activity_user_group">Group Members</string>
     <string name="title_activity_new_group">New Group</string>
@@ -101,4 +108,8 @@
     <string name="title_activity_timetable">Timetable</string>
     <string name="title_activity_events">Events</string>
     <string name="title_activity_message_recipient">Message Info</string>
+    <string name="title_activity_result">Result</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

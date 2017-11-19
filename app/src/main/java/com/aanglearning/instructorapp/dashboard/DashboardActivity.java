@@ -47,6 +47,7 @@ import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Service;
 import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.newgroup.NewGroupActivity;
+import com.aanglearning.instructorapp.reportcard.ReportActivity;
 import com.aanglearning.instructorapp.sqlite.SqlDbHelper;
 import com.aanglearning.instructorapp.timetable.TimetableActivity;
 import com.aanglearning.instructorapp.util.DividerItemDecoration;
@@ -361,6 +362,9 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                         break;
                     case R.id.event_item:
                         startActivity(new Intent(DashboardActivity.this, CalendarActivity.class));
+                        break;
+                    case R.id.result_item:
+                        startActivity(new Intent(DashboardActivity.this, ReportActivity.class));
                         break;
                     case R.id.gallery_item:
                         startActivity(new Intent(DashboardActivity.this, GalleryActivity.class));

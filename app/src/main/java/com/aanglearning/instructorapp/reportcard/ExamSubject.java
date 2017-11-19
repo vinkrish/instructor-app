@@ -92,4 +92,8 @@ public class ExamSubject {
 		this.type = type;
 	}
 
+	public String toString() {
+		return subjectName;
+	}
+
 }

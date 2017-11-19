@@ -36,6 +36,7 @@ import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Homework;
 import com.aanglearning.instructorapp.model.Section;
+import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.util.AlertDialogHelper;
 import com.aanglearning.instructorapp.util.Conversion;
 import com.aanglearning.instructorapp.util.DatePickerFragment;
@@ -73,6 +74,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
 
     private HomeworkPresenter presenter;
     private String homeworkDate;
+    private Teacher teacher;
     ActionMode mActionMode;
     boolean isMultiSelect = false;
     AlertDialogHelper alertDialogHelper;
@@ -103,8 +105,10 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
 
         setDefaultDate();
 
+        teacher = TeacherDao.getTeacher();
+
         if(NetworkUtil.isNetworkAvailable(this)) {
-            presenter.getClassList(TeacherDao.getTeacher().getId());
+            presenter.getClassList(teacher.getId());
         } else {
             showOfflineClass();
         }
@@ -118,7 +122,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.getClassList(TeacherDao.getTeacher().getId());
+                presenter.getClassList(teacher.getId());
             }
         });
     }
@@ -339,14 +343,14 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ClassDao.delete(TeacherDao.getTeacher().getSchoolId());
+                ClassDao.delete(teacher.getSchoolId());
                 ClassDao.insert(classList);
             }
         }).start();
     }
 
     private void showOfflineClass() {
-        List<Clas> clasList = ClassDao.getClassList(TeacherDao.getTeacher().getSchoolId());
+        List<Clas> clasList = ClassDao.getClassList(teacher.getSchoolId());
         ArrayAdapter<Clas> adapter = new
                 ArrayAdapter<>(this, android.R.layout.simple_spinner_item, clasList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -462,7 +466,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
             case R.id.spinner_class:
                 if(NetworkUtil.isNetworkAvailable(this)) {
                     presenter.getSectionList(((Clas) classSpinner.getSelectedItem()).getId(),
-                            TeacherDao.getTeacher().getId());
+                            teacher.getId());
                 } else {
                     showOfflineSection();
                 }

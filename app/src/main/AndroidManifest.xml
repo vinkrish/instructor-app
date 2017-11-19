@@ -234,6 +234,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".chat.ChatActivity" />
         </activity>
+        <activity
+            android:name=".reportcard.ReportActivity"
+            android:label="@string/title_activity_result"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".dashboard.DashboardActivity" />
+        </activity>
     </application>
 
 </manifest>

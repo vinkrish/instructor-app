@@ -8,7 +8,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -36,6 +35,7 @@ import com.aanglearning.instructorapp.model.Clas;
 import com.aanglearning.instructorapp.model.Section;
 import com.aanglearning.instructorapp.model.Student;
 import com.aanglearning.instructorapp.model.StudentSet;
+import com.aanglearning.instructorapp.model.Teacher;
 import com.aanglearning.instructorapp.model.Timetable;
 import com.aanglearning.instructorapp.util.AlertDialogHelper;
 import com.aanglearning.instructorapp.util.Conversion;
@@ -81,6 +81,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
 
     private AttendancePresenter presenter;
     private String attendanceDate;
+    private Teacher teacher;
     ActionMode mActionMode;
     boolean isMultiSelect = false;
     AlertDialogHelper alertDialogHelper;
@@ -114,8 +115,10 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
 
         showSession();
 
+        teacher = TeacherDao.getTeacher();
+
         if(NetworkUtil.isNetworkAvailable(this)) {
-            presenter.getClassList(TeacherDao.getTeacher().getId());
+            presenter.getClassList(teacher.getId());
         } else {
             showOfflineClass();
         }
@@ -173,7 +176,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.getClassList(TeacherDao.getTeacher().getId());
+                presenter.getClassList(teacher.getId());
             }
         });
     }
@@ -284,14 +287,14 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ClassDao.delete(TeacherDao.getTeacher().getSchoolId());
+                ClassDao.delete(teacher.getSchoolId());
                 ClassDao.insert(classList);
             }
         }).start();
     }
 
     private void showOfflineClass() {
-        List<Clas> clasList = ClassDao.getClassList(TeacherDao.getTeacher().getSchoolId());
+        List<Clas> clasList = ClassDao.getClassList(teacher.getSchoolId());
         ArrayAdapter<Clas> adapter = new
                 ArrayAdapter<>(this, android.R.layout.simple_spinner_item, clasList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -499,7 +502,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
             case R.id.spinner_class:
                 if(NetworkUtil.isNetworkAvailable(this)) {
                     presenter.getSectionList(((Clas) classSpinner.getSelectedItem()).getId(),
-                            TeacherDao.getTeacher().getId());
+                            teacher.getId());
                 } else {
                     showOfflineSection();
                 }
