@@ -206,7 +206,6 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
             } else {
                 Picasso.with(this)
                         .load("https://s3.ap-south-1.amazonaws.com/shikshitha-images/" + teacher.getSchoolId() + "/" + teacher.getImage())
-                        .placeholder(R.drawable.ic_account_black)
                         .into(imageView, new Callback() {
                             @Override
                             public void onSuccess() {
