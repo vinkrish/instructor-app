@@ -6,15 +6,18 @@
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:orientation="horizontal"
-    android:padding="@dimen/spacing_small">
+    android:paddingBottom="@dimen/spacing_small"
+    android:paddingLeft="@dimen/spacing_tiny"
+    android:paddingRight="@dimen/spacing_small"
+    android:paddingTop="@dimen/spacing_small">
 
     <TextView
         android:id="@+id/roll_no"
         android:layout_width="wrap_content"
-        android:minWidth="20dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="end"
+        android:minWidth="20dp"
         android:textColor="@color/primaryTextColor"
         android:textSize="@dimen/text_xsmall" />
 
