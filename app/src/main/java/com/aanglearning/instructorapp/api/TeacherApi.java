@@ -178,10 +178,10 @@ public interface TeacherApi {
                                          @Path("session") int session);
 
     @POST("app/attendance")
-    Call<Void> saveAttendance(@Body ArrayList<Attendance> attendances);
+    Call<Void> saveAttendance(@Body List<Attendance> attendances);
 
     @POST("app/attendance/delete")
-    Call<Void> deleteAttendance(@Body ArrayList<Attendance> attendanceList);
+    Call<Void> deleteAttendance(@Body List<Attendance> attendanceList);
 
     //Homework API
 

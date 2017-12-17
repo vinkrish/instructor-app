@@ -114,7 +114,7 @@ class AttendanceInteractorImpl implements AttendanceInteractor {
     }
 
     @Override
-    public void saveAttendance(ArrayList<Attendance> attendances, final OnFinishedListener listener) {
+    public void saveAttendance(List<Attendance> attendances, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
         Call<Void> queue = api.saveAttendance(attendances);
@@ -135,7 +135,7 @@ class AttendanceInteractorImpl implements AttendanceInteractor {
     }
 
     @Override
-    public void deleteAttendance(ArrayList<Attendance> attendances, final OnFinishedListener listener) {
+    public void deleteAttendance(List<Attendance> attendances, final OnFinishedListener listener) {
         TeacherApi api = ApiClient.getAuthorizedClient().create(TeacherApi.class);
 
         Call<Void> queue = api.deleteAttendance(attendances);
