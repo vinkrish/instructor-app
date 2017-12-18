@@ -92,9 +92,10 @@ public class GalleryActivity extends AppCompatActivity implements GalleryView,
     private void syncGallery() {
         if(NetworkUtil.isNetworkAvailable(this)) {
             if(adapter.getDataSet().size() == 0) {
-                presenter.getAlbums(teacher.getSchoolId());
+                presenter.getAlbums(teacher.getSchoolId(), teacher.getId());
             } else {
-                presenter.getAlbumsAboveId(teacher.getSchoolId(), adapter.getDataSet().get(adapter.getItemCount() - 1).getId());
+                presenter.getAlbumsAboveId(teacher.getSchoolId(), teacher.getId(),
+                        adapter.getDataSet().get(adapter.getItemCount() - 1).getId());
             }
         }
     }
@@ -235,9 +236,10 @@ public class GalleryActivity extends AppCompatActivity implements GalleryView,
     @Override
     public void setAlbum(Album album) {
         if(adapter.getDataSet().size() == 0) {
-            presenter.getAlbums(teacher.getSchoolId());
+            presenter.getAlbums(teacher.getSchoolId(), teacher.getId());
         } else {
-            presenter.getAlbumsAboveId(teacher.getSchoolId(), adapter.getDataSet().get(adapter.getItemCount() - 1).getId());
+            presenter.getAlbumsAboveId(teacher.getSchoolId(), teacher.getId(),
+                    adapter.getDataSet().get(adapter.getItemCount() - 1).getId());
         }
     }
 
@@ -279,9 +281,9 @@ public class GalleryActivity extends AppCompatActivity implements GalleryView,
     private void syncDeletedAlbums() {
         DeletedAlbum deletedAlbum = DeletedAlbumDao.getNewestDeletedAlbum();
         if(deletedAlbum.getId() == 0) {
-            presenter.getDeletedAlbums(teacher.getSchoolId());
+            presenter.getDeletedAlbums(teacher.getSchoolId(), teacher.getId());
         } else {
-            presenter.getRecentDeletedAlbums(teacher.getSchoolId(), deletedAlbum.getId());
+            presenter.getRecentDeletedAlbums(teacher.getSchoolId(), teacher.getId(), deletedAlbum.getId());
         }
     }
 

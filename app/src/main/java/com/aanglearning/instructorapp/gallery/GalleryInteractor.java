@@ -29,11 +29,11 @@ interface GalleryInteractor {
 
     void deleteAlbum(DeletedAlbum deletedAlbum, GalleryInteractor.OnFinishedListener listener);
 
-    void getAlbumsAboveId(long schoolId, long id, GalleryInteractor.OnFinishedListener listener);
+    void getAlbumsAboveId(long schoolId, long teacherId, long id, GalleryInteractor.OnFinishedListener listener);
 
-    void getAlbums(long schoolId, GalleryInteractor.OnFinishedListener listener);
+    void getAlbums(long schoolId, long teacherId, GalleryInteractor.OnFinishedListener listener);
 
-    void getRecentDeletedAlbums(long schoolId, long id, GalleryInteractor.OnFinishedListener listener);
+    void getRecentDeletedAlbums(long schoolId, long teacherId, long id, GalleryInteractor.OnFinishedListener listener);
 
-    void getDeletedAlbums(long schoolId, GalleryInteractor.OnFinishedListener listener);
+    void getDeletedAlbums(long schoolId, long teacherId, GalleryInteractor.OnFinishedListener listener);
 }

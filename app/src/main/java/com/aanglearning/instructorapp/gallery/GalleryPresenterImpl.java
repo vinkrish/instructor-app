@@ -4,7 +4,6 @@ import com.aanglearning.instructorapp.dao.DeletedAlbumDao;
 import com.aanglearning.instructorapp.model.Album;
 import com.aanglearning.instructorapp.model.DeletedAlbum;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,31 +36,31 @@ class GalleryPresenterImpl implements GalleryPresenter, GalleryInteractor.OnFini
     }
 
     @Override
-    public void getAlbumsAboveId(long schoolId, long id) {
+    public void getAlbumsAboveId(long schoolId, long teacherId, long id) {
         if (mView != null) {
-            mInteractor.getAlbumsAboveId(schoolId, id, this);
+            mInteractor.getAlbumsAboveId(schoolId, teacherId, id, this);
         }
     }
 
     @Override
-    public void getAlbums(long schoolId) {
+    public void getAlbums(long schoolId, long teacherId) {
         if (mView != null) {
             mView.showProgress();
-            mInteractor.getAlbums(schoolId, this);
+            mInteractor.getAlbums(schoolId, teacherId, this);
         }
     }
 
     @Override
-    public void getRecentDeletedAlbums(long schoolId, long id) {
+    public void getRecentDeletedAlbums(long schoolId, long teacherId, long id) {
         if (mView != null) {
-            mInteractor.getRecentDeletedAlbums(schoolId, id, this);
+            mInteractor.getRecentDeletedAlbums(schoolId, teacherId, id, this);
         }
     }
 
     @Override
-    public void getDeletedAlbums(long schoolId) {
+    public void getDeletedAlbums(long schoolId, long teacherId) {
         if (mView != null) {
-            mInteractor.getDeletedAlbums(schoolId, this);
+            mInteractor.getDeletedAlbums(schoolId, teacherId, this);
         }
     }
 

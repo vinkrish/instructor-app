@@ -21,7 +21,7 @@ import retrofit2.http.Path;
 
 public interface GalleryApi {
 
-    @POST("album")
+    @POST("album/new")
     Call<Album> saveAlbum(@Body Album album);
 
     @PUT("album")
@@ -30,22 +30,26 @@ public interface GalleryApi {
     @GET("album/{albumId}")
     Call<Album> getAlbum(@Path("albumId") long albumId);
 
-    @GET("album/{id}/school/{schoolId}")
+    @GET("album/teacher/{schoolId}/{teacherId}/{id}")
     Call<List<Album>> getAlbumAboveId(@Path("schoolId") long schoolId,
+                                      @Path("teacherId") long teacherId,
                                       @Path("id") long id);
 
-    @GET("album/school/{schoolId}")
-    Call<List<Album>> getAlbums(@Path("schoolId") long schoolId);
+    @GET("album/teacher/{schoolId}/{teacherId}")
+    Call<List<Album>> getAlbums(@Path("schoolId") long schoolId,
+                                @Path("teacherId") long teacherId);
 
-    @POST("deletedalbum")
+    @POST("deletedalbum/new")
     Call<DeletedAlbum> deleteAlbum(@Body DeletedAlbum deletedAlbum);
 
-    @GET("deletedalbum/{id}/school/{schoolId}")
+    @GET("deletedalbum/teacher/{schoolId}/{teacherId}/{id}")
     Call<List<DeletedAlbum>> getDeletedAlbumsAboveId(@Path("schoolId") long schoolId,
+                                                     @Path("teacherId") long teacherId,
                                                      @Path("id") long id);
 
-    @GET("deletedalbum/school/{schoolId}")
-    Call<List<DeletedAlbum>> getDeletedAlbums(@Path("schoolId") long schoolId);
+    @GET("deletedalbum/teacher/{schoolId}/{teacherId}")
+    Call<List<DeletedAlbum>> getDeletedAlbums(@Path("schoolId") long schoolId,
+                                              @Path("teacherId") long teacherId);
 
     @POST("ai")
     Call<Void> saveAlbumImages(@Body List<AlbumImage> albumImages);

@@ -14,13 +14,13 @@ interface GalleryPresenter {
 
     void deleteAlbum(DeletedAlbum deletedAlbum);
 
-    void getAlbumsAboveId(long schoolId, long id);
+    void getAlbumsAboveId(long schoolId, long teacherId, long id);
 
-    void getAlbums(long schoolId);
+    void getAlbums(long schoolId, long teacherId);
 
-    void getRecentDeletedAlbums(long schoolId, long id);
+    void getRecentDeletedAlbums(long schoolId, long teacherId, long id);
 
-    void getDeletedAlbums(long schoolId);
+    void getDeletedAlbums(long schoolId, long teacherId);
 
     void onDestroy();
 }

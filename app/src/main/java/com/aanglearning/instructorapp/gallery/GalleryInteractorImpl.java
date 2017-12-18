@@ -64,10 +64,10 @@ class GalleryInteractorImpl implements GalleryInteractor {
     }
 
     @Override
-    public void getAlbumsAboveId(long schoolId, long id, final OnFinishedListener listener) {
+    public void getAlbumsAboveId(long schoolId, long teacherId, long id, final OnFinishedListener listener) {
         GalleryApi api = ApiClient.getAuthorizedClient().create(GalleryApi.class);
 
-        Call<List<Album>> queue = api.getAlbumAboveId(schoolId, id);
+        Call<List<Album>> queue = api.getAlbumAboveId(schoolId, teacherId, id);
         queue.enqueue(new Callback<List<Album>>() {
             @Override
             public void onResponse(Call<List<Album>> call, Response<List<Album>> response) {
@@ -86,10 +86,10 @@ class GalleryInteractorImpl implements GalleryInteractor {
     }
 
     @Override
-    public void getAlbums(long schoolId, final OnFinishedListener listener) {
+    public void getAlbums(long schoolId, long teacherId, final OnFinishedListener listener) {
         GalleryApi api = ApiClient.getAuthorizedClient().create(GalleryApi.class);
 
-        Call<List<Album>> queue = api.getAlbums(schoolId);
+        Call<List<Album>> queue = api.getAlbums(schoolId, teacherId);
         queue.enqueue(new Callback<List<Album>>() {
             @Override
             public void onResponse(Call<List<Album>> call, Response<List<Album>> response) {
@@ -108,10 +108,10 @@ class GalleryInteractorImpl implements GalleryInteractor {
     }
 
     @Override
-    public void getRecentDeletedAlbums(long schoolId, long id, final OnFinishedListener listener) {
+    public void getRecentDeletedAlbums(long schoolId, long teacherId, long id, final OnFinishedListener listener) {
         GalleryApi api = ApiClient.getAuthorizedClient().create(GalleryApi.class);
 
-        Call<List<DeletedAlbum>> queue = api.getDeletedAlbumsAboveId(schoolId, id);
+        Call<List<DeletedAlbum>> queue = api.getDeletedAlbumsAboveId(schoolId, teacherId, id);
         queue.enqueue(new Callback<List<DeletedAlbum>>() {
             @Override
             public void onResponse(Call<List<DeletedAlbum>> call, Response<List<DeletedAlbum>> response) {
@@ -130,10 +130,10 @@ class GalleryInteractorImpl implements GalleryInteractor {
     }
 
     @Override
-    public void getDeletedAlbums(long schoolId, final OnFinishedListener listener) {
+    public void getDeletedAlbums(long schoolId, long teacherId, final OnFinishedListener listener) {
         GalleryApi api = ApiClient.getAuthorizedClient().create(GalleryApi.class);
 
-        Call<List<DeletedAlbum>> queue = api.getDeletedAlbums(schoolId);
+        Call<List<DeletedAlbum>> queue = api.getDeletedAlbums(schoolId, teacherId);
         queue.enqueue(new Callback<List<DeletedAlbum>>() {
             @Override
             public void onResponse(Call<List<DeletedAlbum>> call, Response<List<DeletedAlbum>> response) {
