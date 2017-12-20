@@ -1,20 +1,20 @@
-package com.aanglearning.instructorapp.newgroup;
+package com.aanglearning.instructorapp.newalbum;
 
+import com.aanglearning.instructorapp.model.Album;
 import com.aanglearning.instructorapp.model.Clas;
-import com.aanglearning.instructorapp.model.Groups;
 import com.aanglearning.instructorapp.model.Section;
 
 import java.util.List;
 
 /**
- * Created by Vinay on 30-03-2017.
+ * Created by Vinay on 19-12-2017.
  */
 
-public class NewGroupPresenterImpl implements NewGroupPresenter, NewGroupInteractor.OnFinishedListener {
-    private NewGroupView mView;
-    private NewGroupInteractor mInteractor;
+public class NewAlbumPresenterImpl implements NewAlbumPresenter, NewAlbumInteractor.OnFinishedListener {
+    private NewAlbumView mView;
+    private NewAlbumInteractor mInteractor;
 
-    NewGroupPresenterImpl(NewGroupView view, NewGroupInteractor interactor) {
+    NewAlbumPresenterImpl(NewAlbumView view, NewAlbumInteractor interactor) {
         mView = view;
         mInteractor = interactor;
     }
@@ -36,10 +36,10 @@ public class NewGroupPresenterImpl implements NewGroupPresenter, NewGroupInterac
     }
 
     @Override
-    public void saveGroup(Groups groups) {
+    public void saveAlbum(Album album) {
         if (mView != null) {
             mView.showProgress();
-            mInteractor.saveGroup(groups, this);
+            mInteractor.saveAlbum(album, this);
         }
     }
 
@@ -57,9 +57,9 @@ public class NewGroupPresenterImpl implements NewGroupPresenter, NewGroupInterac
     }
 
     @Override
-    public void onClasReceived(List<Clas> clasList) {
+    public void onClassReceived(List<Clas> classList) {
         if (mView != null) {
-            mView.showClass(clasList);
+            mView.showClass(classList);
             mView.hideProgress();
         }
     }
@@ -73,9 +73,9 @@ public class NewGroupPresenterImpl implements NewGroupPresenter, NewGroupInterac
     }
 
     @Override
-    public void onGroupSaved(Groups groups) {
+    public void onAlbumSaved(Album album) {
         if (mView != null) {
-            mView.groupSaved(groups);
+            mView.albumSaved(album);
             mView.hideProgress();
         }
     }

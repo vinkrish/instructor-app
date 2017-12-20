@@ -10,8 +10,6 @@ import java.util.ArrayList;
  */
 
 interface GalleryPresenter {
-    void saveAlbum(Album album);
-
     void deleteAlbum(DeletedAlbum deletedAlbum);
 
     void getAlbumsAboveId(long schoolId, long teacherId, long id);

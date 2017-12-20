@@ -20,28 +20,6 @@ import retrofit2.Response;
 
 class GalleryInteractorImpl implements GalleryInteractor {
     @Override
-    public void saveAlbum(Album album, final OnFinishedListener listener) {
-        GalleryApi api = ApiClient.getAuthorizedClient().create(GalleryApi.class);
-
-        Call<Album> queue = api.saveAlbum(album);
-        queue.enqueue(new Callback<Album>() {
-            @Override
-            public void onResponse(Call<Album> call, Response<Album> response) {
-                if(response.isSuccessful()) {
-                    listener.onAlbumSaved(response.body());
-                } else {
-                    listener.onError(App.getInstance().getString(R.string.request_error));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Album> call, Throwable t) {
-                listener.onError(App.getInstance().getString(R.string.request_error));
-            }
-        });
-    }
-
-    @Override
     public void deleteAlbum(DeletedAlbum deletedAlbum, final OnFinishedListener listener) {
         GalleryApi api = ApiClient.getAuthorizedClient().create(GalleryApi.class);
 

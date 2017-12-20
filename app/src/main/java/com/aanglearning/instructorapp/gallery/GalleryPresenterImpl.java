@@ -20,14 +20,6 @@ class GalleryPresenterImpl implements GalleryPresenter, GalleryInteractor.OnFini
     }
 
     @Override
-    public void saveAlbum(Album album) {
-        if(mView != null) {
-            mView.showProgress();
-            mInteractor.saveAlbum(album, this);
-        }
-    }
-
-    @Override
     public void deleteAlbum(DeletedAlbum deletedAlbum) {
         if(mView != null) {
             mView.showProgress();
@@ -74,14 +66,6 @@ class GalleryPresenterImpl implements GalleryPresenter, GalleryInteractor.OnFini
         if (mView != null) {
             mView.hideProgress();
             mView.showError(message);
-        }
-    }
-
-    @Override
-    public void onAlbumSaved(Album album) {
-        if (mView != null) {
-            mView.hideProgress();
-            mView.setAlbum(album);
         }
     }
 

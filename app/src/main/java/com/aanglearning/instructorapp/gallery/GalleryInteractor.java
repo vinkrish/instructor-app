@@ -14,8 +14,6 @@ interface GalleryInteractor {
     interface OnFinishedListener {
         void onError(String message);
 
-        void onAlbumSaved(Album album);
-
         void onAlbumDeleted();
 
         void onRecentAlbumsReceived(List<Album> albumList);
@@ -24,9 +22,6 @@ interface GalleryInteractor {
 
         void onDeletedAlbumsReceived(List<DeletedAlbum> deletedAlbums);
     }
-
-    void saveAlbum(Album album, GalleryInteractor.OnFinishedListener listener);
-
     void deleteAlbum(DeletedAlbum deletedAlbum, GalleryInteractor.OnFinishedListener listener);
 
     void getAlbumsAboveId(long schoolId, long teacherId, long id, GalleryInteractor.OnFinishedListener listener);

@@ -52,6 +52,7 @@ public class NewGroupActivity extends AppCompatActivity implements NewGroupView,
     @BindView(R.id.section_layout) LinearLayout sectionLayout;
     @BindView(R.id.checkBox) CheckBox isForClass;
 
+    private Teacher teacher;
     private NewGroupPresenter presenter;
 
     @Override
@@ -64,6 +65,8 @@ public class NewGroupActivity extends AppCompatActivity implements NewGroupView,
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        teacher = TeacherDao.getTeacher();
+
         groupName.addTextChangedListener(new EditTextWatcher(groupLayout));
         presenter = new NewGroupPresenterImpl(this, new NewGroupInteractorImpl());
 
@@ -73,11 +76,11 @@ public class NewGroupActivity extends AppCompatActivity implements NewGroupView,
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getClassList(SharedPreferenceUtil.getTeacher(this).getSchoolId());
+        presenter.getClassList(teacher.getId());
     }
 
     private void showSnackbar(String message) {
-        Snackbar.make(coordinatorLayout, message, 3000).show();
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     public void createGroup(View view) {

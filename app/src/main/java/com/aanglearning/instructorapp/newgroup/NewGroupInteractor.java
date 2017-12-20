@@ -21,7 +21,7 @@ interface NewGroupInteractor {
         void onGroupSaved(Groups groups);
     }
 
-    void getClassList(long schoolId, NewGroupInteractor.OnFinishedListener listener);
+    void getClassList(long teacherId, NewGroupInteractor.OnFinishedListener listener);
 
     void getSectionList(long classId, NewGroupInteractor.OnFinishedListener listener);
 

@@ -7,7 +7,7 @@ import com.aanglearning.instructorapp.model.Groups;
  */
 
 interface NewGroupPresenter {
-    void getClassList(long schoolId);
+    void getClassList(long teacherId);
 
     void getSectionList(long classId);
 

@@ -1,10 +1,9 @@
 package com.aanglearning.instructorapp.gallery;
 
-import android.app.Dialog;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -19,13 +18,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.album.AlbumActivity;
@@ -35,6 +29,7 @@ import com.aanglearning.instructorapp.dao.TeacherDao;
 import com.aanglearning.instructorapp.model.Album;
 import com.aanglearning.instructorapp.model.DeletedAlbum;
 import com.aanglearning.instructorapp.model.Teacher;
+import com.aanglearning.instructorapp.newalbum.NewAlbumActivity;
 import com.aanglearning.instructorapp.util.NetworkUtil;
 import com.aanglearning.instructorapp.util.PermissionUtil;
 import com.aanglearning.instructorapp.util.RecyclerItemClickListener;
@@ -63,6 +58,7 @@ public class GalleryActivity extends AppCompatActivity implements GalleryView,
     boolean isAlbumSelect = false;
 
     private static final int WRITE_STORAGE_PERMISSION = 333;
+    final static int REQ_CODE = 789;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,55 +159,25 @@ public class GalleryActivity extends AppCompatActivity implements GalleryView,
         }));
     }
 
-    public Dialog addAlbum(MenuItem item) {
-        final Dialog dialog = new Dialog(GalleryActivity.this, R.style.DialogFadeAnim);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.dialog_new_album);
+    public void addAlbum(MenuItem item) {
+        if (NetworkUtil.isNetworkAvailable(this)) {
+            Intent intent = new Intent(this, NewAlbumActivity.class);
+            startActivityForResult(intent, REQ_CODE);
+        } else {
+            showSnackbar("You are offline,check your internet.");
+        }
+    }
 
-        final EditText albumName = dialog.findViewById(R.id.album_name);
-        Button cancel = dialog.findViewById(R.id.cancel_btn);
-        Button save = dialog.findViewById(R.id.save_btn);
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if(adapter.getDataSet().size() == 0) {
+                presenter.getAlbums(teacher.getSchoolId(), teacher.getId());
+            } else {
+                presenter.getAlbumsAboveId(teacher.getSchoolId(), teacher.getId(),
+                        adapter.getDataSet().get(adapter.getItemCount() - 1).getId());
             }
-        });
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(albumName.getText().toString().isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Please enter album name", Toast.LENGTH_SHORT).show();
-                } else {
-                    Album album = new Album();
-                    album.setCoverPic("");
-                    album.setCreatedAt(System.currentTimeMillis());
-                    album.setCreatedBy(teacher.getId());
-                    album.setCreatorName(teacher.getName());
-                    album.setCreatorRole("teacher");
-                    album.setName(albumName.getText().toString());
-                    album.setSchoolId(teacher.getSchoolId());
-                    presenter.saveAlbum(album);
-                    dialog.dismiss();
-                }
-            }
-        });
-        dialog.show();
-
-        //Grab the window of the dialog, and change the width and height
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        Window window = dialog.getWindow();
-        lp.copyFrom(window.getAttributes());
-
-        //This makes the dialog take up the full width and height
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        window.setAttributes(lp);
-
-        return dialog;
+        }
     }
 
     private void showSnackbar(String message) {
