@@ -46,6 +46,7 @@ public class ImageSlideActivity extends AppCompatActivity {
 
     private Album album;
     private int startPosition;
+    private long schoolId;
     private ArrayList<AlbumImage> albumImages;
     ImageFragmentPagerAdapter imageFragmentPagerAdapter;
 
@@ -65,6 +66,7 @@ public class ImageSlideActivity extends AppCompatActivity {
         if (extras != null) {
             album = (Album) extras.getSerializable("album");
             startPosition = extras.getInt("position");
+            schoolId = extras.getLong("schoolId");
             getSupportActionBar().setTitle(album.getName());
         }
 
@@ -145,7 +147,7 @@ public class ImageSlideActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return SwipeFragment.newInstance(albumImages.get(position).getName(), album.getSchoolId());
+            return SwipeFragment.newInstance(albumImages.get(position).getName(), schoolId);
         }
     }
 

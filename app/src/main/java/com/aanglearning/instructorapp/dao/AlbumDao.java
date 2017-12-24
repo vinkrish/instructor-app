@@ -46,10 +46,10 @@ public class AlbumDao {
         return 1;
     }
 
-    public static List<Album> getAlbums(long schoolId) {
+    public static List<Album> getAlbums() {
         List<Album> albums = new ArrayList<>();
         SQLiteDatabase sqliteDatabase = AppGlobal.getSqlDbHelper().getReadableDatabase();
-        Cursor c = sqliteDatabase.rawQuery("select * from album where SchoolId = " + schoolId, null);
+        Cursor c = sqliteDatabase.rawQuery("select * from album order by Id asc", null);
         c.moveToFirst();
         while (!c.isAfterLast()) {
             Album album = new Album();
