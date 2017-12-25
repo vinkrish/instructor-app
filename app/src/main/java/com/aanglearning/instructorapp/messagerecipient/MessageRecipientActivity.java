@@ -24,6 +24,7 @@ import com.aanglearning.instructorapp.dao.GroupDao;
 import com.aanglearning.instructorapp.model.Message;
 import com.aanglearning.instructorapp.model.MessageRecipient;
 import com.aanglearning.instructorapp.util.DividerItemDecoration;
+import com.aanglearning.instructorapp.util.PaddedItemDecoration;
 import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 import com.aanglearning.instructorapp.util.YouTubeHelper;
 import com.aanglearning.instructorapp.util.YoutubeDeveloperKey;
@@ -176,14 +177,14 @@ public class MessageRecipientActivity extends AppCompatActivity implements Messa
         readRecyclerView.setNestedScrollingEnabled(false);
         readRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         readRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        readRecyclerView.addItemDecoration(new DividerItemDecoration(this));
+        readRecyclerView.addItemDecoration(new PaddedItemDecoration(this));
         readAdapter = new MessageRecipientAdapter(new ArrayList<MessageRecipient>(0));
         readRecyclerView.setAdapter(readAdapter);
 
         deliveredRecyclerView.setNestedScrollingEnabled(false);
         deliveredRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         deliveredRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        deliveredRecyclerView.addItemDecoration(new DividerItemDecoration(this));
+        deliveredRecyclerView.addItemDecoration(new PaddedItemDecoration(this));
         deliveredAdapter = new MessageRecipientAdapter(new ArrayList<MessageRecipient>(0));
         deliveredRecyclerView.setAdapter(deliveredAdapter);
 

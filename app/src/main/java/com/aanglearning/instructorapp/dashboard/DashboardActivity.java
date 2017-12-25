@@ -50,8 +50,8 @@ import com.aanglearning.instructorapp.newgroup.NewGroupActivity;
 import com.aanglearning.instructorapp.reportcard.ReportActivity;
 import com.aanglearning.instructorapp.sqlite.SqlDbHelper;
 import com.aanglearning.instructorapp.timetable.TimetableActivity;
-import com.aanglearning.instructorapp.util.DividerItemDecoration;
 import com.aanglearning.instructorapp.util.NetworkUtil;
+import com.aanglearning.instructorapp.util.PaddedItemDecoration;
 import com.aanglearning.instructorapp.util.PermissionUtil;
 import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 import com.squareup.picasso.Callback;
@@ -156,7 +156,7 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(this));
+        recyclerView.addItemDecoration(new PaddedItemDecoration(this));
 
         adapter = new GroupAdapter(new ArrayList<Groups>(0), mItemListener);
         recyclerView.setAdapter(adapter);
