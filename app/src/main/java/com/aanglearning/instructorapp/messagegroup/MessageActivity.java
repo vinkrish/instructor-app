@@ -190,6 +190,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
                     }
                     intent.putExtras(args);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.activity_open_translate,R.anim.activity_close_scale);
                 }
             }
 
@@ -564,6 +565,24 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        //overridePendingTransition(R.anim.activity_open_scale,R.anim.activity_close_translate);
+    }
+
+    /*
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                overridePendingTransition(R.anim.activity_open_scale,R.anim.activity_close_translate);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    */
+
+    @Override
     public void onBackPressed() {
         if (newMsgLayout.getVisibility() == View.VISIBLE) {
             newMsgLayout.setVisibility(View.GONE);
@@ -575,6 +594,7 @@ public class MessageActivity extends AppCompatActivity implements MessageView, V
             enterMsg.setImageResource(R.drawable.ic_send_black);
         } else {
             super.onBackPressed();
+            overridePendingTransition(R.anim.activity_open_scale,R.anim.activity_close_translate);
         }
     }
 }

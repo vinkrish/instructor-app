@@ -109,7 +109,12 @@ public class MessageViewActivity extends AppCompatActivity
     }
 
     @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {}
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.activity_open_scale,R.anim.activity_close_translate);
     }
+
 }
