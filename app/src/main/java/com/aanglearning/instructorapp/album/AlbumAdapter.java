@@ -6,19 +6,15 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Environment;
 import android.support.annotation.UiThread;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.model.AlbumImage;
-import com.aanglearning.instructorapp.util.SquareRelativeLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -78,7 +74,6 @@ class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> {
                 }
             }
         }
-
     }
 
     @Override
@@ -121,6 +116,7 @@ class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> {
                 dir.mkdirs();
             }
             final File file = new File(dir, coverPhoto);
+
             if (file.exists()) {
                 albumImage.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
             } else {

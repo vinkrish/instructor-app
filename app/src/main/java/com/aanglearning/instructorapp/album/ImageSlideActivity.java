@@ -1,6 +1,7 @@
 package com.aanglearning.instructorapp.album;
 
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,17 +9,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.aanglearning.instructorapp.App;
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.api.ApiClient;
 import com.aanglearning.instructorapp.api.GalleryApi;
@@ -26,7 +24,6 @@ import com.aanglearning.instructorapp.dao.AlbumDao;
 import com.aanglearning.instructorapp.dao.AlbumImageDao;
 import com.aanglearning.instructorapp.model.Album;
 import com.aanglearning.instructorapp.model.AlbumImage;
-import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.File;
@@ -34,7 +31,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Optional;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -110,6 +106,16 @@ public class ImageSlideActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                supportFinishAfterTransition();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void updateCoverPic(String coverPic) {
         GalleryApi api = ApiClient.getAuthorizedClient().create(GalleryApi.class);
 
@@ -170,7 +176,6 @@ public class ImageSlideActivity extends AppCompatActivity {
             if (file.exists()) {
                 imageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
             }
-
             return swipeView;
         }
 
@@ -183,4 +188,5 @@ public class ImageSlideActivity extends AppCompatActivity {
             return swipeFragment;
         }
     }
+
 }
