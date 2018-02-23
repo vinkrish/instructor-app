@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.aanglearning.instructorapp.BaseActivity;
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.album.AlbumActivity;
 import com.aanglearning.instructorapp.dao.AlbumDao;
@@ -40,7 +41,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GalleryActivity extends AppCompatActivity implements GalleryView,
+public class GalleryActivity extends BaseActivity implements GalleryView,
         ActivityCompat.OnRequestPermissionsResultCallback{
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
@@ -70,7 +71,7 @@ public class GalleryActivity extends AppCompatActivity implements GalleryView,
 
     private void init() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         teacher = TeacherDao.getTeacher();
 
@@ -79,6 +80,10 @@ public class GalleryActivity extends AppCompatActivity implements GalleryView,
         setupRecyclerView();
 
         loadOfflineData();
+
+        setProfile(teacher);
+
+        setNavigationItem(6);
 
         if (PermissionUtil.isStoragePermissionGranted(this, WRITE_STORAGE_PERMISSION)) {
             syncGallery();
@@ -324,17 +329,6 @@ public class GalleryActivity extends AppCompatActivity implements GalleryView,
                 adapter.selectedItemChanged(position, selectedAlbum);
             }
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                overridePendingTransition(R.anim.activity_open_scale,R.anim.activity_close_translate);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

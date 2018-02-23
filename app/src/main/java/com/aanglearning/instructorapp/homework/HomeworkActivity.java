@@ -28,6 +28,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.aanglearning.instructorapp.BaseActivity;
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.ClassDao;
 import com.aanglearning.instructorapp.dao.HomeworkDao;
@@ -58,7 +59,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
+public class HomeworkActivity extends BaseActivity implements HomeworkView,
         AdapterView.OnItemSelectedListener, AlertDialogHelper.AlertDialogListener {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
@@ -95,7 +96,7 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
 
     private void init() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         presenter = new HomeworkPresenterImpl(this, new HomeworkInteractorImpl());
 
@@ -106,6 +107,10 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
         setDefaultDate();
 
         teacher = TeacherDao.getTeacher();
+
+        setProfile(teacher);
+
+        setNavigationItem(2);
 
         if(NetworkUtil.isNetworkAvailable(this)) {
             presenter.getClassList(teacher.getId());
@@ -535,17 +540,6 @@ public class HomeworkActivity extends AppCompatActivity implements HomeworkView,
             dialog.show();*/
         }
     };
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                overridePendingTransition(R.anim.activity_open_scale,R.anim.activity_close_translate);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {

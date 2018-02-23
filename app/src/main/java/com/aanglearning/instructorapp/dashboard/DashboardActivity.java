@@ -353,27 +353,34 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
                 switch (menuItem.getItemId()) {
                     case R.id.dashboard_item:
                         startActivity(new Intent(DashboardActivity.this, DashboardActivity.class));
+                        finish();
                         break;
                     case R.id.attendance_item:
                         startActivity(new Intent(DashboardActivity.this, AttendanceActivity.class));
+                        finish();
                         break;
                     case R.id.homework_item:
                         startActivity(new Intent(DashboardActivity.this, HomeworkActivity.class));
+                        finish();
                         break;
                     case R.id.timetable_item:
                         startActivity(new Intent(DashboardActivity.this, TimetableActivity.class));
+                        finish();
                         break;
                     case R.id.event_item:
                         startActivity(new Intent(DashboardActivity.this, CalendarActivity.class));
                         break;
                     case R.id.result_item:
                         startActivity(new Intent(DashboardActivity.this, ReportActivity.class));
+                        finish();
                         break;
                     case R.id.gallery_item:
                         startActivity(new Intent(DashboardActivity.this, GalleryActivity.class));
+                        finish();
                         break;
                     case R.id.chat_item:
                         startActivity(new Intent(DashboardActivity.this, ChatsActivity.class));
+                        finish();
                         break;
                     case R.id.logout_item:
                         logout();
@@ -455,8 +462,6 @@ public class DashboardActivity extends AppCompatActivity implements GroupView{
     public void onBackPressed() {
         if (isNavDrawerOpen()) {
             closeNavDrawer();
-        } else {
-            super.onBackPressed();
         }
     }
 }

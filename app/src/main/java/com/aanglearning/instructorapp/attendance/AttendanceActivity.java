@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.aanglearning.instructorapp.BaseActivity;
 import com.aanglearning.instructorapp.R;
 import com.aanglearning.instructorapp.dao.AttendanceDao;
 import com.aanglearning.instructorapp.dao.ClassDao;
@@ -60,7 +61,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AttendanceActivity extends AppCompatActivity implements AttendanceView,
+public class AttendanceActivity extends BaseActivity implements AttendanceView,
         AdapterView.OnItemSelectedListener, AlertDialogHelper.AlertDialogListener {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
@@ -99,14 +100,15 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_attendance);
+        super.setContentView(R.layout.activity_attendance);
         ButterKnife.bind(this);
         init();
     }
 
     private void init() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_add);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         presenter = new AttendancePresenterImpl(this, new AttendanceInteractorImpl());
         setDefaultDate();
@@ -118,6 +120,10 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
         showSession();
 
         teacher = TeacherDao.getTeacher();
+
+        setProfile(teacher);
+
+        setNavigationItem(1);
 
         if(NetworkUtil.isNetworkAvailable(this)) {
             presenter.getClassList(teacher.getId());
@@ -704,6 +710,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
         presenter.saveAttendance(Arrays.asList(att));
     }
 
+    /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -714,6 +721,7 @@ public class AttendanceActivity extends AppCompatActivity implements AttendanceV
         }
         return super.onOptionsItemSelected(item);
     }
+    */
 
     @Override
     public void onBackPressed() {
