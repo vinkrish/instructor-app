@@ -35,59 +35,65 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0 &&
+                SharedPreferenceUtil.isNotifiable(getApplicationContext()) &&
                 !SharedPreferenceUtil.getTeacher(getApplicationContext()).getAuthToken().equals("")) {
              if (remoteMessage.getData().get("type").equals("group_message")) {
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(getApplicationContext())
-                                .setSmallIcon(R.drawable.ic_stat_notify)
-                                .setContentTitle(remoteMessage.getData().get("group_name"))
-                                .setContentText("You have new message in this group!")
-                                .setDefaults(Notification.DEFAULT_SOUND)
-                                .setStyle(new NotificationCompat.BigTextStyle().bigText(remoteMessage.getData().get("message")));
-
-                mBuilder.setAutoCancel(true);
-
-                Intent resultIntent = new Intent(getApplicationContext(), DashboardActivity.class);
-                resultIntent.putExtra("group_id", Long.valueOf(remoteMessage.getData().get("group_id")));
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
-                //stackBuilder.addParentStack(DashboardActivity.class);
-                stackBuilder.addNextIntent(resultIntent);
-                PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(789, PendingIntent.FLAG_UPDATE_CURRENT);
-                mBuilder.setContentIntent(resultPendingIntent);
-                NotificationManager mNotificationManager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(0, mBuilder.build());
-            }else if (App.isActivityVisible() && ChatActivity.isActivityVisible()) {
+                messageNotification(remoteMessage);
+             } else if (App.isActivityVisible() && ChatActivity.isActivityVisible()) {
                  EventBus.getDefault().post(new MessageEvent(remoteMessage.getData().get("message"),
                          Long.valueOf(remoteMessage.getData().get("sender_id"))));
              } else {
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(getApplicationContext())
-                                .setSmallIcon(R.drawable.ic_stat_notify)
-                                .setContentTitle(remoteMessage.getData().get("sender_name"))
-                                .setContentText(remoteMessage.getData().get("message"))
-                                .setDefaults(Notification.DEFAULT_SOUND)
-                                .setStyle(new NotificationCompat.BigTextStyle().bigText(remoteMessage.getData().get("message")));
-
-                mBuilder.setAutoCancel(true);
-
-                Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
-                resultIntent.putExtra("recipientId", Long.valueOf(remoteMessage.getData().get("sender_id")));
-                resultIntent.putExtra("recipientName", remoteMessage.getData().get("sender_name"));
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
-                stackBuilder.addParentStack(ChatsActivity.class);
-                stackBuilder.addNextIntent(resultIntent);
-                PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(123, PendingIntent.FLAG_UPDATE_CURRENT);
-                mBuilder.setContentIntent(resultPendingIntent);
-                NotificationManager mNotificationManager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(0, mBuilder.build());
+                chatNotification(remoteMessage);
             }
         }
 
     }
 
-    // Also if you intend on generating your own notifications as a result of a received FCM
-    // message, here is where that should be initiated. See sendNotification method below.
+    private void messageNotification(RemoteMessage remoteMessage) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getApplicationContext())
+                        .setSmallIcon(R.drawable.ic_stat_notify)
+                        .setContentTitle(remoteMessage.getData().get("group_name"))
+                        .setContentText("You have new message in this group!")
+                        .setDefaults(Notification.DEFAULT_SOUND)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(remoteMessage.getData().get("message")));
+
+        mBuilder.setAutoCancel(true);
+
+        Intent resultIntent = new Intent(getApplicationContext(), DashboardActivity.class);
+        resultIntent.putExtra("group_id", Long.valueOf(remoteMessage.getData().get("group_id")));
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+        //stackBuilder.addParentStack(DashboardActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(789, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, mBuilder.build());
+    }
+
+    private void chatNotification(RemoteMessage remoteMessage) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getApplicationContext())
+                        .setSmallIcon(R.drawable.ic_stat_notify)
+                        .setContentTitle(remoteMessage.getData().get("sender_name"))
+                        .setContentText(remoteMessage.getData().get("message"))
+                        .setDefaults(Notification.DEFAULT_SOUND)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(remoteMessage.getData().get("message")));
+
+        mBuilder.setAutoCancel(true);
+
+        Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
+        resultIntent.putExtra("recipientId", Long.valueOf(remoteMessage.getData().get("sender_id")));
+        resultIntent.putExtra("recipientName", remoteMessage.getData().get("sender_name"));
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+        stackBuilder.addParentStack(ChatsActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(123, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, mBuilder.build());
+    }
 
 }

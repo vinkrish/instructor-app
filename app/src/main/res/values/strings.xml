@@ -104,6 +104,9 @@
     <string name="select_subject">Subject</string>
     <string name="check_activity">Check Activity / Rubrics</string>
 
+    <string name="features_enabled">Enabled / Disabled by Institution</string>
+    <string name="notifications">Notifications</string>
+
     <string name="title_activity_group">New Group</string>
     <string name="title_activity_user_group">Group Members</string>
     <string name="title_activity_new_group">New Group</string>
@@ -115,7 +118,6 @@
     <string name="title_activity_events">Events</string>
     <string name="title_activity_message_recipient">Message Info</string>
     <string name="title_activity_result">Result</string>
+    <string name="title_activity_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

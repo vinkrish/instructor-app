@@ -13,6 +13,7 @@ import com.aanglearning.instructorapp.model.Homework;
 import com.aanglearning.instructorapp.model.Message;
 import com.aanglearning.instructorapp.model.MessageRecipient;
 import com.aanglearning.instructorapp.model.Section;
+import com.aanglearning.instructorapp.model.Service;
 import com.aanglearning.instructorapp.model.Student;
 import com.aanglearning.instructorapp.model.TeacherTimetable;
 import com.aanglearning.instructorapp.model.Timetable;
@@ -208,4 +209,10 @@ public interface TeacherApi {
     @GET("event/school/{schoolId}/teacher/{teacherId}")
     Call<List<Evnt>> getEvents(@Path("schoolId") long schoolId,
                                @Path("teacherId") long teacherId);
+
+    //Service API
+
+    @GET("service/school/{id}")
+    Call<Service> getService(@Path("id") long id);
+
 }

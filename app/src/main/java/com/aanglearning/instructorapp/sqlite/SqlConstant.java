@@ -6,7 +6,7 @@ package com.aanglearning.instructorapp.sqlite;
 interface SqlConstant {
 
     String DATABASE_NAME = "teacher.db";
-    int DATABASE_VERSION = 13;
+    int DATABASE_VERSION = 14;
 
     String CREATE_ATTENDANCE = "CREATE TABLE attendance (" +
             "  Id INTEGER PRIMARY KEY," +
@@ -206,7 +206,8 @@ interface SqlConstant {
             " IsHomework TEXT, " +
             " IsHomeworkSms TEXT," +
             " IsTimetable TEXT," +
-            " IsReport TEXT" +
+            " IsReport TEXT," +
+            " IsGallery TEXT" +
             ")";
 
     String CREATE_USER_GROUP = "CREATE TABLE user_group (" +
