@@ -1,7 +1,13 @@
 package com.aanglearning.instructorapp.login;
 
+import android.content.Intent;
+
+import com.aanglearning.instructorapp.dao.ServiceDao;
+import com.aanglearning.instructorapp.dao.TeacherDao;
+import com.aanglearning.instructorapp.fcm.FCMIntentService;
 import com.aanglearning.instructorapp.model.Credentials;
 import com.aanglearning.instructorapp.model.TeacherCredentials;
+import com.aanglearning.instructorapp.util.SharedPreferenceUtil;
 
 /**
  * Created by Vinay on 28-03-2017.
@@ -19,18 +25,14 @@ class LoginPresenterImpl implements LoginPresenter, LoginInteractor.OnLoginFinis
 
     @Override
     public void validateCredentials(Credentials credentials) {
-        if(loginView != null) {
-            loginView.showProgress();
-            interactor.login(credentials, this);
-        }
+        loginView.showProgress();
+        interactor.login(credentials, this);
     }
 
     @Override
     public void pwdRecovery(String username) {
-        if(loginView != null) {
-            loginView.showProgress();
-            interactor.recoverPwd(username, this);
-        }
+        loginView.showProgress();
+        interactor.recoverPwd(username, this);
     }
 
     @Override
@@ -43,6 +45,15 @@ class LoginPresenterImpl implements LoginPresenter, LoginInteractor.OnLoginFinis
         if(loginView != null) {
             loginView.saveUser(credentials);
             loginView.hideProgress();
+
+            /*
+            TeacherDao.clear();
+            TeacherDao.insert(credentials.getTeacher());
+            ServiceDao.clear();
+            ServiceDao.insert(credentials.getService());
+            SharedPreferenceUtil.saveTeacher(this, credentials);
+            */
+
             loginView.navigateToDashboard();
         }
     }

@@ -23,34 +23,26 @@ class NewChatPresenterImpl implements NewChatPresenter, NewChatInteractor.OnFini
 
     @Override
     public void getClassList(long teacherId) {
-        if (mView != null) {
-            mView.showProgress();
-            mInteractor.getClassList(teacherId, this);
-        }
+        mView.showProgress();
+        mInteractor.getClassList(teacherId, this);
     }
 
     @Override
     public void getSectionList(long classId, long teacherId) {
-        if (mView != null) {
-            mView.showProgress();
-            mInteractor.getSectionList(classId, teacherId, this);
-        }
+        mView.showProgress();
+        mInteractor.getSectionList(classId, teacherId, this);
     }
 
     @Override
     public void getStudentList(long sectionId) {
-        if (mView != null) {
-            mView.showProgress();
-            mInteractor.getStudentList(sectionId, this);
-        }
+        mView.showProgress();
+        mInteractor.getStudentList(sectionId, this);
     }
 
     @Override
     public void saveChat(Chat chat) {
-        if (mView != null) {
-            mView.showProgress();
-            mInteractor.saveChat(chat, this);
-        }
+        mView.showProgress();
+        mInteractor.saveChat(chat, this);
     }
 
     @Override

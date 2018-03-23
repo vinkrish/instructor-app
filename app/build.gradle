@@ -7,8 +7,8 @@ android {
         applicationId "com.aanglearning.instructorapp"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 50
-        versionName "5.0"
+        versionCode 51
+        versionName "5.1"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -50,8 +50,10 @@ dependencies {
     compile 'com.github.darsh2:MultipleImageSelect:v0.0.4'
     compile 'com.amazonaws:aws-android-sdk-s3:2.6.14'
     compile 'com.amazonaws:aws-android-sdk-cognito:2.6.14'
+    compile 'com.google.dagger:dagger:2.11'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
 }
 
 

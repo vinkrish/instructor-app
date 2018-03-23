@@ -23,39 +23,29 @@ class GroupPresenterImpl implements GroupPresenter, GroupInteractor.OnFinishedLi
 
     @Override
     public void getGroup(long groupId) {
-        if (mView != null) {
-            mView.showProgress();
-            mInteractor.getGroup(groupId, this);
-        }
+        mView.showProgress();
+        mInteractor.getGroup(groupId, this);
     }
 
     @Override
     public void getGroupsAboveId(long teacherId, long id) {
-        if (mView != null) {
-            mInteractor.getGroupsAboveId(teacherId, id, this);
-        }
+        mInteractor.getGroupsAboveId(teacherId, id, this);
     }
 
     @Override
     public void getGroups(long userId) {
-        if (mView != null) {
-            mView.showProgress();
-            mInteractor.getGroups(userId, this);
-        }
+        mView.showProgress();
+        mInteractor.getGroups(userId, this);
     }
 
     @Override
     public void getRecentDeletedGroups(long schoolId, long id) {
-        if (mView != null) {
-            mInteractor.getRecentDeletedGroups(schoolId, id, this);
-        }
+        mInteractor.getRecentDeletedGroups(schoolId, id, this);
     }
 
     @Override
     public void getDeletedGroups(long schoolId) {
-        if (mView != null) {
-            mInteractor.getDeletedGroups(schoolId, this);
-        }
+        mInteractor.getDeletedGroups(schoolId, this);
     }
 
     @Override

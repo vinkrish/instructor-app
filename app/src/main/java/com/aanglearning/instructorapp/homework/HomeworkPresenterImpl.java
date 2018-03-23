@@ -24,50 +24,38 @@ public class HomeworkPresenterImpl implements HomeworkPresenter,
 
     @Override
     public void getClassList(long teacherId) {
-        if (mView != null) {
-            mView.showProgress();
-            mInteractor.getClassList(teacherId, this);
-        }
+        mView.showProgress();
+        mInteractor.getClassList(teacherId, this);
     }
 
     @Override
     public void getSectionList(long classId, long teacherId) {
-        if (mView != null) {
-            mView.showProgress();
-            mInteractor.getSectionList(classId, teacherId, this);
-        }
+        mView.showProgress();
+        mInteractor.getSectionList(classId, teacherId, this);
     }
 
     @Override
     public void getHomework(long sectionId, String date) {
-        if (mView != null) {
-            mView.showProgress();
-            mInteractor.getHomework(sectionId, date, this);
-        }
+        mView.showProgress();
+        mInteractor.getHomework(sectionId, date, this);
     }
 
     @Override
     public void saveHomework(Homework homework) {
-        if (mView != null) {
-            mView.showProgress();
-            mInteractor.saveHomework(homework, this);
-        }
+        mView.showProgress();
+        mInteractor.saveHomework(homework, this);
     }
 
     @Override
     public void updateHomework(Homework homework) {
-        if (mView != null) {
-            mView.showProgress();
-            mInteractor.updateHomework(homework, this);
-        }
+        mView.showProgress();
+        mInteractor.updateHomework(homework, this);
     }
 
     @Override
     public void deleteHomework(ArrayList<Homework> homeworks) {
-        if (mView != null) {
-            mView.showProgress();
-            mInteractor.deleteHomework(homeworks, this);
-        }
+        mView.showProgress();
+        mInteractor.deleteHomework(homeworks, this);
     }
 
     @Override
